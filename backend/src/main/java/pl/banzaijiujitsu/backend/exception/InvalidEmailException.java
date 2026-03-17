@@ -1,0 +1,9 @@
+package pl.banzaijiujitsu.backend.exception;
+
+public class InvalidEmailException extends RuntimeException {
+    public InvalidEmailException() {}
+
+    public InvalidEmailException(String message) {
+        super(message);
+    }
+}

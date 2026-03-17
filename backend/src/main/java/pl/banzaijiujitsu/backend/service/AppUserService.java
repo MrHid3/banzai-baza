@@ -1,8 +1,12 @@
-package pl.banzaijiujitsu.backend;
+package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
+import pl.banzaijiujitsu.backend.exception.UsernameTakenException;
+import pl.banzaijiujitsu.backend.repository.AppUserRepository;
+import pl.banzaijiujitsu.backend.model.AppUser;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -10,13 +14,13 @@ import java.util.UUID;
 @Service
 public class AppUserService {
 
+    private final EncodingService encodingService;
     private AppUserRepository appUserRepository;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AppUserService(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+    public AppUserService(AppUserRepository appUserRepository, EncodingService encodingService) {
         this.appUserRepository = appUserRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.encodingService = encodingService;
     }
 
     public Optional<AppUser> findByUsername(String username) {
@@ -35,8 +39,11 @@ public class AppUserService {
         return appUserRepository.findByPhoneNumber(phooneNumber);
     }
 
-    public AppUser save(AppUser appUser) {
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+    public AppUser save(AppUser appUser) throws UsernameTakenException, InvalidPasswordException {
+        if(appUserRepository.findByUsername(appUser.getUsername()).isPresent()){
+            throw new UsernameTakenException();
+        }
+        appUser.hashPassword(encodingService);
         return appUserRepository.save(appUser);
     }
 }

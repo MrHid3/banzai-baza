@@ -1,4 +1,4 @@
-package pl.banzaijiujitsu.backend;
+package pl.banzaijiujitsu.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

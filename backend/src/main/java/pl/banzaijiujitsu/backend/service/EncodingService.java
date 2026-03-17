@@ -1,4 +1,4 @@
-package pl.banzaijiujitsu.backend;
+package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

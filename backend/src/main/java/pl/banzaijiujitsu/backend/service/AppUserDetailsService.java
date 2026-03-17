@@ -1,4 +1,4 @@
-package pl.banzaijiujitsu.backend;
+package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import pl.banzaijiujitsu.backend.model.AppUser;
+import pl.banzaijiujitsu.backend.model.Privilege;
+import pl.banzaijiujitsu.backend.model.Role;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,31 +31,61 @@ public class AppUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser user = appUserService.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return new User(user.getUsername(), user.getPassword(), getAuthoritieslist("USER"));
+        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 
     public UserDetails loadUserByUuid(UUID uuid) throws UsernameNotFoundException {
         AppUser user = appUserService.findByUuid(uuid)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return new User(user.getUsername(), user.getPassword(), getAuthoritieslist("USER"));
+        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
         AppUser user = appUserService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return new User(user.getUsername(), user.getPassword(), getAuthoritieslist("USER"));
+        return new User(user.getEmail(), user.getPassword(),  getGrantedAuthorities(user.getRoles()));
 
+    }
+
+    private Collection<GrantedAuthority> getAuthoritiesList(String role){
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role));
+        return authorities;
+    }
+
+    private List<String> getPrivileges(Collection<Role> roles) {
+
+        List<String> privileges = new ArrayList<>();
+        List<Privilege> collection = new ArrayList<>();
+        for (Role role : roles) {
+            privileges.add(role.getName());
+            collection.addAll(role.getPrivileges());
+        }
+        for (Privilege item : collection) {
+            privileges.add(item.getName());
+        }
+        return privileges;
     }
 
     public UserDetails loadUserByPhoneNumber(String phoneNumber) throws UsernameNotFoundException {
         AppUser user = appUserService.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return new User(user.getUsername(), user.getPassword(), getAuthoritieslist("USER"));
+        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthoritieslist(String role) {
+    private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges){
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role));
+        for (String privilege : privileges) {
+            authorities.add(new SimpleGrantedAuthority(privilege));
+        }
+        return authorities;
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(Collection<Role> roles){
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role item : roles) {
+            authorities.add(new SimpleGrantedAuthority(item.getName()));
+        }
         return authorities;
     }
 }
