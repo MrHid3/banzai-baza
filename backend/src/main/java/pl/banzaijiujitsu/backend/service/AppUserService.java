@@ -15,7 +15,7 @@ import java.util.UUID;
 public class AppUserService {
 
     private final EncodingService encodingService;
-    private AppUserRepository appUserRepository;
+    private final AppUserRepository appUserRepository;
 
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, EncodingService encodingService) {

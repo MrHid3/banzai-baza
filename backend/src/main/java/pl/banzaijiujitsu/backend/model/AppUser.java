@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.cglib.core.Local;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.service.EncodingService;
@@ -76,4 +77,5 @@ public class AppUser {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
+    private Collection<Localization> localizations;
 }
