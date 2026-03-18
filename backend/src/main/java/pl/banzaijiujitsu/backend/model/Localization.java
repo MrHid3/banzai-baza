@@ -9,6 +9,7 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
+@Table
 public class Localization {
 
     @Id

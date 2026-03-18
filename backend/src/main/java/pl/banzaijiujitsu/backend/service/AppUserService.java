@@ -9,6 +9,7 @@ import pl.banzaijiujitsu.backend.exception.UsernameTakenException;
 import pl.banzaijiujitsu.backend.repository.AppUserRepository;
 import pl.banzaijiujitsu.backend.model.AppUser;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class AppUserService {
         this.encodingService = encodingService;
     }
 
-    public Optional<AppUser> findByUsername(String username) {
+    public List<AppUser> findByUsername(String username) {
         return appUserRepository.findByUsername(username);
     }
 
@@ -41,7 +42,7 @@ public class AppUserService {
     }
 
     public AppUser save(AppUser appUser) throws InvalidEmailException, InvalidPasswordException {
-        if(appUserRepository.findByUsername(appUser.getEmail()).isPresent()){
+        if(!appUserRepository.findByUsername(appUser.getEmail()).isEmpty()){
             throw new InvalidEmailException("Email already exists");
         }
         appUser.hashPassword(encodingService);

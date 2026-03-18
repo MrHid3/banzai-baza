@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.exception.EmailNotFoundException;
 import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Role;
-import pl.banzaijiujitsu.backend.repository.AppUserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,15 +20,6 @@ public class AuthenticationService {
 
     @Autowired
     private AppUserService appUserService;
-
-    public Optional<User> loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUser> optionalAppUser = this.appUserService.findByUsername(username);
-        if(optionalAppUser.isEmpty()){
-            return Optional.empty();
-        }
-        AppUser appUser = optionalAppUser.get();
-        return Optional.of(new User(appUser.getEmail(), appUser.getPassword(), getGrantedAuthorities(appUser.getRoles())));
-    }
 
     public Optional<User> loadUserByEmail(String email) throws EmailNotFoundException {
         Optional<AppUser> optionalAppUser = this.appUserService.findByEmail(email);

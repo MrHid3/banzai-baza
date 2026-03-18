@@ -28,6 +28,12 @@ public class AppUser {
         this.setPassword(password);
     }
 
+    public AppUser(String email, String password, Collection<Role> roles) throws InvalidEmailException, InvalidPasswordException {
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setRoles(roles);
+    }
+
     public void setPassword(String password) throws  InvalidPasswordException {
         Pattern pattern = Pattern.compile("^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*?[?!\\\\|'\";:+=-_()*&^%$#@<>,.`~\\[\\]{}/]).{8,})\\S$");
         Matcher matcher = pattern.matcher(password);
@@ -68,7 +74,7 @@ public class AppUser {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch =  FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
@@ -77,5 +83,6 @@ public class AppUser {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
+    @ManyToMany
     private Collection<Localization> localizations;
 }

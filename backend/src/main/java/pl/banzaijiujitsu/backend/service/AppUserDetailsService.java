@@ -1,5 +1,6 @@
 package pl.banzaijiujitsu.backend.service;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import pl.banzaijiujitsu.backend.exception.EmailNotFoundException;
+import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
 import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Privilege;
 import pl.banzaijiujitsu.backend.model.Role;
@@ -28,15 +31,15 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser user = appUserService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+    public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws EmailNotFoundException {
+        AppUser user = appUserService.findByEmail(email)
+                .orElseThrow(EmailNotFoundException::new);
         return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 
-    public UserDetails loadUserByUuid(UUID uuid) throws UsernameNotFoundException {
+    public UserDetails loadUserByUuid(UUID uuid) throws InvalidUuidException {
         AppUser user = appUserService.findByUuid(uuid)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+                .orElseThrow(InvalidUuidException::new);
         return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 

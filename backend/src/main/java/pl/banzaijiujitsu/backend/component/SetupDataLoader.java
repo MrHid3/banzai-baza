@@ -12,6 +12,7 @@ import pl.banzaijiujitsu.backend.model.*;
 import pl.banzaijiujitsu.backend.repository.AppUserRepository;
 import pl.banzaijiujitsu.backend.service.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -20,9 +21,6 @@ import java.util.Optional;
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     boolean alreadySetup = false;
-
-    @Autowired
-    private AppUserRepository appUserRepository;
 
     @Autowired
     private RoleService roleService;
@@ -44,6 +42,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private PaymentTypeService paymentTypeService;
 
     @Override
     @Transactional
@@ -53,15 +53,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        Privilege readAllPrivilege = createPrivilegeIfNotFound("READ_ALL_MEMBERS_PRIVILAGE");
-        Privilege readOwnMembers = createPrivilegeIfNotFound("READ_OWN_MEMBERS_PRIVILAGE");
-        Privilege addMembers = createPrivilegeIfNotFound("CREATE_MEMBERS");
+        Privilege manageAllMembers = createPrivilegeIfNotFound("MANAGE_ALL_MEMBERS");
+        Privilege manageOwnMembers = createPrivilegeIfNotFound("MANAGE_OWN_MEMBERS");
+        Privilege manageUsers = createPrivilegeIfNotFound("MANAGE_USERS");
 
-        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", Arrays.asList(readAllPrivilege, addMembers));
-        createRoleIfNotFound("ROLE_COACH", Arrays.asList(readOwnMembers, addMembers));
+        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", Arrays.asList(manageAllMembers, manageUsers));
+        createRoleIfNotFound("ROLE_COACH", Arrays.asList(manageOwnMembers));
 
         try {
-            createAppUserIfNotFound(adminEmail, adminPassword);
+            createAppUserIfNotFound(adminEmail, adminPassword, Arrays.asList(adminRole));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -69,7 +69,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createPaymentMethodIfNotFound("CASH");
         createPaymentMethodIfNotFound("DEBIT");
 
-
+        createPaymentTypeIfNotFound("MONTHLY_FEE");
+        createPaymentTypeIfNotFound("STARTING_FEE");
 
         alreadySetup = true;
     }
@@ -120,13 +121,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    AppUser createAppUserIfNotFound(String email, String password) throws InvalidPasswordException {
+    AppUser createAppUserIfNotFound(String email, String password, Collection<Role> roles) throws InvalidPasswordException {
 
         AppUser appUser;
         Optional<AppUser> optionalAppUser = appUserService.findByEmail(email);
 
         if (optionalAppUser.isEmpty()) {
-            appUser = new AppUser(email, password);
+            appUser = new AppUser(email, password, roles);
             appUserService.save(appUser);
         }else{
             appUser = optionalAppUser.get();
@@ -135,10 +136,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return appUser;
     }
 
-//    @Transactional
-//    PaymentType createPaymentTypeIfNotFound(String name) {
-//        PaymentType paymentType;
-//    }
+    @Transactional
+    PaymentType createPaymentTypeIfNotFound(String name) {
+        PaymentType paymentType;
+        Optional<PaymentType> optionalPaymentType = paymentTypeService.findByName(name);
+
+        if(optionalPaymentType.isEmpty()){
+            paymentType = new PaymentType(name);
+            paymentTypeService.save(paymentType);
+        }else{
+            paymentType = optionalPaymentType.get();
+        }
+
+        return paymentType;
+    }
 
 
 }

@@ -40,7 +40,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/auth/*").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/register").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -48,7 +49,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(AuthenticationService authenticationService) {
-        return username -> authenticationService.loadUserByUsername(username)
+        return email -> authenticationService.loadUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

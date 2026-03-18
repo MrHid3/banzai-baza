@@ -9,6 +9,12 @@ import lombok.Setter;
 @Setter
 public class PaymentType {
 
+    public PaymentType() {}
+
+    public PaymentType(String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

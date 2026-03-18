@@ -11,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.exception.UsernameTakenException;
 import pl.banzaijiujitsu.backend.model.*;
@@ -53,10 +54,10 @@ public class AuthController {
             return ResponseEntity.ok("User registered succesfully");
         }catch (RoleNotFoundException e){
             return ResponseEntity.badRequest().body("Invalid role");
-        }catch (UsernameTakenException e){
-            return ResponseEntity.badRequest().body("Username taken");
         }catch (InvalidPasswordException e){
             return ResponseEntity.badRequest().body("Invalid password");
+        }catch (InvalidEmailException e){
+            return ResponseEntity.badRequest().body("Invalid email");
         }
     }
 
