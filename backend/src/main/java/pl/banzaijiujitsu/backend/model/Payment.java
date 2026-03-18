@@ -28,8 +28,6 @@ public class Payment {
     @JoinColumn(nullable = false)
     private PaymentType paymentType;
 
-    private Integer fullPrice;
-
     @JoinColumn(nullable = false)
     private Date paymentDate;
 
@@ -40,4 +38,9 @@ public class Payment {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Member payer;
+
+    @Column(nullable = false)
+    private boolean amountOverwritten;
+
+    private String comment;
 }

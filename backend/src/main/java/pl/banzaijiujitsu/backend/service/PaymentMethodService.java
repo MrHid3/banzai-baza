@@ -17,7 +17,7 @@ public class PaymentMethodService {
         return paymentMethodRepository.findById(id);
     }
 
-    public Optional<PaymentMethod> fundByName(String name) {
+    public Optional<PaymentMethod> findByName(String name) {
         return paymentMethodRepository.findByName(name);
     }
 

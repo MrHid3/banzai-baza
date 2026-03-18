@@ -3,6 +3,7 @@ package pl.banzaijiujitsu.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.exception.UsernameTakenException;
 import pl.banzaijiujitsu.backend.repository.AppUserRepository;
@@ -39,9 +40,9 @@ public class AppUserService {
         return appUserRepository.findByPhoneNumber(phooneNumber);
     }
 
-    public AppUser save(AppUser appUser) throws UsernameTakenException, InvalidPasswordException {
-        if(appUserRepository.findByUsername(appUser.getUsername()).isPresent()){
-            throw new UsernameTakenException();
+    public AppUser save(AppUser appUser) throws InvalidEmailException, InvalidPasswordException {
+        if(appUserRepository.findByUsername(appUser.getEmail()).isPresent()){
+            throw new InvalidEmailException("Email already exists");
         }
         appUser.hashPassword(encodingService);
         return appUserRepository.save(appUser);

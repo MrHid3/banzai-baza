@@ -2,6 +2,7 @@ package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.banzaijiujitsu.backend.exception.InvalidPaymentException;
 import pl.banzaijiujitsu.backend.model.Localization;
 import pl.banzaijiujitsu.backend.model.Payment;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
@@ -41,7 +42,11 @@ public class PaymentService {
         return paymentRepository.findByPayerUuid(uuid);
     }
 
-    public Payment save(Payment payment) {
+    public Payment save(Payment payment) throws InvalidPaymentException {
+        if(payment.isAmountOverwritten() && payment.getComment().isEmpty()) {
+            throw new InvalidPaymentException("Comment required to ovverride amount");
+        }
+        payment.setPaymentDate(new Date());
         return paymentRepository.save(payment);
     }
 }
