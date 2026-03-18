@@ -9,10 +9,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.model.*;
-import pl.banzaijiujitsu.backend.repository.AppUserRepository;
 import pl.banzaijiujitsu.backend.service.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -30,9 +28,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private PaymentMethodService paymentMethodService;
-
-    @Autowired
-    private EncodingService encodingService;
 
     @Value("${backend.admin-email}")
     private String adminEmail;

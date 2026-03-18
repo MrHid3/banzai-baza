@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
-import pl.banzaijiujitsu.backend.exception.UsernameTakenException;
 import pl.banzaijiujitsu.backend.model.*;
 import pl.banzaijiujitsu.backend.repository.RoleRepository;
 import pl.banzaijiujitsu.backend.service.AppUserService;

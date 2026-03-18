@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.cglib.core.Local;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.service.EncodingService;
@@ -44,7 +43,7 @@ public class AppUser {
     }
 
     public void setEmail(String email) throws InvalidEmailException {
-        Pattern pattern  = Pattern.compile("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$");
+        Pattern pattern  = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
         Matcher matcher = pattern.matcher(email);
         if(!matcher.find()){
             throw new InvalidEmailException();
