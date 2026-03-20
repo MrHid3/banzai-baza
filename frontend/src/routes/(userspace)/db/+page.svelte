@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type {PageProps} from "../$types"
+    import type {PageProps} from "../../../../.svelte-kit/types/src/routes"
     import Member from "./Member.svelte";
-    import {PUBLIC_BACKEND_URL} from "$env/static/public";
+    // import {PUBLIC_BACKEND_URL} from "$env/static/public";
 
     let { data }: PageProps = $props();
 

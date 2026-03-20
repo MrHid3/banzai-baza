@@ -9,14 +9,14 @@
         phoneNumber: string,
         location: string,
         monthlyFee: number,
-        payments: [
+        payments:
             {
                 month: number,
                 year: number,
                 method: string,
                 amount: number,
                 active: boolean
-            }]},
+            }[]},
         componentClass: string
     } = $props();
 

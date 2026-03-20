@@ -1,57 +1,18 @@
 <script lang="ts">
-	import Header from './Header.svelte';
-	import './layout.css';
 
-	let { children } = $props();
+    let { children } = $props();
+
 </script>
 
-<div class="app">
-	<Header />
-
-	<main>
-		{@render children()}
-	</main>
-
-	<footer>
-		<p>
-			visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to learn about SvelteKit
-		</p>
-	</footer>
-</div>
+{@render children()}
 
 <style>
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		width: 100%;
-		max-width: 64rem;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
-	}
-
-	footer a {
-		font-weight: bold;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
-	}
+    :global(*){
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+	    font-family: 'Ubuntu', sans-serif;
+    }
 </style>
