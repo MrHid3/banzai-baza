@@ -14,6 +14,7 @@ import pl.banzaijiujitsu.backend.service.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -123,6 +124,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         if (optionalAppUser.isEmpty()) {
             appUser = new AppUser(email, password, roles);
+//            if(uuid != null){
+//                appUser.setUuid(uuid);
+//            }
             appUserService.save(appUser);
         }else{
             appUser = optionalAppUser.get();

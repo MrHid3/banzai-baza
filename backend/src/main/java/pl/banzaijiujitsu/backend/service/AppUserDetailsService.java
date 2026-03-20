@@ -15,10 +15,7 @@ import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Privilege;
 import pl.banzaijiujitsu.backend.model.Role;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
@@ -37,10 +34,10 @@ public class AppUserDetailsService implements UserDetailsService {
         return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 
-    public UserDetails loadUserByUuid(UUID uuid) throws InvalidUuidException {
+    public Optional<UserDetails> loadUserByUuid(UUID uuid) throws InvalidUuidException {
         AppUser user = appUserService.findByUuid(uuid)
                 .orElseThrow(InvalidUuidException::new);
-        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
+        return Optional.of(new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles())));
     }
 
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {

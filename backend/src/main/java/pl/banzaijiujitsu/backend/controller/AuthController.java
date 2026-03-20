@@ -63,7 +63,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login (@RequestBody LoginRequest loginRequest, HttpServletResponse response){
         try{
-            System.out.println(loginRequest.toString());
             Authentication authentication = customAuthenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
                             loginRequest.getPassword()));
@@ -92,7 +91,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refresh (@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<String> refresh (@CookieValue(name = "refreshToken") String refreshToken, HttpServletResponse response) {
 
         if (refreshToken == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No refresh token");
