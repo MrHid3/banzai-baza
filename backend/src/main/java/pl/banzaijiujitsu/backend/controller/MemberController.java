@@ -75,7 +75,21 @@ public class MemberController {
 
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Member>> member(HttpServletResponse response){
-
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//
+//        try {
+//            assert auth != null;
+//
+//            if(auth.getAuthorities().contains()){
+//
+//            }
+//            Collection<Localization> allowed_localizations = appUserService
+//                    .findByEmail(auth.getName())
+//                    .orElseThrow(InvalidUuidException::new)
+//                    .getLocalizations();
+//
+//        }
+//
         return ResponseEntity.ok(memberService.findAll());
     }
 }
