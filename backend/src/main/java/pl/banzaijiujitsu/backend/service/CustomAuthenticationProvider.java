@@ -7,9 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.banzaijiujitsu.backend.exception.EmailNotFoundException;
+import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 
 @Service
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -32,7 +31,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = appUserDetailsService.loadUserByEmail(email);
 
         if(userDetails == null){
-            throw new EmailNotFoundException("Email not found");
+            throw new InvalidEmailException("Email not found");
         }
 
         if(!encodingService.passwordMatches(password, userDetails.getPassword())){

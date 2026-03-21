@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/notsecure").permitAll()
                         .requestMatchers("/api/auth/register").hasRole("ADMIN")
+                        .requestMatchers("/api/member/all").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -63,5 +64,4 @@ public class SecurityConfig {
     public AuthenticationProvider authenticationProvider(AppUserDetailsService appUserDetailsService, EncodingService encodingService){
         return new CustomAuthenticationProvider(appUserDetailsService, encodingService);
     }
-
 }

@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.banzaijiujitsu.backend.exception.EmailNotFoundException;
+import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
 import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Privilege;
@@ -28,9 +28,9 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws EmailNotFoundException {
+    public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws InvalidEmailException {
         AppUser user = appUserService.findByEmail(email)
-                .orElseThrow(EmailNotFoundException::new);
+                .orElseThrow(() -> new InvalidEmailException("Email not found"));
         return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 

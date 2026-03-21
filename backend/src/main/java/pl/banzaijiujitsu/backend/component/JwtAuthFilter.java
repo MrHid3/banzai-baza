@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
+import pl.banzaijiujitsu.backend.repository.InvalidLocalizationException;
 import pl.banzaijiujitsu.backend.service.AppUserDetailsService;
 import pl.banzaijiujitsu.backend.service.JwtService;
 
@@ -40,14 +42,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if(jwtService.isTokenValid(token)) {
 
-            UUID uuid = jwtService.extractUuid(token);
-            UserDetails userDetails = appUserDetailsService.loadUserByUuid(uuid).
-                    orElseThrow(ServletException::new);
+            try {
+                UUID uuid = jwtService.extractUuid(token);
+                UserDetails userDetails = appUserDetailsService.loadUserByUuid(uuid).
+                        orElseThrow(InvalidUuidException::new);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }catch(InvalidUuidException e){
+                filterChain.doFilter(request, response);
+            }
         }
 
         filterChain.doFilter(request, response);

@@ -10,6 +10,12 @@ import lombok.Setter;
 @Table
 public class Localization {
 
+    public Localization(){}
+
+    public Localization(String name){
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

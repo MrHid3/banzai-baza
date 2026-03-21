@@ -5,7 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-import pl.banzaijiujitsu.backend.exception.EmailNotFoundException;
+import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Role;
 
@@ -20,7 +20,7 @@ public class AuthenticationService {
     @Autowired
     private AppUserService appUserService;
 
-    public Optional<User> loadUserByEmail(String email) throws EmailNotFoundException {
+    public Optional<User> loadUserByEmail(String email) throws InvalidEmailException {
         Optional<AppUser> optionalAppUser = this.appUserService.findByEmail(email);
         if(optionalAppUser.isEmpty()){
             return Optional.empty();

@@ -75,9 +75,9 @@ public class AppUser {
 
     @ManyToMany(fetch =  FetchType.EAGER)
     @JoinTable(
-            name = "users_roles",
+            name = "app_users_roles",
             joinColumns = @JoinColumn(
-                    name = "user_uuid", referencedColumnName = "uuid"),
+                    name = "app_user_uuid", referencedColumnName = "uuid"),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;

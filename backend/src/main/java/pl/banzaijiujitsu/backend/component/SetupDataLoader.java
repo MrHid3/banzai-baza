@@ -4,6 +4,7 @@ package pl.banzaijiujitsu.backend.component;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -38,8 +39,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private AppUserService appUserService;
+
     @Autowired
     private PaymentTypeService paymentTypeService;
+
+    @Autowired
+    private LocalizationService localizationService;
 
     @Override
     @Transactional
@@ -67,6 +72,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         createPaymentTypeIfNotFound("MONTHLY_FEE");
         createPaymentTypeIfNotFound("STARTING_FEE");
+
+        createLocalizationIfNotFound("Szkoła Podstawowa nr 24");
+        createLocalizationIfNotFound("Szkoła Podstawowa nr 111");
 
         alreadySetup = true;
     }
@@ -150,5 +158,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return paymentType;
     }
 
+    @Transactional
+    Localization createLocalizationIfNotFound(String name) {
+        Localization localization;
+        Optional<Localization> optionalLocalization = localizationService.findByName(name);
+
+        if(optionalLocalization.isEmpty()){
+            localization = new Localization(name);
+            localizationService.save(localization);
+        }else{
+            localization = optionalLocalization.get();
+        }
+
+        return localization;
+    }
 
 }
