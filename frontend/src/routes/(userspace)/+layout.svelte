@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Header from './Header.svelte';
 	import '../layout.css';
+	import RouteGuard from "$lib/RouteGuard.svelte";
 
 	let { children } = $props();
 </script>
-
+<RouteGuard>
 <div class="app">
 	<Header />
 
@@ -18,7 +19,7 @@
 		</p>
 	</footer>
 </div>
-
+</RouteGuard>
 <style>
 	.app {
 		display: flex;

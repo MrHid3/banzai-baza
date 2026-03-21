@@ -22,6 +22,7 @@ import pl.banzaijiujitsu.backend.service.RefreshTokenService;
 
 import javax.management.relation.RoleNotFoundException;
 import java.util.Arrays;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,7 +62,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login (@RequestBody LoginRequest loginRequest, HttpServletResponse response){
+    public ResponseEntity<Map<String, String>> login (@RequestBody LoginRequest loginRequest, HttpServletResponse response){
         try{
             Authentication authentication = customAuthenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
@@ -75,18 +76,21 @@ public class AuthController {
 
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(appUser);
 
-            Cookie refreshCookie = new Cookie("refreshToken", refreshToken.getToken());
-            refreshCookie.setHttpOnly(true);
-            refreshCookie.setSecure(true);
-            refreshCookie.setPath("/api/auth/refresh");
-            refreshCookie.setMaxAge(30 * 24 * 60 * 60);
-            response.addCookie(refreshCookie);
+//            Cookie refreshCookie = new Cookie("refreshToken", refreshToken.getToken());
+//            refreshCookie.setHttpOnly(true);
+//            refreshCookie.setSecure(true);
+//            refreshCookie.setPath("/api/auth/refresh");
+//            refreshCookie.setMaxAge(30 * 24 * 60 * 60);
+//            response.addCookie(refreshCookie);
 
-            return ResponseEntity.ok(accessToken);
+            return ResponseEntity.ok(Map.of(
+                    "accessToken", accessToken,
+                    "refreshToken", refreshToken.getToken()
+            ));
         }catch(UsernameNotFoundException e){
-            return ResponseEntity.badRequest().body("Username not found");
+            return ResponseEntity.badRequest().body(Map.of("error", "Username not found"));
         }catch(AuthenticationException e){
-            return ResponseEntity.badRequest().body("Wrong username or password");
+            return ResponseEntity.badRequest().body(Map.of("error", "Wrong username or password"));
         }
     }
 

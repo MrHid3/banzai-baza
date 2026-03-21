@@ -1,15 +1,9 @@
-import type { PageLoad } from '../../../../.svelte-kit/types/src/routes';
+import { fetchWithAuth } from '$lib/fetchWithAuth.js';
+import type {PageLoad} from "../../../../.svelte-kit/types/src/routes/$types";
 
-export const load: PageLoad = async ({ fetch, params }) => {
+export const load: PageLoad = async (event) => {
 
-    const result = await fetch(``, {
-        // method: "GET",
-        // headers: {
-        //     "Access-Control-Allow-Origin": "*",
-        // }
-    });
-
-    return {
-        // result: result
-    };
+    const res = await fetchWithAuth(`/api/member/all`, {method: "GET"}, event.fetch)
+    const json = await res.json();
+    return { members: json};
 };

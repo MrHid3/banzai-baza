@@ -1,12 +1,23 @@
 <script lang="ts">
     import {enhance} from "$app/forms"
-    import {setContext} from "svelte";
+    import {goto} from "$app/navigation";
+    import {isAuthenticated, token} from '../../../stores/auth.ts'
+    import {get} from "svelte/store";
 
     let { form } = $props()
 
     const passwordPattern = ".{8,}";
 
     let showPassword = $state(false);
+
+    $effect(() => { if( form?.token ) {
+        token.set(form.token);
+        goto('/db');
+    }})
+
+    if(get(isAuthenticated)){
+        goto('/db');
+    }
 
 </script>
 
@@ -16,10 +27,6 @@
     <label for="show">
         <input type="checkbox" name="show" bind:checked={showPassword}>
         Pokaż hasło
-    </label>
-    <label for="remember">
-        <input type="checkbox" name="remember" id="remember"/>
-        Zapamiętaj mnie
     </label>
     <button id="send" type="submit">Zaloguj się</button>
 

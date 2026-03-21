@@ -2,8 +2,9 @@
   import svelteLogo from './assets/svelte.svg'
   import viteLogo from '/vite.svg'
   import Counter from './lib/Counter.svelte'
+  import RouteGuard from "$lib/RouteGuard.svelte";
 </script>
-
+<RouteGuard>
 <main>
   <div>
     <a href="https://vite.dev" target="_blank" rel="noreferrer">
@@ -27,6 +28,7 @@
     Click on the Vite and Svelte logos to learn more
   </p>
 </main>
+</RouteGuard>
 
 <style>
   .logo {

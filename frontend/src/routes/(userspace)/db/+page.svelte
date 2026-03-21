@@ -1,35 +1,9 @@
 <script lang="ts">
-    import type {PageProps} from "../../../../.svelte-kit/types/src/routes"
     import Member from "./Member.svelte";
-    // import {PUBLIC_BACKEND_URL} from "$env/static/public";
 
-    let { data }: PageProps = $props();
+    let { data } = $props();
 
-    const members = [{
-        id: 1,
-        name: "Adam",
-        surname: "Małysz",
-        email: "amalysz@gmail.com",
-        phoneNumber: "123456789",
-        location: "SP 24",
-        monthlyFee: 150,
-        payments: [
-            {
-                date: "2026-02-02",
-                amount: 150,
-                method: "cash",
-                active: true,
-            },
-            {
-                date: "2026-01-01",
-                amount: 150,
-                method: "debit",
-                active: true,
-            }
-        ]
-    }]
-
-
+    let members = $state(data.members);
 </script>
 
 <div class="container">
@@ -39,9 +13,9 @@
             <span class="data">Nazwisko</span>
             <span class="data">Email</span>
             <span class="data">Numer telefonu</span>
-            <span class="data">{data.json}</span>
+<!--            <span class="data">{data.json}</span>-->
         </div>
-        {#each members as member}
+        {#each members as member, index (index)}
             <Member componentClass="Member" member={member}></Member>
         {/each}
     </div>
