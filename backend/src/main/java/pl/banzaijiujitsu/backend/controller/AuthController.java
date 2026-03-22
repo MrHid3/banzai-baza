@@ -62,7 +62,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login (@RequestBody LoginRequest loginRequest, HttpServletResponse response){
+    public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest, HttpServletResponse response){
         try{
             Authentication authentication = customAuthenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
@@ -88,14 +88,14 @@ public class AuthController {
                     "refreshToken", refreshToken.getToken()
             ));
         }catch(UsernameNotFoundException e){
-            return ResponseEntity.badRequest().body(Map.of("error", "Username not found"));
+            return ResponseEntity.badRequest().body("Username not found");
         }catch(AuthenticationException e){
-            return ResponseEntity.badRequest().body(Map.of("error", "Wrong username or password"));
+            return ResponseEntity.badRequest().body("Wrong username or password");
         }
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refresh (@CookieValue(name = "refreshToken") String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<String> refresh (@CookieValue(name = "refreshToken", required = false, value = "") String refreshToken, HttpServletResponse response) {
 
         if (refreshToken == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No refresh token");

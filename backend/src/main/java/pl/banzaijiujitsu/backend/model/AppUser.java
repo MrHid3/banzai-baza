@@ -83,5 +83,5 @@ public class AppUser {
     private Collection<Role> roles;
 
     @ManyToMany
-    private Collection<Localization> localizations;
+    private Collection<Location> locations;
 }

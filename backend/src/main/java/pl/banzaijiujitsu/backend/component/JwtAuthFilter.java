@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
-import pl.banzaijiujitsu.backend.repository.InvalidLocalizationException;
 import pl.banzaijiujitsu.backend.service.AppUserDetailsService;
 import pl.banzaijiujitsu.backend.service.JwtService;
 

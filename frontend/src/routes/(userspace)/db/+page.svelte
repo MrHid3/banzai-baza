@@ -4,6 +4,7 @@
     let { data } = $props();
 
     let members = $state(data.members);
+
 </script>
 
 <div class="container">
@@ -13,7 +14,7 @@
             <span class="data">Nazwisko</span>
             <span class="data">Email</span>
             <span class="data">Numer telefonu</span>
-<!--            <span class="data">{data.json}</span>-->
+            <span class="data">Lokalizacja</span>
         </div>
         {#each members as member, index (index)}
             <Member componentClass="Member" member={member}></Member>

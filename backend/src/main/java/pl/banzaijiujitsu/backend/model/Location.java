@@ -8,12 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table
-public class Localization {
+public class Location {
 
-    public Localization(){}
+    public Location(){}
 
-    public Localization(String name){
+    public Location(String name, String shortname){
         this.name = name;
+        this.shortname = shortname;
     }
 
     @Id
@@ -22,4 +23,7 @@ public class Localization {
 
     @Column(unique = true, nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String shortname;
 }

@@ -11,6 +11,6 @@ public class MemberRequest {
     private String phoneNumber;
     private String name;
     private String surname;
-    private Long localization_id;
+    private Long location_id;
     private Integer monthlyFee;
 }

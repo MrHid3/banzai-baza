@@ -1,6 +1,7 @@
 import { writable, derived, type Readable } from 'svelte/store';
 import { browser } from '$app/environment';
 import {goto} from "$app/navigation";
+import {redirect} from "@sveltejs/kit";
 
 const storedToken = browser ? localStorage.getItem('accessToken') : null;
 

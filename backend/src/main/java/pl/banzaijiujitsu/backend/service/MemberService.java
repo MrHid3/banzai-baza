@@ -2,10 +2,11 @@ package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.banzaijiujitsu.backend.model.Localization;
+import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.repository.MemberRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,8 +21,8 @@ public class MemberService {
         return  memberRepository.findByEmail(email);
     }
 
-    public List<Member> findByLocalization(Localization localization) {
-        return  memberRepository.findByLocalization(localization);
+    public List<Member> findByLocation(Location location) {
+        return  memberRepository.findByLocation(location);
     }
 
     public Optional<Member> findByUuid(UUID uuid) {
@@ -34,5 +35,9 @@ public class MemberService {
 
     public Member save(Member member) {
         return memberRepository.save(member);
+    }
+
+    public Collection<Member> findByLocationIsIn(Collection<Location> locations){
+        return memberRepository.findByLocationIsIn(locations);
     }
 }

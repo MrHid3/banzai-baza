@@ -4,7 +4,6 @@ package pl.banzaijiujitsu.backend.component;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,6 @@ import pl.banzaijiujitsu.backend.service.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -44,7 +42,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private PaymentTypeService paymentTypeService;
 
     @Autowired
-    private LocalizationService localizationService;
+    private LocationService locationService;
 
     @Override
     @Transactional
@@ -73,8 +71,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createPaymentTypeIfNotFound("MONTHLY_FEE");
         createPaymentTypeIfNotFound("STARTING_FEE");
 
-        createLocalizationIfNotFound("Szkoła Podstawowa nr 24");
-        createLocalizationIfNotFound("Szkoła Podstawowa nr 111");
+        createLocationIfNotFound("Szkoła Podstawowa nr 24", "SP24");
+        createLocationIfNotFound("Szkoła Podstawowa nr 111", "SP111");
 
         alreadySetup = true;
     }
@@ -159,18 +157,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    Localization createLocalizationIfNotFound(String name) {
-        Localization localization;
-        Optional<Localization> optionalLocalization = localizationService.findByName(name);
+    Location createLocationIfNotFound(String name, String shortname) {
+        Location location;
+        Optional<Location> optionalLocaltion = locationService.findByName(name);
 
-        if(optionalLocalization.isEmpty()){
-            localization = new Localization(name);
-            localizationService.save(localization);
+        if(optionalLocaltion.isEmpty()){
+            location = new Location(name, shortname);
+            locationService.save(location);
         }else{
-            localization = optionalLocalization.get();
+            location = optionalLocaltion.get();
         }
 
-        return localization;
+        return location;
     }
 
 }

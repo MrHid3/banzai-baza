@@ -1,30 +1,23 @@
 package pl.banzaijiujitsu.backend.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
-import pl.banzaijiujitsu.backend.model.AppUser;
-import pl.banzaijiujitsu.backend.model.Localization;
-import pl.banzaijiujitsu.backend.model.Member;
-import pl.banzaijiujitsu.backend.model.MemberRequest;
-import pl.banzaijiujitsu.backend.repository.InvalidLocalizationException;
+import pl.banzaijiujitsu.backend.model.*;
+import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
 import pl.banzaijiujitsu.backend.service.AppUserService;
 import pl.banzaijiujitsu.backend.service.JwtService;
-import pl.banzaijiujitsu.backend.service.LocalizationService;
+import pl.banzaijiujitsu.backend.service.LocationService;
 import pl.banzaijiujitsu.backend.service.MemberService;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/member")
@@ -40,7 +33,7 @@ public class MemberController {
     private AppUserService appUserService;
 
     @Autowired
-    private LocalizationService localizationService;
+    private LocationService locationService;
 
     @PostMapping("/add")
     public ResponseEntity<String> addMember(@RequestBody MemberRequest memberRequest, HttpServletResponse response){
@@ -50,46 +43,51 @@ public class MemberController {
         try {
 
             assert auth != null;
-            Collection<Localization> allowed_localizations = appUserService
+            Collection<Location> allowed_locations = appUserService
                     .findByEmail(auth.getName())
                     .orElseThrow(InvalidUuidException::new)
-                    .getLocalizations();
+                    .getLocations();
 
-            Localization memberLocalization = localizationService.findById(
-                            memberRequest.getLocalization_id())
-                    .orElseThrow(() -> new InvalidLocalizationException("Invalid localization id"));
+            Location memberLocation = locationService.findById(
+                            memberRequest.getLocation_id())
+                .orElseThrow(() -> new InvalidLocationException("Invalid location id"));
 
-            if (allowed_localizations.contains(memberLocalization)) {
-                throw new InvalidLocalizationException("User doesn't have access to this localization");
+            if (allowed_locations.contains(memberLocation)) {
+                throw new InvalidLocationException("User doesn't have access to this location");
             }
 
-            Member member = new Member(memberRequest.getEmail(), memberRequest.getName(), memberRequest.getSurname(), memberLocalization);
+            Member member = new Member(memberRequest.getEmail(), memberRequest.getName(), memberRequest.getSurname(), memberLocation);
 
             memberService.save(member);
-        }catch (InvalidLocalizationException | InvalidEmailException e){
+        }catch (InvalidLocationException | InvalidEmailException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
         return ResponseEntity.ok("Member added");
     }
 
+    //TODO: sprawdź czy to działa na użytkowników bez i z mniejszą niż wszystkie liczbą lokalizacji
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Member>> member(HttpServletResponse response){
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//
-//        try {
-//            assert auth != null;
-//
-//            if(auth.getAuthorities().contains()){
-//
-//            }
-//            Collection<Localization> allowed_localizations = appUserService
-//                    .findByEmail(auth.getName())
-//                    .orElseThrow(InvalidUuidException::new)
-//                    .getLocalizations();
-//
-//        }
-//
-        return ResponseEntity.ok(memberService.findAll());
+    public ResponseEntity<Collection<Member>> member(HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Collection<Member> members = Collections.emptyList();
+        try {
+            assert auth != null;
+
+            if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+                members = memberService.findAll();
+            }else {
+                Collection<Location> allowed_locations = appUserService
+                        .findByEmail(auth.getName())
+                        .orElseThrow(InvalidUuidException::new)
+                        .getLocations();
+
+                members = memberService.findByLocationIsIn(allowed_locations);
+            }
+        }catch (Exception e){
+            ResponseEntity.internalServerError();
+        }
+        return ResponseEntity.ok(members);
     }
 }

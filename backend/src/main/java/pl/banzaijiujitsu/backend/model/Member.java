@@ -16,11 +16,11 @@ public class Member {
 
     public Member(){}
 
-    public Member(String email, String name, String surname, Localization localization) {
+    public Member(String email, String name, String surname, Location location) {
         this.setEmail(email);
         this.name = name;
         this.surname = surname;
-        this.localization = localization;
+        this.location = location;
     }
 
     public void setEmail(String email) throws InvalidEmailException {
@@ -48,6 +48,6 @@ public class Member {
     private Integer monthlyFee;
 
     @ManyToOne
-    private Localization localization;
+    private Location location;
 
 }

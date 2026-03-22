@@ -1,23 +1,24 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import { goto } from '$app/navigation'
-    import { isAuthenticated } from "../stores/auth.ts";
+    import {isAuthenticated, token} from "../stores/auth.ts";
     import { refreshAccessToken} from "$lib/fetchWithAuth.js";
+    import {browser} from "$app/environment";
 
     let checked = false;
 
-    onMount(() => {
+    onMount(async () => {
 
         if(!$isAuthenticated) {
-            refreshAccessToken(fetch);
-            if(!$isAuthenticated) {
-                goto('/login');
-            }
+            await refreshAccessToken(fetch);
         }
         checked = true;
     })
+
 </script>
 
-{#if checked && isAuthenticated}
+{#if !checked}
+    <div></div>
+{:else }
     <slot/>
 {/if}
