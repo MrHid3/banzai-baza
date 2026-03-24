@@ -3,6 +3,8 @@
     import {goto} from "$app/navigation";
     import {isAuthenticated, token} from '../../../stores/auth.ts'
     import {get} from "svelte/store";
+    import {onMount} from "svelte";
+    import {refreshAccessToken} from "$lib/fetchWithAuth.ts";
 
     let { form } = $props()
 
@@ -10,17 +12,30 @@
 
     let showPassword = $state(false);
 
+    let checked = false;
+
+    onMount(async () => {
+        if ($isAuthenticated) {
+            await goto("/db");
+        }
+        checked = true;
+    })
+
     $effect(() => { if( form?.token ) {
         token.set(form.token);
         goto('/db');
     }})
 
-    if(get(isAuthenticated)){
-        goto('/db');
+    $effect(() => {
+        if($isAuthenticated)
+            goto('/db');
+    })
+    if(!$isAuthenticated) {
+        refreshAccessToken()
     }
-
+    //TODO: Fancy loading type shit
 </script>
-
+{#if !$isAuthenticated}
 <form method="POST" action="?/login" use:enhance>
     <input type="email" name="email">
     <input type={showPassword? "text" : "password"} name="password" pattern={passwordPattern}>
@@ -34,7 +49,7 @@
         {form.error}
     {/if}
 </form>
-
+{/if}
 <style>
 
     form{

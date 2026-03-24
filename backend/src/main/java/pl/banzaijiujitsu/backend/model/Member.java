@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 
+import java.sql.Blob;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +16,10 @@ import java.util.regex.Pattern;
 public class Member {
 
     public Member(){}
+
+    public Member(String email) {
+        this.email = email;
+    }
 
     public Member(String email, String name, String surname, Location location) {
         this.setEmail(email);
@@ -49,5 +54,7 @@ public class Member {
 
     @ManyToOne
     private Location location;
+
+    private String comment;
 
 }

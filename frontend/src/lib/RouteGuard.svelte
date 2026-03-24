@@ -12,6 +12,9 @@
         if(!$isAuthenticated) {
             await refreshAccessToken(fetch);
         }
+        if(!$isAuthenticated) {
+            goto('/login');
+        }
         checked = true;
     })
 

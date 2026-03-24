@@ -62,7 +62,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest, HttpServletResponse response){
+    public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest){
         try{
             Authentication authentication = customAuthenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),

@@ -1,5 +1,6 @@
 import { PUBLIC_BACKEND_2, PUBLIC_DEV } from '$env/static/public';
 import { fail, redirect } from '@sveltejs/kit';
+import { isAuthenticated} from "../../../stores/auth.ts";
 
 export const actions = {
 	login: async ({ request, cookies }) => {
@@ -17,6 +18,7 @@ export const actions = {
 				password: password
 			})
 		});
+		if (!res.ok) return fail(400, { error: await res.text() });
 
 		const { accessToken, refreshToken } = await res.json();
 
@@ -26,7 +28,6 @@ export const actions = {
 			sameSite: 'strict',
 			path: `/api/auth/refresh`
 		});
-		if (!res.ok) return fail(400, { error: await res.text() });
 		// throw redirect(303, '/db')
 		return { success: true, token: await accessToken };
 	}

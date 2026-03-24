@@ -3,6 +3,7 @@ import {get} from "svelte/store";
 import {PUBLIC_BACKEND_2} from "$env/static/public";
 import {browser} from "$app/environment";
 import {redirect} from "@sveltejs/kit";
+import {goto} from "$app/navigation";
 
 export async function refreshAccessToken(customFetch = fetch) {
 	if(!browser){
@@ -12,9 +13,8 @@ export async function refreshAccessToken(customFetch = fetch) {
         method: "POST",
         credentials: "include"
     })
-
     if(!res.ok){
-		throw redirect(302, "/login");
+		await logout(customFetch);
 	}
 
 	token.set(await res.text())
@@ -47,7 +47,9 @@ export async function fetchWithAuth(input: RequestInfo, init: RequestInit = {}, 
 		});
 	}
 	if (!res.ok) {
-		logout()
+		await logout(customFetch)
+		// if(browser)
+		// 	goto("/login")
 	}
 	return res;
 }

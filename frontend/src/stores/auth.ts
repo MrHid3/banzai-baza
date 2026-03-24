@@ -34,6 +34,12 @@ export const isAuthenticated : Readable<boolean> = derived(token, $token => {
 	}
 })
 
-export function logout() {
-	token.set(null);
+export async function logout(customFetch = fetch) {
+	if(browser){
+		token.set(null);
+		await customFetch('/logout', { method: 'POST' });
+		await goto('/login')
+	}
+	// throw redirect(303, '/login');
+	// goto('/login')
 }

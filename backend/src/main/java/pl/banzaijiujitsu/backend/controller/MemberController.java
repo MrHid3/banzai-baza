@@ -2,6 +2,7 @@ package pl.banzaijiujitsu.backend.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -56,7 +57,13 @@ public class MemberController {
                 throw new InvalidLocationException("User doesn't have access to this location");
             }
 
-            Member member = new Member(memberRequest.getEmail(), memberRequest.getName(), memberRequest.getSurname(), memberLocation);
+            Member member = new Member(memberRequest.getEmail());
+            member.setName(memberRequest.getName());
+            member.setSurname(memberRequest.getSurname());
+            member.setLocation(memberLocation);
+            member.setComment(memberRequest.getComment());
+            member.setMonthlyFee(memberRequest.getMonthlyFee());
+            member.setPhoneNumber(memberRequest.getPhoneNumber());
 
             memberService.save(member);
         }catch (InvalidLocationException | InvalidEmailException e){
@@ -68,12 +75,15 @@ public class MemberController {
 
     //TODO: sprawdź czy to działa na użytkowników bez i z mniejszą niż wszystkie liczbą lokalizacji
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<Member>> member(HttpServletResponse response){
+//    public ResponseEntity<Collection<Member>> member(){
+        public ResponseEntity<?> member(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         Collection<Member> members = Collections.emptyList();
         try {
-            assert auth != null;
+            if (auth == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
 
             if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
                 members = memberService.findAll();
@@ -86,7 +96,7 @@ public class MemberController {
                 members = memberService.findByLocationIsIn(allowed_locations);
             }
         }catch (Exception e){
-            ResponseEntity.internalServerError();
+            return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok(members);
     }
