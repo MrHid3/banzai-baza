@@ -4,21 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Getter
-@Setter
-public class PaymentType {
-
-    public PaymentType() {}
-
-    public PaymentType(String name) {
-        this.name = name;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String name;
+public enum PaymentType {
+    MONTHLY_FEE,
+    STARTING_FEE
 }

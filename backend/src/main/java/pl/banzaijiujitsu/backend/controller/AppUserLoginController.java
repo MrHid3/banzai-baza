@@ -2,6 +2,8 @@ package pl.banzaijiujitsu.backend.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
-import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
-import pl.banzaijiujitsu.backend.exception.UserNotActiveException;
+import pl.banzaijiujitsu.backend.exception.*;
 import pl.banzaijiujitsu.backend.model.*;
 import pl.banzaijiujitsu.backend.repository.RoleRepository;
 import pl.banzaijiujitsu.backend.service.AppUserService;
@@ -36,7 +36,7 @@ public class AppUserLoginController {
     private final RoleRepository roleRepository;
 
     @Autowired
-    public AppUserLoginController(AppUserService appUserService, CustomAuthenticationProvider customAuthenticationProvider, JwtService jwtService, RefreshTokenService refreshTokenService, RoleRepository roleRepository){
+    public AppUserLoginController(AppUserService appUserService, CustomAuthenticationProvider customAuthenticationProvider, JwtService jwtService, RefreshTokenService refreshTokenService, RoleRepository roleRepository) {
         this.appUserService = appUserService;
         this.customAuthenticationProvider = customAuthenticationProvider;
         this.jwtService = jwtService;
@@ -63,37 +63,29 @@ public class AppUserLoginController {
 //    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest){
-        try{
-            Authentication authentication = customAuthenticationProvider.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
-                            loginRequest.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = customAuthenticationProvider.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.email(),
+                        loginRequest.password()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            AppUser appUser = appUserService.findByEmail(loginRequest.getEmail())
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        AppUser appUser = appUserService.findByEmail(loginRequest.email())
+                .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
 
-            String accessToken = jwtService.generateAccessToken(appUser);
+        String accessToken = jwtService.generateAccessToken(appUser);
 
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(appUser);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(appUser);
 
-            return ResponseEntity.ok(Map.of(
-                    "accessToken", accessToken,
-                    "refreshToken", refreshToken.getToken()
-            ));
-        }catch(UsernameNotFoundException e) {
-            return ResponseEntity.badRequest().body("USER_NOT_FOUND");
-        } catch (UserNotActiveException e){
-            return ResponseEntity.badRequest().body("USER_INACTIVE");
-        }catch(AuthenticationException e){
-            return ResponseEntity.badRequest().body("WRONG_PASSWORD_OR_USERNAME");
-        }
+        return ResponseEntity.ok(Map.of(
+                "accessToken", accessToken,
+                "refreshToken", refreshToken.getToken()
+        ));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refresh (@CookieValue(name = "refreshToken", required = false, value = "") String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<String> refresh(@CookieValue(name = "refreshToken", required = false, value = "") String refreshToken, HttpServletResponse response) {
 
-        if (refreshToken == null){
+        if (refreshToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No refresh token");
         }
 
@@ -102,14 +94,13 @@ public class AppUserLoginController {
                     String newAccessToken = jwtService.generateAccessToken(
                             rt.getAppUser());
                     return ResponseEntity.ok(newAccessToken);
-                })
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired access token"));
+                }).orElseThrow(InvalidRefreshTokenException::new);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout (@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<String> logout(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
 
-        if (refreshToken != null){
+        if (refreshToken != null) {
             refreshTokenService.findValidToken(refreshToken)
                     .ifPresent(rt -> refreshTokenService.deleteByAppUser(
                             rt.getAppUser()));
@@ -126,4 +117,8 @@ public class AppUserLoginController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
+    public record LoginRequest(
+            @NotNull @Email String email,
+            @NotNull String password
+    ) { }
 }

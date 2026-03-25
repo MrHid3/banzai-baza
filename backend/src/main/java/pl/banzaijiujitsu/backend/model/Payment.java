@@ -20,12 +20,8 @@ public class Payment {
     @Column(nullable = false)
     private Integer amount;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
     private PaymentMethod paymentMethod;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
     private PaymentType paymentType;
 
     @JoinColumn(nullable = false)

@@ -39,13 +39,13 @@ public class VerificationTokenService {
                 .orElseThrow(InvalidTokenException::new);
 
         if(token.getType() != expectedType){
-            throw new InvalidTokenException("Invalid token type");
+            throw new InvalidTokenException("INVALID_TOKEN_TYPE");
         }
         if (token.getUsed()){
-            throw new InvalidTokenException("Token already used");
+            throw new InvalidTokenException("TOKEN_ALREADY_USED");
         }
         if(token.getExpiresAt().isBefore(LocalDateTime.now())){
-            throw new InvalidTokenException("Token expired");
+            throw new InvalidTokenException("TOKEN_EXPIRED");
         }
         return token;
     }

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.exception.InvalidRoleException;
 import pl.banzaijiujitsu.backend.model.AppUser;
-import pl.banzaijiujitsu.backend.model.RegisterRequest;
-import pl.banzaijiujitsu.backend.model.Role;
 import pl.banzaijiujitsu.backend.model.VerificationToken;
 import pl.banzaijiujitsu.backend.service.AppUserService;
 import pl.banzaijiujitsu.backend.service.EmailService;

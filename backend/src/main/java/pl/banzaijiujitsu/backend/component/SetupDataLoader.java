@@ -26,9 +26,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private PrivilegeService privilegeService;
 
-    @Autowired
-    private PaymentMethodService paymentMethodService;
-
     @Value("${backend.admin-email}")
     private String adminEmail;
 
@@ -37,9 +34,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private AppUserService appUserService;
-
-    @Autowired
-    private PaymentTypeService paymentTypeService;
 
     @Autowired
     private LocationService locationService;
@@ -64,12 +58,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        createPaymentMethodIfNotFound("CASH");
-        createPaymentMethodIfNotFound("DEBIT");
-
-        createPaymentTypeIfNotFound("MONTHLY_FEE");
-        createPaymentTypeIfNotFound("STARTING_FEE");
 
         createLocationIfNotFound("Szkoła Podstawowa nr 24", "SP24");
         createLocationIfNotFound("Szkoła Podstawowa nr 111", "SP111");
@@ -106,23 +94,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return role;
     }
 
-    @Transactional
-    PaymentMethod createPaymentMethodIfNotFound(String name) {
-
-        PaymentMethod paymentMethod;
-        Optional<PaymentMethod> optionalPaymentMethod = paymentMethodService.findByName(name);
-
-        if(optionalPaymentMethod.isEmpty()){
-            paymentMethod = new PaymentMethod(name);
-            paymentMethodService.save(paymentMethod);
-        }else{
-            paymentMethod =  optionalPaymentMethod.get();
-        }
-
-        return paymentMethod;
-    }
-
-    @Transactional
     AppUser createAppUserIfNotFound(String email, String password, Collection<Role> roles) throws InvalidPasswordException {
 
         AppUser appUser;
@@ -139,21 +110,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
 
         return appUser;
-    }
-
-    @Transactional
-    PaymentType createPaymentTypeIfNotFound(String name) {
-        PaymentType paymentType;
-        Optional<PaymentType> optionalPaymentType = paymentTypeService.findByName(name);
-
-        if(optionalPaymentType.isEmpty()){
-            paymentType = new PaymentType(name);
-            paymentTypeService.save(paymentType);
-        }else{
-            paymentType = optionalPaymentType.get();
-        }
-
-        return paymentType;
     }
 
     @Transactional

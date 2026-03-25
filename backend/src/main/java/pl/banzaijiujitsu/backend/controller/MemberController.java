@@ -2,6 +2,8 @@ package pl.banzaijiujitsu.backend.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +39,7 @@ public class MemberController {
     private LocationService locationService;
 
     @PostMapping("/api/member")
-    public ResponseEntity<String> addMember(@RequestBody MemberRequest memberRequest, HttpServletResponse response){
+    public ResponseEntity<String> addMember(@RequestBody CreateMemberRequest memberRequest, HttpServletResponse response) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -50,88 +52,95 @@ public class MemberController {
                     .getLocations();
 
             Location memberLocation = locationService.findById(
-                            memberRequest.getLocation_id())
-                .orElseThrow(() -> new InvalidLocationException("Invalid location id"));
+                            memberRequest.location_id())
+                    .orElseThrow(() -> new InvalidLocationException("Invalid location id"));
 
             if (allowed_locations.contains(memberLocation)) {
                 throw new InvalidLocationException("User doesn't have access to this location");
             }
 
-            Member member = new Member(memberRequest.getEmail());
-            member.setName(memberRequest.getName());
-            member.setSurname(memberRequest.getSurname());
+            Member member = new Member(memberRequest.email());
+            member.setName(memberRequest.name());
+            member.setSurname(memberRequest.surname());
             member.setLocation(memberLocation);
-            member.setComment(memberRequest.getComment());
-            member.setMonthlyFee(memberRequest.getMonthlyFee());
-            member.setPhoneNumber(memberRequest.getPhoneNumber());
+            member.setComment(memberRequest.comment());
+            member.setMonthlyFee(memberRequest.monthlyFee());
+            member.setPhoneNumber(memberRequest.phoneNumber());
 
             memberService.save(member);
-        }catch (InvalidLocationException | InvalidEmailException e){
+        } catch (InvalidLocationException | InvalidEmailException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity.ok("Member added");
+        return ResponseEntity.accepted().build();
     }
 
     //TODO: sprawdź czy to działa na użytkowników bez i z mniejszą niż wszystkie liczbą lokalizacji
     @GetMapping(path = "/api/member", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<Collection<Member>> member(){
-        public ResponseEntity<?> member(){
+    public ResponseEntity<?> member() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         Collection<Member> members = Collections.emptyList();
-        try {
-            if (auth == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
+        if (auth == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-            if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
-                members = memberService.findAllByIsActiveTrue();
-            }else {
-                Collection<Location> allowed_locations = appUserService
-                        .findByEmail(auth.getName())
-                        .orElseThrow(InvalidUuidException::new)
-                        .getLocations();
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            members = memberService.findAllByIsActiveTrue();
+        } else {
+            Collection<Location> allowed_locations = appUserService
+                    .findByEmail(auth.getName())
+                    .orElseThrow(InvalidUuidException::new)
+                    .getLocations();
 
-                members = memberService.findByIsActiveTrueAndLocationIsIn(allowed_locations);
-            }
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
+            members = memberService.findByIsActiveTrueAndLocationIsIn(allowed_locations);
         }
         return ResponseEntity.ok(members);
     }
 
     @DeleteMapping("/api/member")
     @Transactional
-    public ResponseEntity<?> deleteMember(@RequestBody MemberRequest memberRequest){
-        System.out.println("aaaa");
+    public ResponseEntity<?> deleteMember(@RequestBody DeleteMemberRequest memberRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if(auth == null) {
+        if (auth == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        try {
-            Member member = memberService.findByUuid(memberRequest.getUuid()).orElseThrow(InvalidUuidException::new);
+        Member member = memberService.findByUuid(UUID.fromString(memberRequest.uuid())).orElseThrow(InvalidUuidException::new);
 
-            Collection<Location> allowed_locations;
-            if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
-                allowed_locations = locationService.findAll();
-            } else {
-                allowed_locations = appUserService
-                        .findByEmail(auth.getName())
-                        .orElseThrow(InvalidUuidException::new)
-                        .getLocations();
-            }
-            if(allowed_locations.contains(member.getLocation())) {
-                member.setIsActive(false);
-                memberService.save(member);
-            }else{
-                return ResponseEntity.badRequest().body("INVALID_LOCATION");
-            }
-        }catch (InvalidUuidException e){
-            return ResponseEntity.badRequest().body("INVALID_UUID");
+        Collection<Location> allowed_locations;
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            allowed_locations = locationService.findAll();
+        } else {
+            allowed_locations = appUserService
+                    .findByEmail(auth.getName())
+                    .orElseThrow(InvalidUuidException::new)
+                    .getLocations();
+        }
+        if (allowed_locations.contains(member.getLocation())) {
+            member.setIsActive(false);
+            memberService.save(member);
+        } else {
+            return ResponseEntity.badRequest().body("INVALID_LOCATION");
         }
 
-        return ResponseEntity.ok("Member deleted");
+        return ResponseEntity.ok().build();
+    }
+
+    public record CreateMemberRequest(
+            @NotNull Long location_id,
+            @NotNull @Email String email,
+            String name,
+            String surname,
+            String comment,
+            Integer monthlyFee,
+            String phoneNumber
+    ) {
+    }
+
+    public record DeleteMemberRequest(
+            @NotNull String uuid
+    ) {
     }
 }
