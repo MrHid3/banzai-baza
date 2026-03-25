@@ -1,0 +1,32 @@
+backend:
+- przeniesienie requestów z klas do recordów
+- error handling dla całej strony (@RestControllerAdvice)
+- zapomniałem hasła
+- zmiana maila?
+- memberzy:
+  - edycja memberów
+- płatności:
+  - wymyślenie do końca jak to działa
+  - dodawanie
+  - czytanie
+- 2fa może ale troche jebać
+- logi?
+
+frontend:
+- memberzy:
+  - dodawanie
+  - usuwanie
+  - edycja
+- zapomniałem hasła
+- płatności
+- layout dla coachy
+- layout na telefony
+- zarządzanie lokalizacjami
+- zarządzanie użytkownikami:
+  - /invite
+  - /set-password
+  - /profile
+  - przypisywanie do lokalizacji i gaszenie
+- logi?
+- beautiful
+- 

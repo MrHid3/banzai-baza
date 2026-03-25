@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: backend
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/banzai-baza
+    username: spring
+    password: password
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 3362863db29627
+    password: 00e479a4ad8579
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+jwt:
+  secret: iwrhghjiqreijoahjlhadjkladhofvjkeahiodhvadoijuhadfviohaeijohvaouheqadouch
+  expiration: 900000
+  refresh-expiration: 2592000000
+
+backend:
+  admin-email: gkornas@proton.me
+  admin-password: 120608Gk!
+
+app:
+  frontend-url: http://localhost:5173
+  magic-link:
+    expiry-hours: 24

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body style="font-family: sans-serif; color: #333;">
+<p>BA(N)ZA(I)</p>
+<p>Zostało stworzone dla ciebie konto. Kliknij w poniższy link, aby je aktywować.</p>
+<p>
+    <a th:href="${link}"
+       style="display:inline-block;padding:12px 24px;background:#4f46e5;color:#fff;border-radius:6px;text-decoration:none;">
+        Ustaw hasło
+    </a>
+</p>
+<p style="color:#666;font-size:13px;">
+    Link wygasa w <span th:text="${expiryHours}">24</span> godziny.
+    Jeżeli nie spodziewałeś/-eś się tego maila, zignoruj go.
+</p>
+</body>
+</html>

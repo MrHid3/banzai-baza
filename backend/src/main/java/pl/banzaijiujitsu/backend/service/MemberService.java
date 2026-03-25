@@ -44,4 +44,8 @@ public class MemberService {
     public Collection<Member> findByIsActiveTrueAndLocationIsIn(Collection<Location> locations){
         return memberRepository.findByIsActiveTrueAndLocationIsIn(locations);
     }
+
+    public Collection<Member> findAllByIsActiveTrue(){
+        return memberRepository.findAllByIsActiveTrue();
+    }
 }

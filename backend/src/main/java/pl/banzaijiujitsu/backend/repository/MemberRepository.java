@@ -22,4 +22,6 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     Collection<Member> findByLocationIsIn(Collection<Location> locations);
 
     Collection<Member> findByIsActiveTrueAndLocationIsIn(Collection<Location> locations);
+
+    Collection<Member> findAllByIsActiveTrue();
 }

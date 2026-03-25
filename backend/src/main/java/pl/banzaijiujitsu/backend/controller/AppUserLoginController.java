@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
+import pl.banzaijiujitsu.backend.exception.UserNotActiveException;
 import pl.banzaijiujitsu.backend.model.*;
 import pl.banzaijiujitsu.backend.repository.RoleRepository;
 import pl.banzaijiujitsu.backend.service.AppUserService;
@@ -26,7 +27,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AppUserLoginController {
 
     private final AppUserService appUserService;
     private final CustomAuthenticationProvider customAuthenticationProvider;
@@ -35,7 +36,7 @@ public class AuthController {
     private final RoleRepository roleRepository;
 
     @Autowired
-    public AuthController(AppUserService appUserService, CustomAuthenticationProvider customAuthenticationProvider, JwtService jwtService, RefreshTokenService refreshTokenService, RoleRepository roleRepository){
+    public AppUserLoginController(AppUserService appUserService, CustomAuthenticationProvider customAuthenticationProvider, JwtService jwtService, RefreshTokenService refreshTokenService, RoleRepository roleRepository){
         this.appUserService = appUserService;
         this.customAuthenticationProvider = customAuthenticationProvider;
         this.jwtService = jwtService;
@@ -43,23 +44,23 @@ public class AuthController {
         this.roleRepository = roleRepository;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registration(@RequestBody RegisterRequest registerRequest){
-        try{
-            AppUser appUser = new AppUser(registerRequest.getEmail(), registerRequest.getPassword());
-            Role role = roleRepository.findByName(registerRequest.getRole())
-                    .orElseThrow(() -> new RoleNotFoundException("Invalid role"));
-            appUser.setRoles(Arrays.asList(role));
-            appUserService.save(appUser);
-            return ResponseEntity.ok("User registered succesfully");
-        }catch (RoleNotFoundException e){
-            return ResponseEntity.badRequest().body("Invalid role");
-        }catch (InvalidPasswordException e){
-            return ResponseEntity.badRequest().body("Invalid password");
-        }catch (InvalidEmailException e){
-            return ResponseEntity.badRequest().body("Invalid email");
-        }
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<String> registration(@RequestBody RegisterRequest registerRequest){
+//        try{
+//            AppUser appUser = new AppUser(registerRequest.getEmail(), registerRequest.getPassword());
+//            Role role = roleRepository.findByName(registerRequest.getRole())
+//                    .orElseThrow(() -> new RoleNotFoundException("Invalid role"));
+//            appUser.setRoles(Arrays.asList(role));
+//            appUserService.save(appUser);
+//            return ResponseEntity.ok("User registered succesfully");
+//        }catch (RoleNotFoundException e){
+//            return ResponseEntity.badRequest().body("Invalid role");
+//        }catch (InvalidPasswordException e){
+//            return ResponseEntity.badRequest().body("Invalid password");
+//        }catch (InvalidEmailException e){
+//            return ResponseEntity.badRequest().body("Invalid email");
+//        }
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest){
@@ -76,21 +77,16 @@ public class AuthController {
 
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(appUser);
 
-//            Cookie refreshCookie = new Cookie("refreshToken", refreshToken.getToken());
-//            refreshCookie.setHttpOnly(true);
-//            refreshCookie.setSecure(true);
-//            refreshCookie.setPath("/api/auth/refresh");
-//            refreshCookie.setMaxAge(30 * 24 * 60 * 60);
-//            response.addCookie(refreshCookie);
-
             return ResponseEntity.ok(Map.of(
                     "accessToken", accessToken,
                     "refreshToken", refreshToken.getToken()
             ));
-        }catch(UsernameNotFoundException e){
-            return ResponseEntity.badRequest().body("Username not found");
+        }catch(UsernameNotFoundException e) {
+            return ResponseEntity.badRequest().body("USER_NOT_FOUND");
+        } catch (UserNotActiveException e){
+            return ResponseEntity.badRequest().body("USER_INACTIVE");
         }catch(AuthenticationException e){
-            return ResponseEntity.badRequest().body("Wrong username or password");
+            return ResponseEntity.badRequest().body("WRONG_PASSWORD_OR_USERNAME");
         }
     }
 

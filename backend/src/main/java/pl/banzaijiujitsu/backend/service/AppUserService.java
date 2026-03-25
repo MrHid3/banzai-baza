@@ -1,12 +1,15 @@
 package pl.banzaijiujitsu.backend.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
+import pl.banzaijiujitsu.backend.model.Role;
 import pl.banzaijiujitsu.backend.repository.AppUserRepository;
 import pl.banzaijiujitsu.backend.model.AppUser;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,5 +48,25 @@ public class AppUserService {
         }
         appUser.hashPassword(encodingService);
         return appUserRepository.save(appUser);
+    }
+
+    @Transactional
+    public AppUser createPending(String email, Role role) {
+        if (appUserRepository.existsByEmail(email)){
+            throw new InvalidEmailException("Email already in use");
+        }
+        AppUser appUser = new AppUser();
+        appUser.setEmail(email);
+        appUser.setRoles(Arrays.asList(role));
+        appUser.setStatus(AppUser.AppUserStatus.PENDING);
+        return appUserRepository.save(appUser);
+    }
+
+    @Transactional
+    public void activateAppUser(AppUser appUser, String password) throws InvalidPasswordException {
+        appUser.setPassword(password);
+        appUser.hashPassword(encodingService);
+        appUser.setStatus(AppUser.AppUserStatus.ACTIVE);
+        appUserRepository.save(appUser);
     }
 }

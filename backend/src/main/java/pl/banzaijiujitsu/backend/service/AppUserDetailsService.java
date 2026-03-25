@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
+import pl.banzaijiujitsu.backend.exception.UserNotActiveException;
 import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Privilege;
 import pl.banzaijiujitsu.backend.model.Role;
@@ -28,9 +29,12 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws InvalidEmailException {
+    public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws InvalidEmailException, UserNotActiveException {
         AppUser user = appUserService.findByEmail(email)
                 .orElseThrow(() -> new InvalidEmailException("Email not found"));
+        if(!user.isEnabled()){
+            throw new UserNotActiveException();
+        }
         return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 

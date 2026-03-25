@@ -22,7 +22,6 @@ import pl.banzaijiujitsu.backend.service.MemberService;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/member")
 public class MemberController {
 
     @Autowired
@@ -37,7 +36,7 @@ public class MemberController {
     @Autowired
     private LocationService locationService;
 
-    @PostMapping("/add")
+    @PostMapping("/api/member")
     public ResponseEntity<String> addMember(@RequestBody MemberRequest memberRequest, HttpServletResponse response){
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -75,7 +74,7 @@ public class MemberController {
     }
 
     //TODO: sprawdź czy to działa na użytkowników bez i z mniejszą niż wszystkie liczbą lokalizacji
-    @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/api/member", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<Collection<Member>> member(){
         public ResponseEntity<?> member(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -87,7 +86,7 @@ public class MemberController {
             }
 
             if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
-                members = memberService.findAll();
+                members = memberService.findAllByIsActiveTrue();
             }else {
                 Collection<Location> allowed_locations = appUserService
                         .findByEmail(auth.getName())
@@ -102,10 +101,10 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/api/member")
     @Transactional
     public ResponseEntity<?> deleteMember(@RequestBody MemberRequest memberRequest){
-//        System.out.println("aaaa");
+        System.out.println("aaaa");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if(auth == null) {

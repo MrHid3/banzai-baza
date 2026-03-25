@@ -33,7 +33,15 @@ public class AppUser {
         this.setRoles(roles);
     }
 
-    public void setPassword(String password) throws  InvalidPasswordException {
+    public enum AppUserStatus{
+        PENDING, ACTIVE
+    }
+
+    public boolean isEnabled(){
+        return this.status == AppUserStatus.ACTIVE;
+    }
+
+    public void setPassword(String password) throws InvalidPasswordException {
         Pattern pattern = Pattern.compile("^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*?[?!\\\\|'\";:+=-_()*&^%$#@<>,.`~\\[\\]{}/]).{8,})\\S$");
         Matcher matcher = pattern.matcher(password);
         if(!matcher.find()){
@@ -70,7 +78,6 @@ public class AppUser {
     @Column(unique = true)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private String password;
 
     @ManyToMany(fetch =  FetchType.EAGER)
@@ -84,4 +91,8 @@ public class AppUser {
 
     @ManyToMany
     private Collection<Location> locations;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AppUserStatus status = AppUserStatus.PENDING;
 }
