@@ -57,4 +57,6 @@ public class Member {
 
     private String comment;
 
+    @Column(nullable = false)
+    private Boolean isActive = true;
 }

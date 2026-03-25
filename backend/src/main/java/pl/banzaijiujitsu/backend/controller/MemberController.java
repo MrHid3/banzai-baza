@@ -1,6 +1,7 @@
 package pl.banzaijiujitsu.backend.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -93,11 +94,45 @@ public class MemberController {
                         .orElseThrow(InvalidUuidException::new)
                         .getLocations();
 
-                members = memberService.findByLocationIsIn(allowed_locations);
+                members = memberService.findByIsActiveTrueAndLocationIsIn(allowed_locations);
             }
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok(members);
+    }
+
+    @DeleteMapping("/")
+    @Transactional
+    public ResponseEntity<?> deleteMember(@RequestBody MemberRequest memberRequest){
+//        System.out.println("aaaa");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(auth == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            Member member = memberService.findByUuid(memberRequest.getUuid()).orElseThrow(InvalidUuidException::new);
+
+            Collection<Location> allowed_locations;
+            if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+                allowed_locations = locationService.findAll();
+            } else {
+                allowed_locations = appUserService
+                        .findByEmail(auth.getName())
+                        .orElseThrow(InvalidUuidException::new)
+                        .getLocations();
+            }
+            if(allowed_locations.contains(member.getLocation())) {
+                member.setIsActive(false);
+                memberService.save(member);
+            }else{
+                return ResponseEntity.badRequest().body("INVALID_LOCATION");
+            }
+        }catch (InvalidUuidException e){
+            return ResponseEntity.badRequest().body("INVALID_UUID");
+        }
+
+        return ResponseEntity.ok("Member deleted");
     }
 }

@@ -3,25 +3,23 @@
 	import { page } from '$app/state';
 	import github from '$lib/images/github.svg';
 	import logo from '$lib/images/svelte-logo.svg';
+	import {logout} from "../../stores/auth.ts";
 </script>
 
 <header>
-	<div class="corner">
-		<a href="https://svelte.dev/docs/kit">
-			<img src={logo} alt="SvelteKit" />
-		</a>
-	</div>
-
+<!--	<div class="corner">-->
+<!--		<a href="https://svelte.dev/docs/kit">-->
+<!--			<img src={logo} alt="SvelteKit" />-->
+<!--		</a>-->
+<!--	</div>-->
+<!---->
 	<nav>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
 			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 		</svg>
 		<ul>
-			<li aria-current={page.url.pathname === '/' ? 'page' : undefined}>
-				<a href={resolve('/')}>Home</a>
-			</li>
-			<li aria-current={page.url.pathname === '/db' ? 'page' : undefined}>
-				<a href={resolve('/db')}>DB</a>
+			<li aria-current={page.url.pathname === '/baza' ? 'page' : undefined}>
+				<a href={resolve('/baza')}>Baza</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
@@ -29,22 +27,55 @@
 		</svg>
 	</nav>
 
-	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
-			<img src={github} alt="GitHub" />
-		</a>
-	</div>
+	<button class="corner" onclick={() => logout()}>
+		<svg viewBox="0 0 2 3" aria-hidden="true">
+			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
+		</svg>
+		<div id="logout">Wyloguj się</div>
+<!--		<a href="https://github.com/sveltejs/kit">-->
+<!--			<img src={github} alt="GitHub" />-->
+<!--		</a>-->
+	</button>
 </header>
 
 <style>
 	header {
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 	}
 
 	.corner {
-		width: 3em;
+		/*width: 5em;*/
+		height: fit-content;
+		display: flex;
+		flex-direction: row;
+		width: fit-content;
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	#logout{
+		background-color: var(--background-special);
+		color: white;
+		border: none;
+		padding: 0 10px;
+		text-align: center;
+		vertical-align: middle;
+		align-items: center;
+		line-height: 3em;
+		font-weight: 800;
 		height: 3em;
+	}
+
+	.corner svg{
+		fill: var(--background-special);
+		/*position: relative;*/
+		/*top: 50%;*/
+		/*left: 50%;*/
 	}
 
 	.corner a {
@@ -64,13 +95,14 @@
 	nav {
 		display: flex;
 		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
+		--background: #b3b3b3;
 	}
 
 	svg {
 		width: 2em;
 		height: 3em;
 		display: block;
+		z-index: 1000;
 	}
 
 	path {
@@ -120,6 +152,7 @@
 		text-decoration: none;
 		transition: color 0.2s linear;
 	}
+
 
 	a:hover {
 		color: var(--color-theme-1);

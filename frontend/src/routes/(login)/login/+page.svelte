@@ -16,27 +16,31 @@
 
     onMount(async () => {
         if ($isAuthenticated) {
-            await goto("/db");
+            await goto("/baza");
         }
         checked = true;
     })
 
     $effect(() => { if( form?.token ) {
         token.set(form.token);
-        goto('/db');
+        goto('/baza');
     }})
 
     $effect(() => {
         if($isAuthenticated)
-            goto('/db');
+            goto('/baza');
     })
     if(!$isAuthenticated) {
         refreshAccessToken()
     }
     //TODO: Fancy loading type shit
 </script>
+<svelte:head>
+    <title>Login</title>
+</svelte:head>
 {#if !$isAuthenticated}
-<form method="POST" action="?/login" use:enhance>
+
+    <form method="POST" action="?/login" use:enhance>
     <input type="email" name="email">
     <input type={showPassword? "text" : "password"} name="password" pattern={passwordPattern}>
     <label for="show">
@@ -51,6 +55,10 @@
 </form>
 {/if}
 <style>
+    *{
+        background-color: var(--color-background-primary);
+        color: var(--color-text-primary);
+    }
 
     form{
         position: absolute;

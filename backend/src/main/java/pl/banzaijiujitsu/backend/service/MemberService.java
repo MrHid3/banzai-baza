@@ -40,4 +40,8 @@ public class MemberService {
     public Collection<Member> findByLocationIsIn(Collection<Location> locations){
         return memberRepository.findByLocationIsIn(locations);
     }
+
+    public Collection<Member> findByIsActiveTrueAndLocationIsIn(Collection<Location> locations){
+        return memberRepository.findByIsActiveTrueAndLocationIsIn(locations);
+    }
 }
