@@ -27,10 +27,10 @@ public class AppUser {
         this.setPassword(password);
     }
 
-    public AppUser(String email, String password, Collection<Role> roles) throws InvalidEmailException, InvalidPasswordException {
+    public AppUser(String email, String password, Role role) throws InvalidEmailException, InvalidPasswordException {
         this.setEmail(email);
         this.setPassword(password);
-        this.setRoles(roles);
+        this.setRole(role);
     }
 
     public enum AppUserStatus{
@@ -80,14 +80,8 @@ public class AppUser {
 
     private String password;
 
-    @ManyToMany(fetch =  FetchType.EAGER)
-    @JoinTable(
-            name = "app_users_roles",
-            joinColumns = @JoinColumn(
-                    name = "app_user_uuid", referencedColumnName = "uuid"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    @ManyToOne(fetch =  FetchType.EAGER)
+    private Role role;
 
     @ManyToMany
     private Collection<Location> locations;

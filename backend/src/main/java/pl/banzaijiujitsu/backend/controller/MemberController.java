@@ -41,6 +41,7 @@ public class MemberController {
     @PostMapping("/api/member")
     public ResponseEntity<String> addMember(@RequestBody CreateMemberRequest memberRequest, HttpServletResponse response) {
 
+        System.out.println("asfsasf");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         try {
@@ -52,7 +53,7 @@ public class MemberController {
                     .getLocations();
 
             Location memberLocation = locationService.findById(
-                            memberRequest.location_id())
+                            memberRequest.locationId())
                     .orElseThrow(() -> new InvalidLocationException("Invalid location id"));
 
             if (allowed_locations.contains(memberLocation)) {
@@ -129,7 +130,7 @@ public class MemberController {
     }
 
     public record CreateMemberRequest(
-            @NotNull Long location_id,
+            @NotNull Long locationId,
             @NotNull @Email String email,
             String name,
             String surname,

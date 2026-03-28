@@ -26,7 +26,7 @@ public class AuthenticationService {
             return Optional.empty();
         }
         AppUser appUser = optionalAppUser.get();
-        return Optional.of(new User(appUser.getEmail(), appUser.getPassword(), getGrantedAuthorities(appUser.getRoles())));
+        return Optional.of(new User(appUser.getEmail(), appUser.getPassword(), getGrantedAuthorities(appUser.getRole())));
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges){
@@ -37,11 +37,10 @@ public class AuthenticationService {
         return authorities;
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(Collection<Role> roles){
+    private List<GrantedAuthority> getGrantedAuthorities(Role role){
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
+        authorities.add(new SimpleGrantedAuthority(role.getName()));
+
         return authorities;
     }
 }

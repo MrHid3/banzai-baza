@@ -25,9 +25,6 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<AppUser> users;
-
     @ManyToMany
     @JoinTable(
             name = "roles_privileges",

@@ -83,13 +83,22 @@ public class AppUserLoginController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refresh(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<String> refresh(
+            @CookieValue(name = "refreshToken", required = false) String refreshToken,
+            @RequestBody(required = false) RefreshRequest bodyRefreshToken,
+            HttpServletResponse response) {
 
-        if (refreshToken == null) {
+        String token = refreshToken;
+
+        if(token == null){
+            token = bodyRefreshToken.refreshToken();
+        }
+
+        if (token == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No refresh token");
         }
 
-        return refreshTokenService.findValidToken(refreshToken)
+        return refreshTokenService.findValidToken(token)
                 .map(rt -> {
                     String newAccessToken = jwtService.generateAccessToken(
                             rt.getAppUser());
@@ -121,4 +130,8 @@ public class AppUserLoginController {
             @NotNull @Email String email,
             @NotNull String password
     ) { }
+
+    public record RefreshRequest(
+            String refreshToken
+    ){}
 }

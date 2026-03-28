@@ -29,6 +29,8 @@ public class JwtService {
     public String generateAccessToken(AppUser appUser){
         return Jwts.builder()
                 .setSubject(appUser.getUuid().toString())
+                .claim("email", appUser.getEmail())
+                .claim("role", appUser.getRole().getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())

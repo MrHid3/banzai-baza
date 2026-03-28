@@ -54,7 +54,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("ROLE_COACH", Arrays.asList(manageOwnMembers));
 
         try {
-            createAppUserIfNotFound(adminEmail, adminPassword, Arrays.asList(adminRole));
+            createAppUserIfNotFound(adminEmail, adminPassword, adminRole);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -94,13 +94,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return role;
     }
 
-    AppUser createAppUserIfNotFound(String email, String password, Collection<Role> roles) throws InvalidPasswordException {
+    AppUser createAppUserIfNotFound(String email, String password, Role role) throws InvalidPasswordException {
 
         AppUser appUser;
         Optional<AppUser> optionalAppUser = appUserService.findByEmail(email);
 
         if (optionalAppUser.isEmpty()) {
-            appUser = new AppUser(email, password, roles);
+            appUser = new AppUser(email, password, role);
 //            if(uuid != null){
 //                appUser.setUuid(uuid);
 //            }

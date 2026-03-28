@@ -57,7 +57,7 @@ public class AppUserService {
         }
         AppUser appUser = new AppUser();
         appUser.setEmail(email);
-        appUser.setRoles(Arrays.asList(role));
+        appUser.setRole(role);
         appUser.setStatus(AppUser.AppUserStatus.PENDING);
         return appUserRepository.save(appUser);
     }

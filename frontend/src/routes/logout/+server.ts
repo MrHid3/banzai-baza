@@ -1,9 +1,8 @@
 import { redirect } from '@sveltejs/kit';
-import type {RequestHandler} from "@sveltejs/kit";
-import {PUBLIC_BACKEND_2} from "$env/static/public";
+import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ cookies }) => {
-    cookies.delete('refreshToken', { path: '/api/auth/refresh' });
-    // await fetch(`${PUBLIC_BACKEND_2}/auth/logout`)
-    return new Response(null, {status: 204})
+	cookies.delete('accessToken', { path: '/' });
+	cookies.delete('refreshToken', { path: '/' });
+	redirect(303, '/login');
 };

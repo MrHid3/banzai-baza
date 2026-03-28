@@ -32,26 +32,26 @@ public class AppUserDetailsService implements UserDetailsService {
     public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws InvalidEmailException, UserNotActiveException {
         AppUser user = appUserService.findByEmail(email)
                 .orElseThrow(() -> new InvalidEmailException("Email not found"));
-        if(!user.isEnabled()){
+        if (!user.isEnabled()) {
             throw new UserNotActiveException();
         }
-        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
+        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole()));
     }
 
     public Optional<UserDetails> loadUserByUuid(UUID uuid) throws InvalidUuidException {
         AppUser user = appUserService.findByUuid(uuid)
                 .orElseThrow(InvalidUuidException::new);
-        return Optional.of(new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles())));
+        return Optional.of(new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole())));
     }
 
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
         AppUser user = appUserService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return new User(user.getEmail(), user.getPassword(),  getGrantedAuthorities(user.getRoles()));
+        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole()));
 
     }
 
-    private Collection<GrantedAuthority> getAuthoritiesList(String role){
+    private Collection<GrantedAuthority> getAuthoritiesList(String role) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role));
         return authorities;
@@ -74,10 +74,10 @@ public class AppUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByPhoneNumber(String phoneNumber) throws UsernameNotFoundException {
         AppUser user = appUserService.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
+        return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole()));
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges){
+    private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (String privilege : privileges) {
             authorities.add(new SimpleGrantedAuthority(privilege));
@@ -85,11 +85,9 @@ public class AppUserDetailsService implements UserDetailsService {
         return authorities;
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(Collection<Role> roles){
+    private List<GrantedAuthority> getGrantedAuthorities(Role role) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role item : roles) {
-            authorities.add(new SimpleGrantedAuthority(item.getName()));
-        }
+        authorities.add(new SimpleGrantedAuthority(role.getName()));
         return authorities;
     }
 }

@@ -1,10 +1,11 @@
 <script lang="ts">
     import Member from "./Member.svelte";
     import Modal from "$lib/Modal.svelte";
+    import {enhance} from "$app/forms";
 
     let {data} = $props();
 
-    let members = $state(data.members);
+    let members = $derived(data.members ?? []);
     let filteredMembers = $state(members)
 
     $effect(() => {
@@ -30,14 +31,7 @@
     let showDeleteModal = $state(false);
     let userToDeleteName = $state("");
 
-    let showAddModal = $state(false);
-    let addName = $state("");
-    let addSurname = $state("");
-    let addEmail = $state("");
-    let addPhoneNumber = $state("");
-    let addLocation = $state(1);
-    let addMonthlyFee = $state(0);
-    let comment = $state("");
+    let showAddFragment = $state(false);
 </script>
 
 <svelte:head>
@@ -52,12 +46,12 @@
 </Modal>
 
 <div class="filterHolder">
-<!--    TODO: dodaj lupe-->
+    <!--    TODO: dodaj lupe-->
     <span>Znajdź:</span>
-    <input type="text" bind:value={memberTextFilter} id="textFilterInput"/>
+    <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
     <span>Filtruj po lokalizacji:</span>
-    <select name="locations" id="locationSelect" bind:value={selectedLocationId}>
-        <option value={-1} selected>Wszystkie</option>
+    <select bind:value={selectedLocationId} id="locationSelect" name="locations">
+        <option selected value={-1}>Wszystkie</option>
         {#each data.locations as location, index(index)}
             <option value={location.id}>{location.name}</option>
         {/each}
@@ -72,28 +66,33 @@
         <span class="data">Lokalizacja</span>
         <span class="data">Cena/mieś.</span>
         <span class="data">Komentarz</span>
-        <span class="data"></span>
-        <button class="data" onclick={() => showAddModal = !showAddModal}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="plusSvg">
-                <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
-            </svg>
-        </button>
+        <span class="data small"></span>
+        <span class="data small">
+            <div>
+            <button onclick={() => showAddFragment = !showAddFragment}>
+                <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                    <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
+                </svg>
+            </button>
+            </div>
+        </span>
     </div>
-    {#if showAddModal}
-            <form action="">
-                <span class="data"><input type="text" name="name">     </span>
-                <span class="data"><input type="text" name="surname">  </span>
-                <span class="data"><input type="text" name="email">    </span>
-                <span class="data"><input type="text" name="phoneNumber"></span>
-                <span class="data"><select name="location">
+    {#if showAddFragment}
+        <form action="?/add" method="POST" use:enhance autocomplete="off">
+            <span class="data"><input type="text" name="name"></span>
+            <span class="data"><input type="text" name="surname"></span>
+            <span class="data"><input type="text" name="email"></span>
+            <span class="data"><input type="text" name="phoneNumber"></span>
+            <span class="data"><select name="locationId">
                 {#each data.locations as location, index(index)}
                     <option value={location.id}>{location.shortname}</option>
                 {/each}
                 </select></span>
-                <span class="data"><input type="number" name="monthlyFee"></span>
-                <span class="data"><textarea name="comment"></textarea></span>
-            </form>
+            <span class="data"><input type="number" name="monthlyFee"></span>
+            <span class="data"><textarea name="comment"></textarea></span>
+            <span class="data"><button type="submit">Dodaj</button></span>
+        </form>
     {/if}
     {#each filteredMembers as member, index (index)}
         <Member componentClass="Member" member={member}></Member>
@@ -106,67 +105,64 @@
 {/if}
 
 <style>
-    *{
+    * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
     }
 
-    /*textarea{*/
-        /*height: 100% !important;*/
-        /*font-size: 0.6em !important;*/
-        /*height: 2.4em;*/
-        /*display: block;*/
-        /*font-size: 1.2em !important;*/
-        /*display: block;*/
-        /*height: 2.4em;        !* match your line-height *!*/
-        /*resize: none;*/
-        /*overflow: hidden;*/
-    /*}*/
-
-    form select, form input, form textarea{
+    .data > div{
         width: 100%;
-        /*text-align: center;*/
-        font-size: 1.4rem;
-        /*padding: 5px 20px;*/
-        /*height: 24px;*/
-        height: 100%;
-        line-height: 24px;
-        align-self: center;
-        /*padding: 10px;*/
-        /*height: 100%;*/
-    /*    display: block;*/
-        text-align: center;
+        height: 100% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
     }
 
-    form select{
-        /*padding: 0 !important;*/
+    form .data > * {
+        font-size: 1.2em;
+        height: 1.2em;
+        line-height: 1.2em;
+        width: 100%;
+        vertical-align: middle;
+        padding: 20px;
     }
 
-    form option{
-        /*height: 100% !important;*/
-        padding: 0 !important;
+    .small {
+        max-width: 50px !important;
+        width: 0 !important;
+    }
+
+    .data button {
+        border-radius: 15px;
+        background-color: var(--color-background-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        width: 50px;
+        height: 50px !important;
+        margin: 0 auto;
+        align-content: center;
+        padding: 10px;
+    }
+
+    button {
+        cursor: pointer;
     }
 
     form textarea {
-        /*height: 1.2em;*/
-        /*max-height: 1.2em;*/
-        margin: 0;
-        overflow: hidden;
-        vertical-align: middle;
-        line-height: 1rem;
-        /*display: block;*/
         resize: vertical;
-        width: 100%;
+        padding: 0 5px;
+        overflow: hidden;
     }
 
-    form{
-        width: 100%;
-        max-width: 100%;
-        display: table-row !important;
+    form {
+        display: table-row;
     }
 
-    button.data{
+    button.data {
         background-color: transparent;
         display: inline;
         border: none;
@@ -180,7 +176,7 @@
         padding: 10px;
     }
 
-    .filterHolder *{
+    .filterHolder * {
         padding: 5px;
         vertical-align: middle;
     }
@@ -203,6 +199,13 @@
         width: auto;
         max-width: 20%;
         padding: 5px 5px;
+        height: fit-content;
+    }
+
+    span.data{
+        line-height: 0;
+        padding: 10px;
+        font-size: 1.2em;
     }
 
     .header {
@@ -214,18 +217,19 @@
         outline-width: 2px;
     }
 
-    .data:has(.plusSvg){
+    .data:has(.plusSvg) {
         position: relative;
     }
 
-    .plusSvg{
-        position: absolute;
-        top: 50%;
-        left: -70%;
-        transform: translate(-50%, -50%);
+    .plusSvg {
+        /*position: absolute;*/
+        /*top: 50%;*/
+        /*left: -70%;*/
+        /*transform: translate(-50%, -50%);*/
         width: 30px;
         height: 30px;
         fill: var(--color-text-primary);
+        align-self: center;
     }
 
     .filterHolder {
@@ -234,11 +238,16 @@
         flex-direction: row;
     }
 
-    input, select, option, textarea{
+    input, select, option, textarea, form button {
         background-color: var(--color-background-secondary);
         border: none;
         color: var(--color-text-secondary);
         display: inline-block !important;
         align-self: center;
+        text-align: center;
+    }
+
+    textarea {
+        text-align: left;
     }
 </style>
