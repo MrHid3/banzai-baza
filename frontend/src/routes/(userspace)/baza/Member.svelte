@@ -69,7 +69,6 @@
         width: 12.5%;
         vertical-align: middle;
         text-wrap: nowrap;
-        height: fit-content;
     }
 
     textarea{

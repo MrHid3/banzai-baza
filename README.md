@@ -3,6 +3,7 @@ backend:
 - [ ] error handling dla całej strony (@RestControllerAdvice)
 - [ ] zapomniałem hasła
 - [ ] zmiana maila?
+- [ ] ratelimiter
 - memberzy:
   - [ ] edycja memberów
 - płatności:

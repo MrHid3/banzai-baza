@@ -3,7 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { isAuthenticated} from "../../../stores/auth.ts";
 
 export const actions = {
-	login: async ({ request, cookies }) => {
+	login: async ({ request, cookies, fetch }) => {
 		const data = await request.formData();
 		const email = data.get('email');
 		const password = data.get('password');
@@ -28,7 +28,6 @@ export const actions = {
 			sameSite: 'strict',
 			path: `/api/auth/refresh`
 		});
-		// throw redirect(303, '/db')
 		return { success: true, token: await accessToken };
 	}
 };

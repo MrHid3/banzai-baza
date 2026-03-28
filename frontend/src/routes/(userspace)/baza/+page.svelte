@@ -1,5 +1,6 @@
 <script lang="ts">
     import Member from "./Member.svelte";
+    import Modal from "$lib/Modal.svelte";
 
     let {data} = $props();
 
@@ -25,11 +26,30 @@
 
     let memberTextFilter = $state("");
     let selectedLocationId = $state(-1);
+
+    let showDeleteModal = $state(false);
+    let userToDeleteName = $state("");
+
+    let showAddModal = $state(false);
+    let addName = $state("");
+    let addSurname = $state("");
+    let addEmail = $state("");
+    let addPhoneNumber = $state("");
+    let addLocation = $state(1);
+    let addMonthlyFee = $state(0);
+    let comment = $state("");
 </script>
 
 <svelte:head>
     <title>Baza klubu</title>
 </svelte:head>
+
+<Modal bind:showModal={showDeleteModal}>
+    {#snippet header()}
+        <h2>Usunąć {userToDeleteName}?</h2>
+    {/snippet}
+    Nie można tego odwrócić
+</Modal>
 
 <div class="filterHolder">
 <!--    TODO: dodaj lupe-->
@@ -53,13 +73,28 @@
         <span class="data">Cena/mieś.</span>
         <span class="data">Komentarz</span>
         <span class="data"></span>
-        <span class="data">
+        <button class="data" onclick={() => showAddModal = !showAddModal}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="plusSvg">
                 <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
                 <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
             </svg>
-        </span>
+        </button>
     </div>
+    {#if showAddModal}
+            <form action="">
+                <span class="data"><input type="text" name="name">     </span>
+                <span class="data"><input type="text" name="surname">  </span>
+                <span class="data"><input type="text" name="email">    </span>
+                <span class="data"><input type="text" name="phoneNumber"></span>
+                <span class="data"><select name="location">
+                {#each data.locations as location, index(index)}
+                    <option value={location.id}>{location.shortname}</option>
+                {/each}
+                </select></span>
+                <span class="data"><input type="number" name="monthlyFee"></span>
+                <span class="data"><textarea name="comment"></textarea></span>
+            </form>
+    {/if}
     {#each filteredMembers as member, index (index)}
         <Member componentClass="Member" member={member}></Member>
     {/each}
@@ -71,6 +106,48 @@
 {/if}
 
 <style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    textarea{
+        /*height: 100% !important;*/
+        /*font-size: 0.6em !important;*/
+        /*height: 2.4em;*/
+        /*display: block;*/
+        font-size: 1.2em !important;
+        display: block;
+        height: 2.4em;        /* match your line-height */
+        resize: none;
+        overflow: hidden;
+    }
+
+    form select, form input, form textarea, form option{
+        width: 100%;
+        text-align: center;
+        font-size: 1.2em;
+        padding: 5px 20px;
+        height: 1.2em;
+    /*    height: 100%;*/
+    /*    display: block;*/
+    }
+
+    form{
+        font-size: 1.2em;
+        width: 100%;
+        max-width: 100%;
+        display: table-row !important;
+    }
+
+    button.data{
+        background-color: transparent;
+        display: inline;
+        border: none;
+        vertical-align: middle;
+    }
+
     .noResults {
         width: 100%;
         text-align: center;
@@ -83,12 +160,6 @@
         vertical-align: middle;
     }
 
-    .header .data, .plus {
-        border-color: var(--color-border);
-        border-style: solid;
-        border-width: 0 0 2px 0;
-    }
-
     .membersTable {
         display: table;
         text-align: center;
@@ -98,17 +169,24 @@
         width: 100%;
     }
 
-    .data {
+    .data:not(:has(*)), button.data {
         padding: 5px 20px;
-        display: table-cell;
+    }
+
+    .data {
+        display: table-cell !important;
         width: auto;
         max-width: 20%;
+        padding: 5px 5px;
     }
 
     .header {
         display: table-row;
         position: relative;
         width: 100%;
+        outline-color: var(--color-border);
+        outline-style: solid;
+        outline-width: 2px;
     }
 
     .data:has(.plusSvg){
@@ -131,9 +209,10 @@
         flex-direction: row;
     }
 
-    #textFilterInput, #locationSelect {
+    input, select, option, textarea{
         background-color: var(--color-background-secondary);
         border: none;
         color: var(--color-text-secondary);
+        display: inline-block !important;
     }
 </style>
