@@ -41,8 +41,8 @@
 {#if !$isAuthenticated}
 
     <form method="POST" action="?/login" use:enhance>
-    <input type="email" name="email">
-    <input type={showPassword? "text" : "password"} name="password" pattern={passwordPattern}>
+    <input type="email" name="email" placeholder="Email">
+    <input type={showPassword? "text" : "password"} name="password" pattern={passwordPattern} placeholder="Hasło">
     <label for="show">
         <input type="checkbox" name="show" bind:checked={showPassword}>
         Pokaż hasło
@@ -74,6 +74,7 @@
         width: 15vw;
         min-width: 200px;
         padding: 10px;
+        border: 1px solid var(--color-border)
     }
 
     input:invalid:not(:focus){

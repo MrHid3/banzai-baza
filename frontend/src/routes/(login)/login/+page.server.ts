@@ -26,7 +26,8 @@ export const actions = {
 			httpOnly: true,
 			secure: !PUBLIC_DEV,
 			sameSite: 'strict',
-			path: `/api/auth/refresh`
+			path: `/`,
+			maxAge: 2592000
 		});
 		return { success: true, token: await accessToken };
 	}

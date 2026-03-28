@@ -36,6 +36,7 @@ export const isAuthenticated : Readable<boolean> = derived(token, $token => {
 
 export async function logout(customFetch = fetch) {
 	if(browser){
+		console.log("Aaaa")
 		token.set(null);
 		await customFetch('/logout', { method: 'POST' });
 		await goto('/login')

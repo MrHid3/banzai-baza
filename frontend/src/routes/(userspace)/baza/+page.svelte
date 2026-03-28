@@ -112,30 +112,55 @@
         box-sizing: border-box;
     }
 
-    textarea{
+    /*textarea{*/
         /*height: 100% !important;*/
         /*font-size: 0.6em !important;*/
         /*height: 2.4em;*/
         /*display: block;*/
-        font-size: 1.2em !important;
-        display: block;
-        height: 2.4em;        /* match your line-height */
-        resize: none;
-        overflow: hidden;
+        /*font-size: 1.2em !important;*/
+        /*display: block;*/
+        /*height: 2.4em;        !* match your line-height *!*/
+        /*resize: none;*/
+        /*overflow: hidden;*/
+    /*}*/
+
+    form select, form input, form textarea{
+        width: 100%;
+        /*text-align: center;*/
+        font-size: 1.4rem;
+        /*padding: 5px 20px;*/
+        /*height: 24px;*/
+        height: 100%;
+        line-height: 24px;
+        align-self: center;
+        /*padding: 10px;*/
+        /*height: 100%;*/
+    /*    display: block;*/
+        text-align: center;
     }
 
-    form select, form input, form textarea, form option{
+    form select{
+        /*padding: 0 !important;*/
+    }
+
+    form option{
+        /*height: 100% !important;*/
+        padding: 0 !important;
+    }
+
+    form textarea {
+        /*height: 1.2em;*/
+        /*max-height: 1.2em;*/
+        margin: 0;
+        overflow: hidden;
+        vertical-align: middle;
+        line-height: 1rem;
+        /*display: block;*/
+        resize: vertical;
         width: 100%;
-        text-align: center;
-        font-size: 1.2em;
-        padding: 5px 20px;
-        height: 1.2em;
-    /*    height: 100%;*/
-    /*    display: block;*/
     }
 
     form{
-        font-size: 1.2em;
         width: 100%;
         max-width: 100%;
         display: table-row !important;
@@ -214,5 +239,6 @@
         border: none;
         color: var(--color-text-secondary);
         display: inline-block !important;
+        align-self: center;
     }
 </style>

@@ -83,7 +83,7 @@ public class AppUserLoginController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refresh(@CookieValue(name = "refreshToken", required = false, value = "") String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<String> refresh(@CookieValue(name = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
 
         if (refreshToken == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No refresh token");
