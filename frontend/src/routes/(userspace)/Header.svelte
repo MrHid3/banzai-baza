@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import github from '$lib/images/github.svg';
 	import logo from '$lib/images/svelte-logo.svg';
-	import {logout} from "../../stores/auth.ts";
+	import {logout} from "$lib/stores/auth.ts";
 </script>
 
 <header>

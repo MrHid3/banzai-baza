@@ -2,6 +2,7 @@
     import Member from "./Member.svelte";
     import Modal from "$lib/Modal.svelte";
     import {enhance} from "$app/forms";
+    import LocationSelect from "$lib/LocationSelect.svelte";
 
     let {data} = $props();
 
@@ -50,12 +51,7 @@
     <span>Znajdź:</span>
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
     <span>Filtruj po lokalizacji:</span>
-    <select bind:value={selectedLocationId} id="locationSelect" name="locations">
-        <option selected value={-1}>Wszystkie</option>
-        {#each data.locations as location, index(index)}
-            <option value={location.id}>{location.name}</option>
-        {/each}
-    </select>
+    <LocationSelect bind:value={selectedLocationId}></LocationSelect>
 </div>
 <div class="membersTable" style="--number-of-elements-minus-four: {members.length + 1 - 4}">
     <div class="header">
@@ -91,7 +87,12 @@
                 </select></span>
             <span class="data"><input type="number" name="monthlyFee"></span>
             <span class="data"><textarea name="comment"></textarea></span>
-            <span class="data"><button type="submit">Dodaj</button></span>
+            <span class="data"><button type="submit">
+                <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                    <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
+                </svg>
+            </button></span>
         </form>
     {/if}
     {#each filteredMembers as member, index (index)}
