@@ -58,5 +58,36 @@ export const actions: Actions = {
 				values: Object.fromEntries(data)
 			});
 		}
+	},
+	update: async ({ request, cookies, locals }) => {
+		const data = await request.formData();
+		const uuid = data.get('uuid');
+
+		const res = await serverFetch(
+			`/api/member/${uuid}`,
+			{
+				method: 'PUT',
+				body: JSON.stringify({
+					name: data.get('name'),
+					surname: data.get('surname'),
+					email: data.get('email'),
+					phoneNumber: data.get('phoneNumber'),
+					monthlyFee: Number(data.get('monthlyFee')),
+					locationId: Number(data.get('locationId')),
+					comment: data.get('comment')
+				})
+			},
+			cookies,
+			locals
+		);
+
+		if (!res.ok) {
+			console.log(res)
+			const body = await res.json().catch(() => ({}));
+			return fail(res.status, {
+				error: body.message ?? 'Failed to update member',
+				values: Object.fromEntries(data)
+			});
+		}
 	}
 };

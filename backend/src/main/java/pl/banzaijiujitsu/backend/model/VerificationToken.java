@@ -24,7 +24,6 @@ public class VerificationToken {
     private String token;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "app_user_uuid", nullable = false)
     private AppUser appUser;
 
     @Enumerated(EnumType.STRING)

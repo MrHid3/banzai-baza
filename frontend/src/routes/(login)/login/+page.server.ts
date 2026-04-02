@@ -3,7 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 
 export const load = ({locals}) => {
 	if(locals.user){
-		redirect(301, '/baza');
+		redirect(301, '/db');
 	}
 }
 
@@ -40,6 +40,6 @@ export const actions = {
 			maxAge: 60 * 60 * 24 * 30 // 30 days
 		});
 
-		redirect(303, '/baza');
+		redirect(303, '/db');
 	}
 };

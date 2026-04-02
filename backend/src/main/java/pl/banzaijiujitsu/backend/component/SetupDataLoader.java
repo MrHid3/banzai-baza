@@ -101,6 +101,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         if (optionalAppUser.isEmpty()) {
             appUser = new AppUser(email, password, role);
+            appUser.setStatus(AppUser.AppUserStatus.ACTIVE);
 //            if(uuid != null){
 //                appUser.setUuid(uuid);
 //            }

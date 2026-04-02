@@ -5,7 +5,7 @@ backend:
 - [ ] zmiana maila?
 - [ ] ratelimiter
 - memberzy:
-  - [ ] edycja memberów
+  - [x] edycja memberów
 - płatności:
   - [ ] wymyślenie do końca jak to działa
   - [ ] dodawanie
@@ -15,18 +15,18 @@ backend:
 
 frontend:
 - memberzy:
-  - [ ] dodawanie
-  - [ ] usuwanie
-  - [ ] edycja
+  - [x] dodawanie
+  - [x] usuwanie
+  - [x] edycja
 - [ ] zapomniałem hasła
 - [ ] płatności
 - [ ] layout dla coachy
 - [ ] layout na telefony
 - [ ] zarządzanie lokalizacjami
-- [ ] zarządzanie użytkownikami:
-  - [ ] /invite
-  - [ ] /set-password
-  - [ ] /profile
+- [x] zarządzanie użytkownikami:
+  - [x] /invite
+  - [x] /set-password
+  - [ ] /profile?
   - [ ] przypisywanie do lokalizacji i gaszenie
 - [ ] logi?
 - [ ] beautiful

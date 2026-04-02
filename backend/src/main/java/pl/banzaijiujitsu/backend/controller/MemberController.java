@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -123,7 +124,42 @@ public class MemberController {
             member.setIsActive(false);
             memberService.save(member);
         } else {
-            return ResponseEntity.badRequest().body("INVALID_LOCATION");
+            throw new InvalidLocationException("NO_ACCESS_TO_LOCATION");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/api/member/{uuid}")
+    @Transactional
+    public ResponseEntity<?> updateMember(@PathVariable String uuid, @RequestBody UpdateMemberRequest memberRequest) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Member member = memberService.findByUuid(UUID.fromString(uuid)).orElseThrow(InvalidUuidException::new);
+
+        Collection<Location> allowed_locations;
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            allowed_locations = locationService.findAll();
+        } else {
+            allowed_locations = appUserService
+                    .findByEmail(auth.getName())
+                    .orElseThrow(InvalidUuidException::new)
+                    .getLocations();
+        }
+        if (allowed_locations.contains(member.getLocation())) {
+            member.setName(memberRequest.name());
+            member.setSurname(memberRequest.surname());
+            member.setEmail(memberRequest.email());
+            member.setPhoneNumber(memberRequest.phoneNumber());
+            member.setComment(memberRequest.comment());
+            member.setLocation(locationService.findById(memberRequest.locationId()).orElseThrow(InvalidLocationException::new));
+            member.setMonthlyFee(memberRequest.monthlyFee());
+            memberService.save(member);
+        }else{
+            throw new InvalidLocationException("NO_ACCESS_TO_LOCATION");
         }
 
         return ResponseEntity.ok().build();
@@ -132,6 +168,17 @@ public class MemberController {
     public record CreateMemberRequest(
             @NotNull Long locationId,
             @NotNull @Email String email,
+            String name,
+            String surname,
+            String comment,
+            Integer monthlyFee,
+            String phoneNumber
+    ) {
+    }
+
+    public record UpdateMemberRequest(
+            @NotNull @Email String email,
+            @NotNull Long locationId,
             String name,
             String surname,
             String comment,

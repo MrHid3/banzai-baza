@@ -1,31 +1,90 @@
 package pl.banzaijiujitsu.backend.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
+import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
 import pl.banzaijiujitsu.backend.model.Location;
+import pl.banzaijiujitsu.backend.model.Member;
+import pl.banzaijiujitsu.backend.repository.AppUserRepository;
+import pl.banzaijiujitsu.backend.service.AppUserService;
 import pl.banzaijiujitsu.backend.service.LocationService;
+import pl.banzaijiujitsu.backend.service.MemberService;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/location")
 public class LocationController {
 
+    @Autowired
     private final LocationService locationService;
 
     @Autowired
-    public LocationController(LocationService locationService) {
+    private final AppUserService appUserService;
+
+    @Autowired
+    public LocationController(LocationService locationService, AppUserService appUserService) {
         this.locationService = locationService;
+        this.appUserService = appUserService;
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<Location>> getAll(HttpServletResponse httpServletResponse) {
+    ResponseEntity<Collection<Location>> getAll(HttpServletResponse httpServletResponse) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.ok(locationService.findAll());
+        if (auth == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Collection<Location> allowed_locations;
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            allowed_locations = locationService.findAll();
+        } else {
+            allowed_locations = appUserService
+                    .findByEmail(auth.getName())
+                    .orElseThrow(InvalidUuidException::new)
+                    .getLocations();
+        }
+
+        return ResponseEntity.ok(allowed_locations);
     }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
+    public ResponseEntity<?> addLocation(@RequestBody LocationCreationRequest req) {
+
+        Location location = new Location(req.name, req.shortname);
+
+        locationService.save(location);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Transactional
+    public ResponseEntity<?> deleteLocation(@RequestParam Long locationId) {
+
+        locationService.deleteById(locationId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    public record LocationCreationRequest(
+            @NotNull String name,
+            @NotNull String shortname
+    ){}
 }

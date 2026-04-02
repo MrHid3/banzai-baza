@@ -72,6 +72,10 @@ public class AppUserLoginController {
         AppUser appUser = appUserService.findByEmail(loginRequest.email())
                 .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
 
+        if(appUser.getStatus() == AppUser.AppUserStatus.PENDING){
+            throw new InvalidEmailException("USER_PENDING");
+        }
+
         String accessToken = jwtService.generateAccessToken(appUser);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(appUser);
@@ -111,9 +115,8 @@ public class AppUserLoginController {
 
         if (refreshToken != null) {
             refreshTokenService.findValidToken(refreshToken)
-                    .ifPresent(rt -> refreshTokenService.deleteByAppUser(
-                            rt.getAppUser()));
-
+                    .ifPresent(rt -> refreshTokenService.deleteByToken(
+                            rt.getToken()));
         }
 
         Cookie expiredCookie = new Cookie("refreshToken", "");

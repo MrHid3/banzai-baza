@@ -9,7 +9,7 @@
     let showPassword = $state(false);
 
     $effect(() => { if( form?.token ) {
-        goto('/baza');
+        goto('/db');
     }})
 
     //TODO: Fancy loading type shit

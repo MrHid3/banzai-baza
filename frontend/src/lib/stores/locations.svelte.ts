@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 type Location = {
 	id: number;
 	name: string;
-	shortName: string;
+	shortname: string;
 };
 
 type LocationsStore = {

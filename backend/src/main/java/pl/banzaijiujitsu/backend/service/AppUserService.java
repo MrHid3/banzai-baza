@@ -4,15 +4,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
+import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
+import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Role;
 import pl.banzaijiujitsu.backend.repository.AppUserRepository;
 import pl.banzaijiujitsu.backend.model.AppUser;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AppUserService {
@@ -68,5 +67,42 @@ public class AppUserService {
         appUser.hashPassword(encodingService);
         appUser.setStatus(AppUser.AppUserStatus.ACTIVE);
         appUserRepository.save(appUser);
+    }
+
+    @Transactional
+    public void deleteByUuid(UUID uuid) {
+        appUserRepository.deleteByUuid(uuid);
+    }
+
+    @Transactional
+    public void addLocation(AppUser appUser, Location location){
+        if(appUser.getLocations().contains(location)){
+            throw new InvalidLocationException("LOCATION_ALREADY_EXISTS");
+        }
+
+        Collection<Location> newLocationList = appUser.getLocations();
+        newLocationList.add(location);
+
+        appUser.setLocations(newLocationList);
+
+        appUserRepository.save(appUser);
+    }
+
+    @Transactional
+    public void deleteLocation(AppUser appUser, Location location){
+        if(!appUser.getLocations().contains(location)){
+            throw new InvalidLocationException("LOCATION_NOT_EXISTS");
+        }
+
+        Collection<Location> newLocationList = appUser.getLocations();
+        newLocationList.remove(location);
+
+        appUser.setLocations(newLocationList);
+
+        appUserRepository.save(appUser);
+    }
+
+    public List<AppUser> findAll() {
+        return appUserRepository.findAll();
     }
 }

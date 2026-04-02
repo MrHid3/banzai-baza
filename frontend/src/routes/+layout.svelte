@@ -1,7 +1,7 @@
 <script lang="ts">
     import "./normalize.css";
 
-    let { children } = $props();
+    let {children} = $props();
 
 </script>
 
@@ -13,10 +13,9 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
-    :global(:root){
-        --font-body:
-                Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-                'Open Sans', 'Helvetica Neue', sans-serif;
+    :global(:root) {
+        --font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+        'Open Sans', 'Helvetica Neue', sans-serif;
         --font-mono: 'Fira Mono', monospace;
         --color-background-primary: #121212;
         --color-background-secondary: #252525;
@@ -30,15 +29,26 @@
         background-color: var(--color-background-primary);
     }
 
-    :global(*){
+    :global(*) {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-	    font-family: 'Ubuntu', sans-serif;
+        font-family: 'Ubuntu', sans-serif;
     }
 
-    main{
+    main {
         background-color: var(--background-color);
         color: var(--color-text-primary);
+    }
+
+    :global(input::-webkit-outer-spin-button),
+    :global(input::-webkit-inner-spin-button) {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    :global(input[type=number]) {
+        -moz-appearance: textfield;
     }
 </style>

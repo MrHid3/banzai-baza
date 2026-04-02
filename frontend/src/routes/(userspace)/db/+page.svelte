@@ -6,13 +6,13 @@
 
     let {data} = $props();
 
-    let members = $derived(data.members ?? []);
+    let members = $state(structuredClone(data.members ?? []));
     let filteredMembers = $state(members)
 
     $effect(() => {
         let result = members;
-        if (selectedLocationId != -1) {
-            result = result.filter((a) => a.location.id == selectedLocationId);
+        if (selectedLocation != null) {
+            result = result.filter((a) => a.location.id == selectedLocation.id);
         }
         if (memberTextFilter.length >= 3) {
             result = result.filter((a) =>
@@ -27,12 +27,13 @@
     })
 
     let memberTextFilter = $state("");
-    let selectedLocationId = $state(-1);
+    let selectedLocation = $state(null);
 
     let showDeleteModal = $state(false);
     let userToDeleteName = $state("");
 
     let showAddFragment = $state(false);
+
 </script>
 
 <svelte:head>
@@ -51,7 +52,7 @@
     <span>Znajdź:</span>
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
     <span>Filtruj po lokalizacji:</span>
-    <LocationSelect bind:value={selectedLocationId}></LocationSelect>
+    <LocationSelect all={true} bind:location={selectedLocation} short={false}></LocationSelect>
 </div>
 <div class="membersTable" style="--number-of-elements-minus-four: {members.length + 1 - 4}">
     <div class="header">
@@ -80,12 +81,10 @@
             <span class="data"><input type="text" name="surname"></span>
             <span class="data"><input type="text" name="email"></span>
             <span class="data"><input type="text" name="phoneNumber"></span>
-            <span class="data"><select name="locationId">
-                {#each data.locations as location, index(index)}
-                    <option value={location.id}>{location.shortname}</option>
-                {/each}
-                </select></span>
-            <span class="data"><input type="number" name="monthlyFee"></span>
+            <span class="data">
+                <LocationSelect class="locationSelect"></LocationSelect>
+            </span>
+            <span class="data"><input type="number" name="monthlyFee" value="150"></span>
             <span class="data"><textarea name="comment"></textarea></span>
             <span class="data"><button type="submit">
                 <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +95,7 @@
         </form>
     {/if}
     {#each filteredMembers as member, index (index)}
-        <Member componentClass="Member" member={member}></Member>
+        <Member bind:member={members[index]}></Member>
     {/each}
 </div>
 {#if filteredMembers.length == 0}
@@ -106,13 +105,26 @@
 {/if}
 
 <style>
+    /*.filterHolder :global(.LocationSelect){}*/
+    .filterHolder {
+        height: 30px;
+    }
+
+    .filterHolder * {
+        height: 100%;
+    }
+
+    form :global(.locationSelect) {
+        width: 100%;
+    }
+
     * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
     }
 
-    .data > div{
+    .data > div {
         width: 100%;
         height: 100% !important;
         display: flex;
@@ -121,17 +133,19 @@
         overflow: hidden;
     }
 
-    form .data > * {
-        font-size: 1.2em;
-        height: 1.2em;
-        line-height: 1.2em;
-        width: 100%;
-        vertical-align: middle;
-        padding: 20px;
+    form .data > *,
+    form :global(.locationSelect) {
+        font-size: 0.7em !important;
+        height: fit-content;
+        /*height: fit-content;*/
+        line-height: 1.1em !important;
+        width: 100% !important;
+        vertical-align: middle !important;
+        padding: 10px;
     }
 
     .small {
-        max-width: 50px !important;
+        max-width: 70px !important;
         width: 0 !important;
     }
 
@@ -157,17 +171,12 @@
         resize: vertical;
         padding: 0 5px;
         overflow: hidden;
+        /*font-size: 0.6em !important;*/
+        /*height: 100% !important;*/
     }
 
     form {
         display: table-row;
-    }
-
-    button.data {
-        background-color: transparent;
-        display: inline;
-        border: none;
-        vertical-align: middle;
     }
 
     .noResults {
@@ -191,7 +200,7 @@
         width: 100%;
     }
 
-    .data:not(:has(*)), button.data {
+    .data:not(:has(*)) {
         padding: 5px 20px;
     }
 
@@ -203,8 +212,8 @@
         height: fit-content;
     }
 
-    span.data{
-        line-height: 0;
+    span.data {
+        /*line-height: 0;*/
         padding: 10px;
         font-size: 1.2em;
     }
@@ -239,7 +248,7 @@
         flex-direction: row;
     }
 
-    input, select, option, textarea, form button {
+    input, textarea, form button {
         background-color: var(--color-background-secondary);
         border: none;
         color: var(--color-text-secondary);

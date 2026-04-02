@@ -19,7 +19,10 @@
 		</svg>
 		<ul>
 			<li aria-current={page.url.pathname === '/baza' ? 'page' : undefined}>
-				<a href={resolve('/baza')}>Baza</a>
+				<a href={resolve('/db')}>Baza</a>
+			</li>
+			<li aria-current={page.url.pathname === '/uzytkownicy' ? 'page' : undefined}>
+				<a href={resolve('/users')}>Użytkownicy</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">

@@ -28,9 +28,6 @@ public class RefreshTokenService {
     @Transactional
     public RefreshToken createRefreshToken(AppUser appUser) {
 
-        refreshTokenRepository.deleteByAppUser(appUser);
-        refreshTokenRepository.flush();
-
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setAppUser(appUser);
         refreshToken.setToken(UUID.randomUUID().toString());
@@ -48,5 +45,11 @@ public class RefreshTokenService {
     @Modifying
     public void deleteByAppUser(AppUser appUser) {
         refreshTokenRepository.deleteByAppUser(appUser);
+    }
+
+    @Transactional
+    @Modifying
+    public void deleteByToken(String token) {
+        refreshTokenRepository.deleteByToken(token);
     }
 }

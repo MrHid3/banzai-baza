@@ -2,6 +2,7 @@ package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.repository.LocationRepository;
 
@@ -32,5 +33,12 @@ public class LocationService {
 
     public Location save(Location location) {
         return locationRepository.save(location);
+    }
+
+    public void deleteById(Long id) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(InvalidLocationException::new);
+
+        locationRepository.deleteById(id);
     }
 }

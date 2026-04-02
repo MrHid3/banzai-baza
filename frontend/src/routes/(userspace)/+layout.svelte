@@ -1,11 +1,9 @@
 <script lang="ts">
 	import Header from './Header.svelte';
 	import '../layout.css';
-	import RouteGuard from "$lib/RouteGuard.svelte";
 
 	let { children } = $props();
 </script>
-<RouteGuard>
 <div class="app">
 	<Header />
 
@@ -15,11 +13,11 @@
 
 	<footer>
 		<p>
-			visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to learn about SvelteKit
+<!--			visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to learn about SvelteKit-->
 		</p>
 	</footer>
 </div>
-</RouteGuard>
+
 <style>
 	.app {
 		display: flex;
@@ -46,9 +44,9 @@
 		padding: 12px;
 	}
 
-	footer a {
-		font-weight: bold;
-	}
+	/*footer a {*/
+	/*	font-weight: bold;*/
+	/*}*/
 
 	@media (min-width: 480px) {
 		footer {
