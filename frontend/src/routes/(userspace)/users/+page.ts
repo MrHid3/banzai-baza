@@ -1,4 +1,6 @@
-export const load = async (event) => {
+import type {PageLoad} from "../../../../.svelte-kit/types/src/routes/$types";
+
+export const load : PageLoad = async (event) => {
 
     const appUsers = await event.fetch("/api/appUser");
     const locations = await event.fetch("/api/location/all");

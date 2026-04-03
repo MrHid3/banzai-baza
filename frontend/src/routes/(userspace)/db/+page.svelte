@@ -6,8 +6,12 @@
 
     let {data} = $props();
 
-    let members = $state(structuredClone(data.members ?? []));
+    let members = $state(data.members ?? []);
     let filteredMembers = $state(members)
+
+    $effect(() => {
+        members = data.members ?? [];
+    })
 
     $effect(() => {
         let result = members;

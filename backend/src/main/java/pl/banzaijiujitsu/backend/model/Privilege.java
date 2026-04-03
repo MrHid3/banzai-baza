@@ -24,7 +24,4 @@ public class Privilege {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
-
 }
