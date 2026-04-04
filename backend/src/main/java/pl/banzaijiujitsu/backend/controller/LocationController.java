@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
 import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
+import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.repository.AppUserRepository;
@@ -36,9 +37,13 @@ public class LocationController {
     private final AppUserService appUserService;
 
     @Autowired
-    public LocationController(LocationService locationService, AppUserService appUserService) {
+    private final MemberService memberService;
+
+    @Autowired
+    public LocationController(LocationService locationService, AppUserService appUserService, MemberService memberService) {
         this.locationService = locationService;
         this.appUserService = appUserService;
+        this.memberService = memberService;
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,7 +56,7 @@ public class LocationController {
 
         Collection<Location> allowed_locations;
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            allowed_locations = locationService.findAll();
+            allowed_locations = locationService.findAllActive();
         } else {
             allowed_locations = appUserService
                     .findByEmail(auth.getName())
@@ -78,6 +83,19 @@ public class LocationController {
     @Transactional
     public ResponseEntity<?> deleteLocation(@RequestParam Long locationId) {
 
+        Location location = locationService.findByIdAndIsActive(locationId).orElseThrow(InvalidLocationException::new);
+        List<Member> member = memberService.findByLocation(location);
+
+        if(!member.isEmpty()) {
+            throw new InvalidLocationException("MEMBER_HAS_LOCATION");
+        }
+
+        List<AppUser> appUsers = appUserService.findByLocationsContains(location);
+
+        for( AppUser appUser : appUsers) {
+            appUserService.deleteLocation(appUser, location);
+        }
+
         locationService.deleteById(locationId);
 
         return ResponseEntity.ok().build();
@@ -86,5 +104,9 @@ public class LocationController {
     public record LocationCreationRequest(
             @NotNull String name,
             @NotNull String shortname
+    ){}
+
+    public record DeleteLocationRequest(
+            @NotNull Long locationId
     ){}
 }

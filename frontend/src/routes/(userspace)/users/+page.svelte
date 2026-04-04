@@ -2,9 +2,11 @@
     import {enhance} from "$app/forms";
     import {onMount} from "svelte";
     import {locations} from "$lib/stores/locations.svelte";
+    import LocationSelect from "$lib/LocationSelect.svelte";
+    import {user} from "$lib/stores/auth";
 
     onMount(() => {
-        locations.load();
+        locations.load(true);
     })
 
     let {data} = $props();
@@ -16,7 +18,14 @@
         "ROLE_COACH": "Trener"
     }
 
+    const statuses = {
+        "PENDING": "Oczekujący",
+        "ACTIVE": "Aktywny",
+        "DISABLED": "Wyłączony"
+    }
+
     let inviting = $state(false);
+
 </script>
 
 <div class="user">
@@ -28,18 +37,45 @@
                 inviting = false;
             }
         }}>
-            <input type="email" name="email">
+            <input name="email" type="email">
             <select name="role">
                 <option value="ROLE_ADMIN">Administrator</option>
                 <option value="ROLE_COACH">Trener</option>
             </select>
-            <button type="submit" disabled={inviting}>{inviting ? "Zaprasznie..." : "Zaproś"}</button>
+            <button disabled={inviting} type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
         </form>
     </div>
 
     <ul>
         {#each users as user, index (index)}
-            <li>{roles[user.role.name]} {user.email}, {user.enabled ? "AKTYWNY" : "NIEAKTYWNY"}</li>
+            <li>
+                {roles[user.role.name]} {user.email}, {statuses[user.status]}
+                <input type="checkbox" class="hide-checkbox">
+                <div class="hideable">
+                    {#if user.role.name !== "ROLE_ADMIN"}
+                        {#each user.locations as location}
+                            <form action="?/deleteLocationFromUser" method="POST" use:enhance>
+                                <span>{location.name}</span>
+                                <input type="hidden" name="locationId" value={location.id}>
+                                <input type="hidden" name="userUuid" value={user.uuid}>
+                                <button type="submit">Usuń</button>
+                            </form>
+                        {/each}
+                        <form action="?/addLocationToUser" method="POST" use:enhance>
+                            <input type="hidden" value={user.uuid} name="userUuid">
+                            <LocationSelect all={false}></LocationSelect>
+                            <button type="submit">Dodaj</button>
+                        </form>
+                    {/if}
+                    {#if user.status !== "PENDING"}
+                        <form action="?/changeStatus" method="POST" use:enhance>
+                            <input type="hidden" name="userUuid" value={user.uuid}>
+                            <input type="hidden" name="status" value={user.status === "ACTIVE" ? "DISABLED" : "ACTIVE"}>
+                            <button type="submit">{user.status === "ACTIVE" ? "DEZAKTYWUJ" : "AKTYWUJ"}</button>
+                        </form>
+                    {/if}
+                </div>
+            </li>
         {/each}
     </ul>
 </div>
@@ -51,19 +87,42 @@
                     await update();
                     await locations.load(true);
         }}}>
-            <input type="text" name="name">
-            <input type="text" name="shortname">
+            <input name="name" type="text">
+            <input name="shortname" type="text">
             <button type="submit">Dodaj</button>
         </form>
     </div>
 
     <ul>
         {#each $locations.data as location, index (index)}
-            <li>{location.name} ({location.shortname})</li>
+            <li>
+                <form action="?/deleteLocation" method="POST" use:enhance={(update) => {
+                    return async ({update}) => {
+                        await update();
+                        await locations.load(true);
+                    }
+                }}>
+                    <span>{location.name} ({location.shortname})</span>
+                    <input type="hidden" name="locationId" value={location.id}>
+                    <button type="submit">Usuń</button>
+                </form>
+            </li>
         {/each}
     </ul>
 </div>
 
 <style>
+    div.hideable {
+        display: flex;
+        flex-direction: column;
+    }
 
+    li form {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .hide-checkbox:not(:checked) + .hideable {
+        display: none;
+    }
 </style>

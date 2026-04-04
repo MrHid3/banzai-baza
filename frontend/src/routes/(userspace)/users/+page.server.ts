@@ -57,5 +57,107 @@ export const actions : Actions = {
                 values: Object.fromEntries(data)
             });
         }
+    },
+
+    addLocationToUser: async ({request, cookies, locals}) => {
+        const data = await request.formData();
+
+        const res = await serverFetch(
+            '/api/appUser/location',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userUuid: data.get("userUuid"),
+                    locationId: data.get("locationId")
+                }),
+            },
+            cookies,
+            locals
+        )
+
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            return fail(res.status, {
+                error: body.message ?? 'Failed to add location',
+                values: Object.fromEntries(data)
+            });
+        }
+    },
+
+    deleteLocationFromUser: async ({request, cookies, locals}) => {
+        const data = await request.formData();
+
+        const res = await serverFetch(
+            '/api/appUser/location',
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userUuid: data.get("userUuid"),
+                    locationId: data.get("locationId")
+                }),
+            },
+            cookies,
+            locals
+        )
+
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            return fail(res.status, {
+                error: body.message ?? 'Nie udało się usunąć lokalizacji',
+                values: Object.fromEntries(data)
+            });
+        }
+    },
+
+    deleteLocation: async ({request, cookies, locals}) => {
+        const data = await request.formData();
+
+        const res = await serverFetch(
+            `/api/location?locationId=${data.get("locationId")}`,
+            {
+                method: 'DELETE'
+            },
+            cookies,
+            locals
+        )
+
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            return fail(res.status, {
+                error: body.message ?? 'Nie udało się usunąć lokalizacji',
+                values: Object.fromEntries(data)
+            });
+        }
+    },
+
+    changeStatus: async({request, cookies, locals}) => {
+        const data = await request.formData();
+
+        const res = await serverFetch(
+            `/api/appUser/status`,
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    userUuid: data.get("userUuid"),
+                    status: data.get("status")
+                })
+            },
+            cookies,
+            locals
+        )
+
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            return fail(res.status, {
+                error: body.message ?? 'Nie udało się zmienić statusu',
+                values: Object.fromEntries(data)
+            });
+        }
     }
 }

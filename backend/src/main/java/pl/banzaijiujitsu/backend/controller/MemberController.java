@@ -42,7 +42,6 @@ public class MemberController {
     @PostMapping("/api/member")
     public ResponseEntity<String> addMember(@RequestBody CreateMemberRequest memberRequest, HttpServletResponse response) {
 
-        System.out.println("asfsasf");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         try {
@@ -53,7 +52,7 @@ public class MemberController {
                     .orElseThrow(InvalidUuidException::new)
                     .getLocations();
 
-            Location memberLocation = locationService.findById(
+            Location memberLocation = locationService.findByIdAndIsActive(
                             memberRequest.locationId())
                     .orElseThrow(() -> new InvalidLocationException("Invalid location id"));
 
@@ -155,7 +154,7 @@ public class MemberController {
             member.setEmail(memberRequest.email());
             member.setPhoneNumber(memberRequest.phoneNumber());
             member.setComment(memberRequest.comment());
-            member.setLocation(locationService.findById(memberRequest.locationId()).orElseThrow(InvalidLocationException::new));
+            member.setLocation(locationService.findByIdAndIsActive(memberRequest.locationId()).orElseThrow(InvalidLocationException::new));
             member.setMonthlyFee(memberRequest.monthlyFee());
             memberService.save(member);
         }else{

@@ -20,9 +20,14 @@
     })
 
     let selectedLocationId = $state(-1);
-    if (!all && location != null) {
-        selectedLocationId = location.id;
-    }
+
+    $effect(() => {
+        if (!all && location != null) {
+            selectedLocationId = location.id;
+        }else if(!all && $locations.data[0] != undefined) {
+            selectedLocationId = $locations.data[0].id;
+        }
+    })
 </script>
 
 

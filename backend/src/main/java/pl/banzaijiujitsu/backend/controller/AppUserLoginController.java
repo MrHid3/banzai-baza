@@ -72,8 +72,8 @@ public class AppUserLoginController {
         AppUser appUser = appUserService.findByEmail(loginRequest.email())
                 .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
 
-        if(appUser.getStatus() == AppUser.AppUserStatus.PENDING){
-            throw new InvalidEmailException("USER_PENDING");
+        if(appUser.getStatus() != AppUser.AppUserStatus.ACTIVE){
+            throw new UserNotActiveException();
         }
 
         String accessToken = jwtService.generateAccessToken(appUser);
@@ -99,7 +99,7 @@ public class AppUserLoginController {
         }
 
         if (token == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No refresh token");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NO_REFRESH_TOKEN");
         }
 
         return refreshTokenService.findValidToken(token)

@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
+import pl.banzaijiujitsu.backend.exception.UserNotActiveException;
 import pl.banzaijiujitsu.backend.service.AppUserDetailsService;
 import pl.banzaijiujitsu.backend.service.JwtService;
 
@@ -64,7 +65,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
 
-        } catch (InvalidUuidException e) {
+        } catch (UserNotActiveException e) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("Account is disabled");
+            return; // do not call filterChain.doFilter
+        }catch (InvalidUuidException e) {
             filterChain.doFilter(request, response);
             return;
         }

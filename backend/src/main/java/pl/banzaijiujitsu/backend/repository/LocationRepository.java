@@ -13,9 +13,13 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Override
     Optional<Location> findById(Long id);
 
+    Optional<Location> findByIdAndIsActive(Long id, Boolean isActive);
+
     Optional<Location> findByName(String name);
 
     List<Location> findAll();
+
+    List<Location> findByIsActive(Boolean isActive);
 
     void deleteById(Long id);
 }

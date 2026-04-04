@@ -105,4 +105,8 @@ public class AppUserService {
     public List<AppUser> findAll() {
         return appUserRepository.findAll();
     }
+
+    public List<AppUser> findByLocationsContains(Location location) {
+        return appUserRepository.findByLocationsContains(location);
+    }
 }

@@ -31,12 +31,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = appUserDetailsService.loadUserByEmail(email);
 
         if(userDetails == null){
-            throw new InvalidEmailException("Email not found");
+            throw new InvalidEmailException("EMAIL_NOT_FOUND");
         }
 
         if(!encodingService.passwordMatches(password, userDetails.getPassword())){
-            throw new BadCredentialsException("Invalid password");
+            throw new BadCredentialsException("INVALID_PASSWORD");
         }
+
 
         return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
     }

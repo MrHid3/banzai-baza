@@ -39,6 +39,14 @@ public class LocationService {
         Location location = locationRepository.findById(id)
                 .orElseThrow(InvalidLocationException::new);
 
-        locationRepository.deleteById(id);
+        location.setIsActive(false);
+    }
+
+    public List<Location> findAllActive(){
+        return locationRepository.findByIsActive(true);
+    }
+
+    public Optional<Location> findByIdAndIsActive(Long id) {
+        return locationRepository.findByIdAndIsActive(id, true);
     }
 }

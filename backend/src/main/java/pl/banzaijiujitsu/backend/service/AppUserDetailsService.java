@@ -41,12 +41,18 @@ public class AppUserDetailsService implements UserDetailsService {
     public Optional<UserDetails> loadUserByUuid(UUID uuid) throws InvalidUuidException {
         AppUser user = appUserService.findByUuid(uuid)
                 .orElseThrow(InvalidUuidException::new);
+        if (!user.isEnabled()) {
+            throw new UserNotActiveException();
+        }
         return Optional.of(new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole())));
     }
 
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
         AppUser user = appUserService.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        if (!user.isEnabled()) {
+            throw new UserNotActiveException();
+        }
         return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole()));
 
     }

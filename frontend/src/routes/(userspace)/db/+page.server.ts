@@ -82,7 +82,6 @@ export const actions: Actions = {
 		);
 
 		if (!res.ok) {
-			console.log(res)
 			const body = await res.json().catch(() => ({}));
 			return fail(res.status, {
 				error: body.message ?? 'Failed to update member',

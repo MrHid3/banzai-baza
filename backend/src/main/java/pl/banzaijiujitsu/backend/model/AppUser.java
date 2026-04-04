@@ -34,7 +34,7 @@ public class AppUser {
     }
 
     public enum AppUserStatus{
-        PENDING, ACTIVE
+        PENDING, ACTIVE, DISABLED
     }
 
     public boolean isEnabled(){
