@@ -35,11 +35,13 @@ export const actions: Actions = {
         if(!res.ok){
             const body = await res.json().catch(() => ({}));
             return fail(res.status, {
-                error: 'Nie udało się zresetować hasła',
+                error: 'Nie udało się zmienić hasła',
                 values: Object.fromEntries(data)
             });
         }
 
-        redirect(303, '/login')
+        return {
+            ok: true
+        }
     }
 }

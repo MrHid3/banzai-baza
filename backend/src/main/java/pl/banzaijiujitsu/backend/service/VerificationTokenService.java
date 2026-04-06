@@ -22,6 +22,7 @@ public class VerificationTokenService {
     @Value("${app.magic-link.expiry-hours}")
     private int expiryHours;
 
+    @Transactional
     public VerificationToken createToken(AppUser user, VerificationToken.TokenType type){
 
         verificationTokenRepository.deleteByAppUserAndType(user, type);

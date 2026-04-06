@@ -26,7 +26,7 @@ public class EmailService {
     @Value("${app.magic-link.expiry-hours}")
     private Integer expiryHours;
 
-    public void sendMagicLink(AppUser appUser, String token){
+    public void sendInviteLink(AppUser appUser, String token){
 
         String link = frontendUrl + "/set-password?token=" + token;
 
@@ -40,7 +40,28 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
             helper.setFrom(fromAdress);
             helper.setTo(appUser.getEmail());
-            helper.setSubject("Rejestracja w bazie banzai");
+            helper.setSubject("Rejestracja w bazie Banzai");
+            helper.setText(html, true);
+        };
+
+        mailSender.send(preparator);
+    }
+
+    public void sendResetLink(AppUser appUser, String token){
+
+        String link = frontendUrl + "/reset-password?token=" + token;
+
+        Context context = new Context();
+        context.setVariable("link", link);
+        context.setVariable("expiryHours", expiryHours);
+
+        String html = templateEngine.process("email/reset-password", context);
+
+        MimeMessagePreparator preparator = msg -> {
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
+            helper.setFrom(fromAdress);
+            helper.setTo(appUser.getEmail());
+            helper.setSubject("Reset hasła (BAnZAi)");
             helper.setText(html, true);
         };
 

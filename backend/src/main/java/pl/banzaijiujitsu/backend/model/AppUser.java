@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.service.EncodingService;
@@ -41,13 +42,13 @@ public class AppUser {
         return this.status == AppUserStatus.ACTIVE;
     }
 
-    public void setPassword(String password) throws InvalidPasswordException {
+    public void setPassword(String password, EncodingService encodingService) throws InvalidPasswordException {
             Pattern pattern = Pattern.compile("^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*?[?!\\\\|'\";:+=-_()*&^%$#@<>,.`~\\[\\]{}/]).{8,})\\S$");
         Matcher matcher = pattern.matcher(password);
         if(!matcher.find()){
             throw new InvalidPasswordException("Password is too easy");
         }
-        this.password = password;
+        this.password = encodingService.encodePassword(password);
     }
 
     public void setEmail(String email) throws InvalidEmailException {
@@ -57,13 +58,6 @@ public class AppUser {
             throw new InvalidEmailException();
         }
         this.email = email;
-    }
-
-    public void hashPassword(EncodingService encodingService) throws InvalidPasswordException {
-        if(this.password == null || this.password.isEmpty()){
-            throw new InvalidPasswordException("Password is empty");
-        }
-        this.password = encodingService.encodePassword(this.password);
     }
 
     @Id

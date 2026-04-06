@@ -45,7 +45,6 @@ public class AppUserService {
         if(!appUserRepository.findByUsername(appUser.getEmail()).isEmpty()){
             throw new InvalidEmailException("Email already exists");
         }
-        appUser.hashPassword(encodingService);
         return appUserRepository.save(appUser);
     }
 
@@ -63,9 +62,14 @@ public class AppUserService {
 
     @Transactional
     public void activateAppUser(AppUser appUser, String password) throws InvalidPasswordException {
-        appUser.setPassword(password);
-        appUser.hashPassword(encodingService);
+        appUser.setPassword(password, encodingService);
         appUser.setStatus(AppUser.AppUserStatus.ACTIVE);
+        appUserRepository.save(appUser);
+    }
+
+    @Transactional
+    public void changePassword(AppUser appUser, String password) throws InvalidPasswordException {
+        appUser.setPassword(password, encodingService);
         appUserRepository.save(appUser);
     }
 

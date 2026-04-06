@@ -2,6 +2,7 @@ package pl.banzaijiujitsu.backend.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,20 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.*;
 import pl.banzaijiujitsu.backend.model.*;
 import pl.banzaijiujitsu.backend.repository.RoleRepository;
-import pl.banzaijiujitsu.backend.service.AppUserService;
-import pl.banzaijiujitsu.backend.service.CustomAuthenticationProvider;
-import pl.banzaijiujitsu.backend.service.JwtService;
-import pl.banzaijiujitsu.backend.service.RefreshTokenService;
+import pl.banzaijiujitsu.backend.service.*;
 
-import javax.management.relation.RoleNotFoundException;
-import java.util.Arrays;
 import java.util.Map;
 
 @RestController
@@ -34,14 +29,18 @@ public class AppUserLoginController {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final RoleRepository roleRepository;
+    private final EmailService emailService;
+    private final VerificationTokenService verificationTokenService;
 
     @Autowired
-    public AppUserLoginController(AppUserService appUserService, CustomAuthenticationProvider customAuthenticationProvider, JwtService jwtService, RefreshTokenService refreshTokenService, RoleRepository roleRepository) {
+    public AppUserLoginController(AppUserService appUserService, CustomAuthenticationProvider customAuthenticationProvider, JwtService jwtService, RefreshTokenService refreshTokenService, RoleRepository roleRepository, EmailService emailService, VerificationTokenService verificationTokenService) {
         this.appUserService = appUserService;
         this.customAuthenticationProvider = customAuthenticationProvider;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.roleRepository = roleRepository;
+        this.emailService = emailService;
+        this.verificationTokenService = verificationTokenService;
     }
 
 //    @PostMapping("/register")
@@ -129,6 +128,30 @@ public class AppUserLoginController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
+    @PostMapping("/reset-password/request")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetRequest req){
+
+        AppUser appUser = appUserService.findByEmail(req.email).orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
+
+        VerificationToken token = verificationTokenService.createToken(appUser, VerificationToken.TokenType.PASSWORD_RESET);
+        emailService.sendResetLink(appUser, token.getToken());
+        return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/reset-password/validate")
+    public ResponseEntity<AppUserRegistrationController.ValidateResponse> validate(@RequestParam String token) {
+        VerificationToken vt = verificationTokenService.validateToken(token, VerificationToken.TokenType.PASSWORD_RESET);
+        return ResponseEntity.ok(new AppUserRegistrationController.ValidateResponse(vt.getAppUser().getEmail()));
+    }
+
+    @PostMapping("/reset-password/confirm")
+    public ResponseEntity<AppUserRegistrationController.ValidateResponse> confirm(@RequestBody @Valid AppUserRegistrationController.ConfirmRequest confirmRequest) throws InvalidPasswordException {
+        VerificationToken token = verificationTokenService.validateToken(confirmRequest.token(), VerificationToken.TokenType.PASSWORD_RESET);
+        appUserService.changePassword(token.getAppUser(), confirmRequest.password());
+        verificationTokenService.consumeToken(token);
+        return ResponseEntity.ok().build();
+    }
+
     public record LoginRequest(
             @NotNull @Email String email,
             @NotNull String password
@@ -136,5 +159,9 @@ public class AppUserLoginController {
 
     public record RefreshRequest(
             String refreshToken
+    ){}
+
+    public record ResetRequest(
+            @NotNull @Email String email
     ){}
 }

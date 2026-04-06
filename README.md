@@ -1,7 +1,7 @@
 backend:
 - [x] przeniesienie requestów z klas do recordów
-- [ ] error handling dla całej strony (@RestControllerAdvice)
-- [ ] zapomniałem hasła
+- [x] error handling dla całej strony (@RestControllerAdvice)
+- [x] zapomniałem hasła
 - [ ] zmiana maila?
 - [ ] ratelimiter
 - memberzy:
@@ -18,15 +18,15 @@ frontend:
   - [x] dodawanie
   - [x] usuwanie
   - [x] edycja
-- [ ] zapomniałem hasła
+- [x] zapomniałem hasła
 - [ ] płatności
 - [ ] layout dla coachy
 - [ ] layout na telefony
-- [ ] zarządzanie lokalizacjami
+- [x] zarządzanie lokalizacjami
 - [x] zarządzanie użytkownikami:
   - [x] /invite
   - [x] /set-password
   - [ ] /profile?
-  - [ ] przypisywanie do lokalizacji i gaszenie
+  - [x] przypisywanie do lokalizacji i gaszenie
 - [ ] logi?
 - [ ] beautiful

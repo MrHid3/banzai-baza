@@ -23,7 +23,7 @@ public class VerificationToken {
     @Column(nullable = false, unique = true)
     private String token;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private AppUser appUser;
 
     @Enumerated(EnumType.STRING)

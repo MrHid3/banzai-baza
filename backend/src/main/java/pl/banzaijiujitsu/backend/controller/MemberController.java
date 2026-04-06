@@ -25,6 +25,7 @@ import pl.banzaijiujitsu.backend.service.MemberService;
 import java.util.*;
 
 @RestController
+@RequestMapping("/api/member")
 public class MemberController {
 
     @Autowired
@@ -39,7 +40,7 @@ public class MemberController {
     @Autowired
     private LocationService locationService;
 
-    @PostMapping("/api/member")
+    @PostMapping
     public ResponseEntity<String> addMember(@RequestBody CreateMemberRequest memberRequest, HttpServletResponse response) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -77,7 +78,7 @@ public class MemberController {
     }
 
     //TODO: sprawdź czy to działa na użytkowników bez i z mniejszą niż wszystkie liczbą lokalizacji
-    @GetMapping(path = "/api/member", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<Collection<Member>> member(){
     public ResponseEntity<?> member() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -100,7 +101,7 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
 
-    @DeleteMapping("/api/member")
+    @DeleteMapping
     @Transactional
     public ResponseEntity<?> deleteMember(@RequestBody DeleteMemberRequest memberRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -129,7 +130,37 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/api/member/{uuid}")
+    @PostMapping("/undelete")
+    @Transactional
+    public ResponseEntity<?> undeleteMember(@RequestBody DeleteMemberRequest memberRequest) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Member member = memberService.findByUuid(UUID.fromString(memberRequest.uuid())).orElseThrow(InvalidUuidException::new);
+
+        Collection<Location> allowed_locations;
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            allowed_locations = locationService.findAll();
+        } else {
+            allowed_locations = appUserService
+                    .findByEmail(auth.getName())
+                    .orElseThrow(InvalidUuidException::new)
+                    .getLocations();
+        }
+        if (allowed_locations.contains(member.getLocation())) {
+            member.setIsActive(true);
+            memberService.save(member);
+        } else {
+            throw new InvalidLocationException("NO_ACCESS_TO_LOCATION");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{uuid}")
     @Transactional
     public ResponseEntity<?> updateMember(@PathVariable String uuid, @RequestBody UpdateMemberRequest memberRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

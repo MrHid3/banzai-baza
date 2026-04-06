@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals, url }) => {
-	const publicRoutes = ['/login', '/set-password'];
+	const publicRoutes = ['/login', '/set-password', "/request-password-reset", "/reset-password"];
 
 	if (!locals.user && !publicRoutes.includes(url.pathname)) {
 		redirect(303, '/login');

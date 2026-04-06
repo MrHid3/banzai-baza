@@ -2,7 +2,7 @@ import type { Handle } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { PUBLIC_BACKEND_2, PUBLIC_DEV } from '$env/static/public';
 
-const UNPROTECTED_ROUTES = ['/login', '/api/auth/refresh', '/set-password'];
+const UNPROTECTED_ROUTES = ['/login', '/api/auth/refresh', '/set-password', "/request-password-reset", "/reset-password"];
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const accessToken = event.cookies.get('accessToken');

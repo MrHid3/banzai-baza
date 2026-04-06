@@ -33,7 +33,7 @@
 {:else}
     <form action="?/confirm" method="POST" use:enhance>
         <input type="hidden" value={token} name="token">
-        Ustaw Hasło: <input type={showPassword? "text" : "password"} name="password" bind:value={password} required />
+        Ustaw hasło: <input type={showPassword? "text" : "password"} name="password" bind:value={password} required />
         Powtórz hasło: <input type={showPassword? "text" : "password"} pattern={password} required/>
         <label for="show">
             <input type="checkbox" bind:checked={showPassword}>

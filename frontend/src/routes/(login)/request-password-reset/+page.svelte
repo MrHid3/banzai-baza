@@ -1,0 +1,39 @@
+<script lang="ts">
+    import {enhance} from "$app/forms";
+    import {browser} from "$app/environment";
+
+    let {form} = $props();
+
+    console.log(form)
+
+    const email = browser ? new URLSearchParams(window.location.search).get("email") : null;
+
+</script>
+
+{#if !form?.ok}
+    <form action="?/request" method="POST" use:enhance>
+        Email:
+        <input name="email" type="email" value={email}>
+        <button type="submit">Resetuj hasło</button>
+    </form>
+    {#if form?.error}
+        <p class="error">{form.error}</p>
+    {/if}
+{:else}
+    <p>Email został wysłany</p>
+    <a href="/login">Powrót do loginu</a>
+{/if}
+
+<style>
+    form, p, a {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        margin: 20px auto;
+    }
+
+    a{
+        color: var(--color-text-secondary);
+        text-decoration: underline;
+    }
+</style>

@@ -33,7 +33,7 @@ export const actions: Actions = {
 		if (!res.ok) {
 			const body = await res.json().catch(() => ({}));
 			return fail(res.status, {
-				error: body.message ?? 'Failed to create member',
+				error: body.message ?? 'Nie udało si stworzyć członka',
 				values: Object.fromEntries(data)
 			});
 		}
@@ -54,9 +54,43 @@ export const actions: Actions = {
 		if (!res.ok) {
 			const body = await res.json().catch(() => ({}));
 			return fail(res.status, {
-				error: body.message ?? 'Failed to delete member',
+				error: body.message ?? 'Nie udało się usunąć członka',
 				values: Object.fromEntries(data)
 			});
+		}
+
+		return {
+			type: "delete",
+			uuid: data.get("uuid"),
+			ok: true
+		}
+	},
+
+	undelete: async ({ request, cookies, locals }) => {
+		const data = await request.formData();
+
+		const res = await serverFetch('/api/member/undelete', {
+				method: 'POST',
+				body: JSON.stringify({
+					uuid: data.get('memberUuid')
+				}),
+			},
+			cookies,
+			locals
+		);
+
+		if (!res.ok) {
+			const body = await res.json().catch(() => ({}));
+			return fail(res.status, {
+				error: body.message ?? "Nie udało się cofnąć usunięcia członka",
+				values: Object.fromEntries(data)
+			});
+		}
+
+		return {
+			type: "undelete",
+			uuid: data.get("uuid"),
+			ok: true
 		}
 	},
 	update: async ({ request, cookies, locals }) => {
@@ -84,7 +118,7 @@ export const actions: Actions = {
 		if (!res.ok) {
 			const body = await res.json().catch(() => ({}));
 			return fail(res.status, {
-				error: body.message ?? 'Failed to update member',
+				error: body.message ?? 'Nie udało się zaktualizować członka',
 				values: Object.fromEntries(data)
 			});
 		}

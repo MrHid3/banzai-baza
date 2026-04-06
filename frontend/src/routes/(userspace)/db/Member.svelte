@@ -32,6 +32,8 @@
 
     let edit = $state(false);
 
+    const phonePattern = "/^[\+]?[0-9]{0,3}\W?+[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im";
+
 </script>
 
 {#if !edit}
@@ -87,7 +89,7 @@
                 <input type="text" name="email" bind:value={member.email}>
         </span>
         <span class="data">
-                <input type="text" name="phoneNumber" bind:value={member.phoneNumber}>
+                <input type="text" name="phoneNumber" bind:value={member.phoneNumber} pattern={phonePattern}>
         </span>
         <span class="data">
                 <LocationSelect all={false} bind:location={member.location} class="locationSelect"></LocationSelect>

@@ -35,7 +35,7 @@ public class AppUserRegistrationController {
                 InvalidRoleException::new
         ));
         VerificationToken token = verificationTokenService.createToken(appUser, VerificationToken.TokenType.REGISTRATION);
-        emailService.sendMagicLink(appUser, token.getToken());
+        emailService.sendInviteLink(appUser, token.getToken());
         return ResponseEntity.accepted().build();
     }
 

@@ -3,8 +3,9 @@
     import Modal from "$lib/Modal.svelte";
     import {enhance} from "$app/forms";
     import LocationSelect from "$lib/LocationSelect.svelte";
+    import {untrack} from "svelte";
 
-    let {data} = $props();
+    let {data, form} = $props();
 
     let members = $state(data.members ?? []);
     let filteredMembers = $state(members)
@@ -16,7 +17,7 @@
     $effect(() => {
         let result = members;
         if (selectedLocation != null) {
-            result = result.filter((a) => a.location.id == selectedLocation.id);
+            result = result.filter((a) => a.location.id == selectedLocation?.id);
         }
         if (memberTextFilter.length >= 3) {
             result = result.filter((a) =>
@@ -38,18 +39,32 @@
 
     let showAddFragment = $state(false);
 
+    // const phonePattern = /^[\+]?[0-9]{0,3}\W?+[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    const phonePattern = new RegExp(/^[+]?[0-9]{0,3}\W?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/);
+
+    let deleteQueue : String[] = $state([]);
+
+    $effect(() => {
+        if (form?.ok)
+            if (form?.type == "delete") {
+                const uuid : String = form?.uuid as String;
+                untrack(() => {
+                    deleteQueue = [...deleteQueue, uuid]
+                })
+            }else if (form?.type == "undelete") {
+                const uuid = form?.uuid as String;
+                untrack(() => {
+                    const index = deleteQueue.indexOf(uuid);
+                    deleteQueue.splice(index, 1);
+                })
+            }
+    })
+
 </script>
 
 <svelte:head>
     <title>Baza klubu</title>
 </svelte:head>
-
-<Modal bind:showModal={showDeleteModal}>
-    {#snippet header()}
-        <h2>Usunąć {userToDeleteName}?</h2>
-    {/snippet}
-    Nie można tego odwrócić
-</Modal>
 
 <div class="filterHolder">
     <!--    TODO: dodaj lupe-->
@@ -57,6 +72,9 @@
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
     <span>Filtruj po lokalizacji:</span>
     <LocationSelect all={true} bind:location={selectedLocation} short={false}></LocationSelect>
+    {#if form?.error}
+        <span class="error">{form.error}</span>
+    {/if}
 </div>
 <div class="membersTable" style="--number-of-elements-minus-four: {members.length + 1 - 4}">
     <div class="header">
@@ -67,7 +85,16 @@
         <span class="data">Lokalizacja</span>
         <span class="data">Cena/mieś.</span>
         <span class="data">Komentarz</span>
-        <span class="data small"></span>
+        <span class="data small">
+            {#if deleteQueue.length > 0}
+                   <form action="?/undelete" method="POST" use:enhance>
+                       <input type="hidden" name="memberUuid" value={deleteQueue[deleteQueue.length - 1]}>
+                       <button type="submit">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z"/></svg>
+                       </button>
+                   </form>
+            {/if}
+        </span>
         <span class="data small">
             <div>
             <button onclick={() => showAddFragment = !showAddFragment}>
@@ -84,7 +111,7 @@
             <span class="data"><input type="text" name="name"></span>
             <span class="data"><input type="text" name="surname"></span>
             <span class="data"><input type="text" name="email"></span>
-            <span class="data"><input type="text" name="phoneNumber"></span>
+            <span class="data"><input type="text" name="phoneNumber" pattern={phonePattern}></span>
             <span class="data">
                 <LocationSelect class="locationSelect"></LocationSelect>
             </span>
@@ -109,6 +136,9 @@
 {/if}
 
 <style>
+    svg{
+        fill: var(--color-text-primary);
+    }
     /*.filterHolder :global(.LocationSelect){}*/
     .filterHolder {
         height: 30px;
@@ -135,6 +165,11 @@
         justify-content: center;
         align-items: center;
         overflow: hidden;
+    }
+
+    span.data form{
+        padding: 0 !important;
+        height: fit-content !important;
     }
 
     form .data > *,
@@ -198,7 +233,7 @@
     .membersTable {
         display: table;
         text-align: center;
-        line-height: 2.4em;
+        line-height: 2.4rem;
         font-size: 1.2em;
         margin: 0 auto;
         width: 100%;
