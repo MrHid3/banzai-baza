@@ -197,7 +197,7 @@ public class MemberController {
 
     public record CreateMemberRequest(
             @NotNull Long locationId,
-            @NotNull @Email String email,
+            @Email String email,
             String name,
             String surname,
             String comment,
@@ -207,7 +207,7 @@ public class MemberController {
     }
 
     public record UpdateMemberRequest(
-            @NotNull @Email String email,
+            @Email String email,
             @NotNull Long locationId,
             String name,
             String surname,

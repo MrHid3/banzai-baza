@@ -33,7 +33,7 @@ export const actions: Actions = {
 		if (!res.ok) {
 			const body = await res.json().catch(() => ({}));
 			return fail(res.status, {
-				error: body.message ?? 'Nie udało si stworzyć członka',
+				error: body.message ?? 'Nie udało się stworzyć członka',
 				values: Object.fromEntries(data)
 			});
 		}

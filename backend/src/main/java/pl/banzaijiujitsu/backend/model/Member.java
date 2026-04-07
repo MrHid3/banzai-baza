@@ -18,7 +18,7 @@ public class Member {
     public Member(){}
 
     public Member(String email) {
-        this.email = email;
+        this.setEmail(email);
     }
 
     public Member(String email, String name, String surname, Location location) {
@@ -29,15 +29,14 @@ public class Member {
     }
 
     public void setEmail(String email) throws InvalidEmailException {
-        if(email == null || email.isEmpty()){
-            throw new InvalidEmailException("Email can't be empty");
+        if(!(email == null || email.isEmpty())){
+            Pattern pattern  = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
+            Matcher matcher = pattern.matcher(email);
+            if(!matcher.find()){
+                throw new InvalidEmailException("Invalid email format");
+            }
         }
 
-        Pattern pattern  = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
-        Matcher matcher = pattern.matcher(email);
-        if(!matcher.find()){
-            throw new InvalidEmailException("Invalid email format");
-        }
         this.email = email;
     }
 
@@ -45,7 +44,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @Column(nullable = false)
     private String email;
     private String name;
     private String surname;

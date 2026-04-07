@@ -39,10 +39,9 @@
 
     let showAddFragment = $state(false);
 
-    // const phonePattern = /^[\+]?[0-9]{0,3}\W?+[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-    const phonePattern = new RegExp(/^[+]?[0-9]{0,3}\W?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/);
+    const phonePattern = "(?:[+][0-9]{1,3} )?[0-9]{3}[\\- ]?[0-9]{3}[\\- ]?[0-9]{3,6}";
 
-    let deleteQueue : String[] = $state([]);
+    let deleteQueue : string[] = $state([]);
 
     $effect(() => {
         if (form?.ok)
@@ -136,6 +135,10 @@
 {/if}
 
 <style>
+    input:not(:focus):invalid {
+        border: 1px solid red;
+    }
+
     svg{
         fill: var(--color-text-primary);
     }
@@ -259,11 +262,15 @@
 
     .header {
         display: table-row;
-        position: relative;
+        /*position: relative;*/
         width: 100%;
         outline-color: var(--color-border);
         outline-style: solid;
         outline-width: 2px;
+        position: sticky;
+        top: 10px;
+        background-color: var(--color-background-primary);
+        z-index: 10;
     }
 
     .data:has(.plusSvg) {

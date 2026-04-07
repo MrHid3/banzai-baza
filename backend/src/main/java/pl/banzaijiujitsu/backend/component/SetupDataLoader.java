@@ -37,6 +37,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private LocationService locationService;
+    @Autowired
+    private EncodingService encodingService;
 
     @Override
     @Transactional
@@ -100,7 +102,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<AppUser> optionalAppUser = appUserService.findByEmail(email);
 
         if (optionalAppUser.isEmpty()) {
-            appUser = new AppUser(email, password, role);
+            appUser = new AppUser(email, password, role, encodingService);
             appUser.setStatus(AppUser.AppUserStatus.ACTIVE);
 //            if(uuid != null){
 //                appUser.setUuid(uuid);

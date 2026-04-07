@@ -1,6 +1,7 @@
 package pl.banzaijiujitsu.backend.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,14 +24,14 @@ public class AppUser {
 
     public AppUser(){}
 
-    public AppUser(String email, String password) throws InvalidEmailException, InvalidPasswordException {
+    public AppUser(String email, String password, EncodingService encodingService) throws InvalidEmailException, InvalidPasswordException {
         this.setEmail(email);
-        this.setPassword(password);
+        this.setPassword(password, encodingService);
     }
 
-    public AppUser(String email, String password, Role role) throws InvalidEmailException, InvalidPasswordException {
+    public AppUser(String email, String password, Role role, EncodingService encodingService) throws InvalidEmailException, InvalidPasswordException {
         this.setEmail(email);
-        this.setPassword(password);
+        this.setPassword(password, encodingService);
         this.setRole(role);
     }
 
@@ -72,6 +73,7 @@ public class AppUser {
     @Column(unique = true)
     private String phoneNumber;
 
+    @Setter(AccessLevel.NONE)
     private String password;
 
     @ManyToOne(fetch =  FetchType.EAGER)
