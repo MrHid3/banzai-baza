@@ -7,6 +7,7 @@ import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Payment;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -43,10 +44,7 @@ public class PaymentService {
     }
 
     public Payment save(Payment payment) throws InvalidPaymentException {
-        if(payment.isAmountOverwritten() && payment.getComment().isEmpty()) {
-            throw new InvalidPaymentException("Comment required to ovverride amount");
-        }
-        payment.setPaymentDate(new Date());
+        payment.setPaymentDate(LocalDateTime.now());
         return paymentRepository.save(payment);
     }
 }

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -18,14 +20,14 @@ public class Payment {
     private UUID uuid;
 
     @Column(nullable = false)
-    private Integer amount;
+    private BigDecimal amount;
 
     private PaymentMethod paymentMethod;
 
     private PaymentType paymentType;
 
     @JoinColumn(nullable = false)
-    private Date paymentDate;
+    private LocalDateTime paymentDate;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -34,9 +36,6 @@ public class Payment {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Member payer;
-
-    @Column(nullable = false)
-    private boolean amountOverwritten;
 
     private String comment;
 }
