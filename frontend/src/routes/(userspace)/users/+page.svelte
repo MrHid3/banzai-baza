@@ -3,7 +3,6 @@
     import {onMount} from "svelte";
     import {locations} from "$lib/stores/locations.svelte";
     import LocationSelect from "$lib/LocationSelect.svelte";
-    import {user} from "$lib/stores/auth";
 
     onMount(() => {
         locations.load(true);
@@ -28,101 +27,203 @@
 
 </script>
 
-<div class="user">
-    <div id="addUser">
-        <form action="?/invite" method="POST" use:enhance={() => {
+<div class="container">
+    <div class="users">
+        <h2>Użytkownicy</h2>
+        <div id="addUser">
+            <form action="?/invite" method="POST" use:enhance={() => {
             inviting = true;
             return async ({update}) => {
                 await update();
                 inviting = false;
             }
         }}>
-            <input name="email" type="email">
-            <select name="role">
-                <option value="ROLE_ADMIN">Administrator</option>
-                <option value="ROLE_COACH">Trener</option>
-            </select>
-            <button disabled={inviting} type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
-        </form>
+                <input name="email" type="email">
+                <select name="role">
+                    <option value="ROLE_ADMIN">Administrator</option>
+                    <option value="ROLE_COACH">Trener</option>
+                </select>
+                <button disabled={inviting} type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
+            </form>
+        </div>
+
+        <ul>
+            {#each users as user, index (index)}
+                <li>
+                    <span class="user">
+                        {roles[user.role.name]} {user.email}, {statuses[user.status]}
+                        {#if user.role.name !== "ROLE_ADMIN"}
+                            <label for="hide{index}">Rozwiń</label>
+                            <input type="checkbox" class="hide-checkbox" id="hide{index}">
+                        {/if}
+                    </span>
+                    <div class="hideable">
+                        {#if user.role.name !== "ROLE_ADMIN"}
+                            {#if user.status !== "PENDING"}
+                                <form action="?/changeStatus" method="POST" use:enhance>
+                                    <input type="hidden" name="userUuid" value={user.uuid}>
+                                    <input type="hidden" name="status"
+                                           value={user.status === "ACTIVE" ? "DISABLED" : "ACTIVE"}>
+                                    <button type="submit">{user.status === "ACTIVE" ? "WYŁĄCZ KONTO" : "WŁĄCZ KONTO"}</button>
+                                </form>
+                            {/if}
+                            {#each user.locations as location}
+                                <form action="?/deleteLocationFromUser" method="POST" use:enhance>
+                                    <span>{location.name}</span>
+                                    <input type="hidden" name="locationId" value={location.id}>
+                                    <input type="hidden" name="userUuid" value={user.uuid}>
+                                    <button type="submit">Usuń</button>
+                                </form>
+                            {/each}
+                            <form action="?/addLocationToUser" method="POST" use:enhance>
+                                <input type="hidden" value={user.uuid} name="userUuid">
+                                <LocationSelect all={false}></LocationSelect>
+                                <button type="submit">Dodaj</button>
+                            </form>
+                        {/if}
+                    </div>
+                </li>
+            {/each}
+        </ul>
     </div>
 
-    <ul>
-        {#each users as user, index (index)}
-            <li>
-                {roles[user.role.name]} {user.email}, {statuses[user.status]}
-                <input type="checkbox" class="hide-checkbox">
-                <div class="hideable">
-                    {#if user.role.name !== "ROLE_ADMIN"}
-                        {#each user.locations as location}
-                            <form action="?/deleteLocationFromUser" method="POST" use:enhance>
-                                <span>{location.name}</span>
-                                <input type="hidden" name="locationId" value={location.id}>
-                                <input type="hidden" name="userUuid" value={user.uuid}>
-                                <button type="submit">Usuń</button>
-                            </form>
-                        {/each}
-                        <form action="?/addLocationToUser" method="POST" use:enhance>
-                            <input type="hidden" value={user.uuid} name="userUuid">
-                            <LocationSelect all={false}></LocationSelect>
-                            <button type="submit">Dodaj</button>
-                        </form>
-                    {/if}
-                    {#if user.status !== "PENDING"}
-                        <form action="?/changeStatus" method="POST" use:enhance>
-                            <input type="hidden" name="userUuid" value={user.uuid}>
-                            <input type="hidden" name="status" value={user.status === "ACTIVE" ? "DISABLED" : "ACTIVE"}>
-                            <button type="submit">{user.status === "ACTIVE" ? "DEZAKTYWUJ" : "AKTYWUJ"}</button>
-                        </form>
-                    {/if}
-                </div>
-            </li>
-        {/each}
-    </ul>
-</div>
 
-<div class="location">
-    <div id="addLocation">
-        <form action="?/addLocation" method="POST" use:enhance={(update) => {
+    <div class="locations">
+        <h2>Lokalizacje</h2>
+        <div id="addLocation">
+            <form action="?/addLocation" method="POST" use:enhance={(update) => {
                 return async ({update}) => {
                     await update();
                     await locations.load(true);
         }}}>
-            <input name="name" type="text">
-            <input name="shortname" type="text">
-            <button type="submit">Dodaj</button>
-        </form>
-    </div>
+                <input name="name" type="text">
+                <input name="shortname" type="text">
+                <button type="submit">Dodaj</button>
+            </form>
+        </div>
 
-    <ul>
-        {#each $locations.data as location, index (index)}
-            <li>
-                <form action="?/deleteLocation" method="POST" use:enhance={(update) => {
+        <ul>
+            {#each $locations.data as location, index (index)}
+                <li>
+                    <form action="?/deleteLocation" method="POST" use:enhance={(update) => {
                     return async ({update}) => {
                         await update();
                         await locations.load(true);
                     }
                 }}>
-                    <span>{location.name} ({location.shortname})</span>
-                    <input type="hidden" name="locationId" value={location.id}>
-                    <button type="submit">Usuń</button>
-                </form>
-            </li>
-        {/each}
-    </ul>
+                        <span>{location.name} ({location.shortname})</span>
+                        <input type="hidden" name="locationId" value={location.id}>
+                        <button type="submit">Usuń</button>
+                    </form>
+                </li>
+            {/each}
+        </ul>
+    </div>
 </div>
 
 <style>
+    label {
+        user-select: none;
+        cursor: pointer;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .users,
+    .locations {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #addUser,
+    #addLocation {
+        display: flex;
+        justify-content: center;
+    }
+
+    #addUser form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #addUser form *,
+    .hideable button {
+        /*display: block !important;*/
+        height: 100% !important;
+    }
+
+    .hideable button[type="submit"] {
+
+    }
+
+
+    .container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .container * {
+        margin: 5px;
+    }
+
+    .container > div {
+        width: 50%;
+    }
+
+    input,
+    button,
+    select,
+    option,
+    label {
+        background-color: var(--color-background-secondary);
+        border: none;
+        color: var(--color-text-secondary);
+        display: inline-block !important;
+        align-self: center;
+        text-align: center;
+        padding: 5px;
+    }
+
+    button,
+    select,
+    option {
+        cursor: pointer !important;
+    }
+
     div.hideable {
         display: flex;
         flex-direction: column;
     }
 
-    li form {
-        display: flex;
-        flex-direction: row;
+    .hideable form {
+        height: fit-content;
     }
 
-    .hide-checkbox:not(:checked) + .hideable {
+    .locations li,
+    .users li {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hideable {
+        display: flex;
+        flex-direction: column
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    .hide-checkbox {
+        display: none !important;
+    }
+
+    .user:has(.hide-checkbox:not(:checked)) + .hideable {
         display: none;
     }
 </style>

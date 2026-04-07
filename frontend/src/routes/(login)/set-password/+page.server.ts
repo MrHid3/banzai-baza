@@ -22,7 +22,7 @@ export const actions: Actions = {
             })
         }
 
-        const res = await serverFetch('/api/auth/reset-password/confirm', {
+        const res = await serverFetch('/api/auth/registration/confirm', {
                 method: "POST",
                 body: JSON.stringify({
                     token: data.get("token"),
