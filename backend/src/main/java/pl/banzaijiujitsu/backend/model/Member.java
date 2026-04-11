@@ -1,11 +1,14 @@
 package pl.banzaijiujitsu.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,4 +60,8 @@ public class Member {
 
     @Column(nullable = false)
     private Boolean isActive = true;
+
+    @OneToMany(mappedBy = "payer")
+    @JsonManagedReference
+    private List<Payment> payments = new ArrayList<>();
 }

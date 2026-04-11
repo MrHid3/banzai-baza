@@ -10,9 +10,11 @@ import pl.banzaijiujitsu.backend.model.Member;
 
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
@@ -33,7 +35,7 @@ public class PaymentService {
     }
 
     public Optional<Payment> findByMonthAndMember(YearMonth month, Member member) {
-        return paymentRepository.findByTimeIsAndPayer(month, member);
+        return paymentRepository.findByMonthIsAndPayer(month, member);
     }
 
     public List<Payment> findByPayerInUuid(UUID uuid) {
@@ -45,10 +47,11 @@ public class PaymentService {
     }
 
     public Payment save(Payment payment) throws InvalidPaymentException {
+        payment.setTimeStamp(LocalDateTime.now());
         return paymentRepository.save(payment);
     }
 
     public List<Payment> findByTimeAndLocations(YearMonth month, List<Location> locations){
-        return paymentRepository.findByTimeAfterAndPayerLocationIsIn(month, locations);
+        return paymentRepository.findByMonthAfterAndPayerLocationIsIn(month, locations);
     }
 }

@@ -1,11 +1,13 @@
 package pl.banzaijiujitsu.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.Date;
@@ -27,7 +29,10 @@ public class Payment {
 
     private PaymentType paymentType;
 
-    private YearMonth time;
+    private YearMonth month;
+
+    @Column(nullable = false)
+    private LocalDateTime timeStamp;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -35,6 +40,7 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @JsonBackReference
     private Member payer;
 
     private String comment;

@@ -4,25 +4,25 @@
 
     const {data, form} = $props();
 
-    let members = $state(data.members ?? []);
+    let members = $state(data.payments ?? []);
     let filteredMembers = $state(members)
 
     $effect(() => {
-        members = data.members ?? [];
+        members = data.payments ?? [];
     })
 
     $effect(() => {
         let result = members;
         if (selectedLocation != null) {
-            result = result.filter((a) => a.location.id == selectedLocation?.id);
+            result = result.filter((a) => a.member.location.id == selectedLocation?.id);
         }
         if (memberTextFilter.length >= 3) {
             result = result.filter((a) =>
-                (a.name != null && a.name.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                (a.surname != null && a.surname.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                a.email.toLowerCase().includes(memberTextFilter.toLowerCase()) ||
-                (a.phoneNumber != null && a.phoneNumber.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                (a.comment != null && a.comment.toLowerCase().includes(memberTextFilter.toLowerCase())));
+                (a.member.name != null && a.member.name.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
+                (a.member.surname != null && a.member.surname.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
+                a.member.email.toLowerCase().includes(memberTextFilter.toLowerCase()) ||
+                (a.member.phoneNumber != null && a.member.phoneNumber.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
+                (a.member.comment != null && a.member.comment.toLowerCase().includes(memberTextFilter.toLowerCase())));
         }
 
         filteredMembers = result;
@@ -33,7 +33,9 @@
 
     const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]
 
-    const currentMonth = new Date().getMonth()
+    const currentMonth = new Date().getMonth().toString().length == 1 ? "0" + (new Date().getMonth() + 1) : new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+
 </script>
 
 <div id="filterHolder">
@@ -52,27 +54,90 @@
         <td>Imię</td>
         <td>Nazwisko</td>
         <td>Lokalizacja</td>
+        <td>Cena/mieś.</td>
+        <td>Wpisowe</td>
+        <td>{monthNames[currentMonth - 3]}</td>
         <td>{monthNames[currentMonth - 2]}</td>
         <td>{monthNames[currentMonth - 1]}</td>
-        <td>{monthNames[currentMonth]}</td>
     </tr>
     </thead>
     <tbody>
     {#each filteredMembers as member, index (index)}
         <tr>
-            <td>{member.name}</td>
-            <td>{member.surname}</td>
-            <td>{member.location.shortname}</td>
-<!--            <td>{}</td>-->
-<!--            <td>{}</td>-->
-<!--            <td>{}</td>-->
+            <td>{member.member.name}</td>
+            <td>{member.member.surname}</td>
+            <td>{member.member.location.shortname}</td>
+            <td>{member.member.monthlyFee}</td>
+            {#if member.payments.some((a) => a.paymentType == "STARTING_FEE")}
+                <td class="payment-ok">{member.payments.find((a) => a.paymentType == "STARTING_FEE")?.amount}</td>
+            {:else}
+                <td class="payment-bad">
+                    <input type="number" value={0}>
+                </td>
+            {/if}
+            {#if member.payments.some((a) => a.month == `${currentYear}-${currentMonth - 2}`)}
+                <td class="payment-ok">{member.payments.find((a) => a.month == `${currentYear}-${currentMonth - 2}`)?.amount}</td>
+            {:else}
+                <td class="payment-bad">
+                    <input type="number" value={0}>
+                </td>
+            {/if}
+            {#if member.payments.some((a) => a.month == `${currentYear}-${currentMonth - 1}`)}
+                <td class="payment-ok">{member.payments.find((a) => a.month == `${currentYear}-${currentMonth - 1}`)?.amount}</td>
+            {:else}
+                <td class="payment-bad">
+                    <input type="number" value={0}>
+                </td>
+            {/if}
+            {#if member.payments.some((a) => a.month == `${currentYear}-${currentMonth}`)}
+                <td class="payment-ok">{member.payments.find((a) => a.month == `${currentYear}-${currentMonth}`)?.amount}</td>
+            {:else}
+                <td class="payment-bad">
+                    <input type="number" value={0}>
+                </td>
+            {/if}
         </tr>
     {/each}
     </tbody>
 </table>
 
 <style>
+    table {
+        font-size: 1.2rem;
+        line-height: 2.4rem;
+    }
+
+    thead {
+        outline: var(--color-border) solid 2px;
+    }
+
     thead td {
         text-transform: math-auto;
+    }
+
+    td {
+        text-align: center;
+        padding: 5px;
+        margin: 10px;
+        max-width: 15% !important;
+        width: 10%;
+    }
+
+    td.payment-ok {
+        color: green;
+    }
+
+    td.payment-bad input{
+        color: red;
+    }
+
+    input {
+        background-color: var(--color-background-secondary);
+        border: none;
+        color: var(--color-text-secondary);
+        display: inline-block !important;
+        align-self: center;
+        text-align: center;
+        padding: 5px;
     }
 </style>

@@ -64,23 +64,28 @@ public class PaymentController {
 
         Member member = memberService.findByUuid(UUID.fromString(req.payerUuid)).
                 orElseThrow(InvalidUuidException::new);
-
-        if(!appUser.getLocations().contains(member.getLocation())){
+        if (!(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
+                appUser.getLocations().contains(member.getLocation()))){
             throw new AuthenticationException("NO_ACCESS_TO_MEMBER");
         }
 
         Payment payment = new Payment();
 
         if(req.year != null && req.month != null){
-            YearMonth paymentMonth = YearMonth.of(req.year, req.month);
+            Month month = Month.of(req.month);
+            YearMonth paymentMonth = YearMonth.of(req.year, month);
+            System.out.println(month);
+            System.out.println(paymentMonth);
             Optional<Payment> optionalPayment = paymentService.findByMonthAndMember(paymentMonth, member);
             if(optionalPayment.isPresent()){
                 payment = optionalPayment.get();
                 if(paymentMonth.isBefore(YearMonth.now().minusMonths(3))){
                     throw new InvalidPaymentException("TOO_EARLY");
                 }
-                payment.setTime(YearMonth.of(req.year, req.month));
             }
+            payment.setMonth(YearMonth.of(req.year, month));
+        }else if(req.paymentType != PaymentType.STARTING_FEE){
+            throw new InvalidPaymentException("MONTH_NEEDED");
         }
 
         payment.setAmount(req.amount);
@@ -114,9 +119,7 @@ public class PaymentController {
                     .getLocations();
         }
 
-        List list = new ArrayList<Location>(allowed_locations);
-
-        return ResponseEntity.ok(paymentService.findByTimeAndLocations(YearMonth.now().minusMonths(3), list));
+        return ResponseEntity.ok(memberService.getLastThreeMonthsGroupedByMember(allowed_locations));
     }
 
     public record AddPaymentRequest(
@@ -125,7 +128,8 @@ public class PaymentController {
             @NotNull PaymentType paymentType,
             @NotNull String payerUuid,
             Integer year,
-            Month month,
+            Integer month,
             String comment
     ){}
+
 }

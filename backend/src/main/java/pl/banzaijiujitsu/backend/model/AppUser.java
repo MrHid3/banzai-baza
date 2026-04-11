@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.service.EncodingService;
+import pl.banzaijiujitsu.backend.service.RoleService;
 
 import java.util.Collection;
 import java.util.UUID;

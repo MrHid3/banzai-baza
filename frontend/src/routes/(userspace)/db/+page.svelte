@@ -261,9 +261,7 @@
         display: table-row;
         /*position: relative;*/
         width: 100%;
-        outline-color: var(--color-border);
-        outline-style: solid;
-        outline-width: 2px;
+        outline: var(--color-border) solid 2px;
         position: sticky;
         top: 10px;
         background-color: var(--color-background-primary);
