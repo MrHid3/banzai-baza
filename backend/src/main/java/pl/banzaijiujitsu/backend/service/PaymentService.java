@@ -6,9 +6,10 @@ import pl.banzaijiujitsu.backend.exception.InvalidPaymentException;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Payment;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
+import pl.banzaijiujitsu.backend.model.Member;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,8 +32,8 @@ public class PaymentService {
         return  paymentRepository.findByPayerLocation(location);
     }
 
-    public List<Payment> findByPaymentDate(Date date) {
-        return paymentRepository.findByPaymentDate(date);
+    public Optional<Payment> findByMonthAndMember(YearMonth month, Member member) {
+        return paymentRepository.findByTimeIsAndPayer(month, member);
     }
 
     public List<Payment> findByPayerInUuid(UUID uuid) {
@@ -44,7 +45,10 @@ public class PaymentService {
     }
 
     public Payment save(Payment payment) throws InvalidPaymentException {
-        payment.setPaymentDate(LocalDateTime.now());
         return paymentRepository.save(payment);
+    }
+
+    public List<Payment> findByTimeAndLocations(YearMonth month, List<Location> locations){
+        return paymentRepository.findByTimeAfterAndPayerLocationIsIn(month, locations);
     }
 }

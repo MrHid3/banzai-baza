@@ -55,10 +55,10 @@ public class MemberController {
 
             Location memberLocation = locationService.findByIdAndIsActive(
                             memberRequest.locationId())
-                    .orElseThrow(() -> new InvalidLocationException("Invalid location id"));
+                    .orElseThrow(InvalidLocationException::new);
 
             if (allowed_locations.contains(memberLocation)) {
-                throw new InvalidLocationException("User doesn't have access to this location");
+                throw new InvalidLocationException();
             }
 
             Member member = new Member(memberRequest.email());

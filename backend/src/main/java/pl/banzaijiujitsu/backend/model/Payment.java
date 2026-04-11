@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.UUID;
 
@@ -26,8 +27,7 @@ public class Payment {
 
     private PaymentType paymentType;
 
-    @JoinColumn(nullable = false)
-    private LocalDateTime paymentDate;
+    private YearMonth time;
 
     @ManyToOne
     @JoinColumn(nullable = false)

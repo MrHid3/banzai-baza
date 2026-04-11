@@ -34,9 +34,6 @@
     let memberTextFilter = $state("");
     let selectedLocation = $state(null);
 
-    let showDeleteModal = $state(false);
-    let userToDeleteName = $state("");
-
     let showAddFragment = $state(false);
 
     const phonePattern = "(?:[+][0-9]{1,3} )?[0-9]{3}[\\- ]?[0-9]{3}[\\- ]?[0-9]{3,6}";
