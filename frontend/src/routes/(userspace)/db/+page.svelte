@@ -77,9 +77,9 @@
         <span class="data">Imię</span>
         <span class="data">Nazwisko</span>
         <span class="data">Email</span>
-        <span class="data">Nr telefonu</span>
-        <span class="data">Lokalizacja</span>
-        <span class="data">Cena/mieś.</span>
+        <span class="data short">Nr telefonu</span>
+        <span class="data short">Lokalizacja</span>
+        <span class="data short">Cena/mieś.</span>
         <span class="data">Komentarz</span>
         <span class="data small">
             {#if deleteQueue.length > 0}
@@ -103,15 +103,15 @@
         </span>
     </div>
     {#if showAddFragment}
-        <form action="?/add" method="POST" use:enhance autocomplete="off">
+        <form action="?/add" method="POST" use:enhance autocomplete="off" class="addFragment">
             <span class="data"><input type="text" name="name"></span>
             <span class="data"><input type="text" name="surname"></span>
             <span class="data"><input type="text" name="email"></span>
-            <span class="data"><input type="text" name="phoneNumber" pattern={phonePattern}></span>
+            <span class="data short"><input type="text" name="phoneNumber" pattern={phonePattern}></span>
             <span class="data">
                 <LocationSelect class="locationSelect"></LocationSelect>
             </span>
-            <span class="data"><input type="number" name="monthlyFee" value="150"></span>
+            <span class="data short"><input type="number" name="monthlyFee" value="150"></span>
             <span class="data"><textarea name="comment"></textarea></span>
             <span class="data"><button type="submit">
                 <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
@@ -132,168 +132,92 @@
 {/if}
 
 <style>
-
-    input:not(:focus):invalid {
-        border: 1px solid red;
-    }
-
-    svg{
-        fill: var(--color-text-primary);
-    }
-    /*.filterHolder :global(.LocationSelect){}*/
-    .filterHolder {
-        height: 30px;
-    }
-
-    .filterHolder * {
-        height: 100%;
-    }
-
-    form :global(.locationSelect) {
-        width: 100%;
-    }
-
-    * {
+    *{
         margin: 0;
+        padding: 0;
         box-sizing: border-box;
     }
 
-    .data > div {
-        width: 100%;
-        height: 100% !important;
+    .filterHolder{
         display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+        flex-direction: row;
     }
 
-    span.data form{
-        height: fit-content !important;
-    }
-
-    form .data > *,
-    form :global(.locationSelect) {
-        font-size: 0.7em !important;
-        height: fit-content;
-        /*height: fit-content;*/
-        line-height: 1.1em !important;
-        width: 100% !important;
-        vertical-align: middle !important;
-    }
-
-    .small {
-        max-width: 70px !important;
-        width: 0 !important;
-    }
-
-    .data button {
-        border-radius: 0 15px 15px 0 ;
-        background-color: var(--color-background-secondary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
+    .membersTable{
         width: 100%;
-        height: 100% !important;
+        display: table;
+        border-spacing: 0 10px;
+        table-layout: fixed;
+    }
+
+    .header,
+    .filterHolder,
+    .addFragment{
+        outline: 2px solid var(--color-border);
+        border-radius: 15px;
+        display: table-row;
+        width: 100%;
         padding: 10px;
-        margin: 0 auto;
-        align-content: center;
+    }
+
+    .addFragment > * > input{
+        /*table-layout: 0.5;*/
+    }
+
+    .header > *,
+    .addFragment > *{
+        display: table-cell;
+        vertical-align: middle;
+        max-width: 100%;
+    }
+
+    .addFragment input{
+        color: var(--color-text-primary);
+        /*font-size: 1.2em;*/
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .short{
+        width: 10%;
+        table-layout: fixed;
+    }
+
+    .data:has(button){
+        width: 5%;
+    }
+
+    .header button {
+        border: none;
+        background-color: var(--color-background-secondary);
+        width: 100%;
+        padding: 10px;
+        height: 100%;
+    }
+
+    .data {
+        text-align: center;
+    }
+
+    svg{
+        width: 20px;
+        height: 20px;
+        fill: var(--color-text-primary);
     }
 
     button {
         cursor: pointer;
     }
 
-    form textarea {
-        resize: vertical;
-        overflow: hidden;
-        /*font-size: 0.6em !important;*/
-        /*height: 100% !important;*/
-    }
-
-    form {
-        display: table-row;
-    }
-
-    .noResults {
-        width: 100%;
-        text-align: center;
-        font-size: 2em;
-    }
-
-    .filterHolder * {
-        vertical-align: middle;
-    }
-
-    .membersTable {
-        display: table;
-        border-spacing: 0 15px;
-        text-align: center;
-        line-height: 2.4rem;
-        font-size: 1.2em;
-        margin: 0 auto;
-        width: 100%;
-    }
-
-    .data:not(:has(*)) {
-    }
-
-    .data {
-        display: table-cell !important;
-        width: auto;
-        max-width: 20%;
-        height: fit-content;
-    }
-
-    span.data {
-        /*line-height: 0;*/
-        font-size: 1.2em;
-    }
-
-    .header {
-        display: table-row;
-        line-height: 0;
-        /*position: relative;*/
-        width: 100%;
-        outline: var(--color-border) solid 2px;
-        position: sticky;
-        top: 10px;
-        background-color: var(--color-background-primary);
-        z-index: 10;
-        border-radius: 15px;
-    }
-
-    .data:has(.plusSvg) {
-        position: relative;
-    }
-
-    .plusSvg {
-        /*position: absolute;*/
-        /*top: 50%;*/
-        /*left: -70%;*/
-        /*transform: translate(-50%, -50%);*/
-        width: 20px;
-        height: 20px;
-        fill: var(--color-text-primary);
-        align-self: center;
-    }
-
-    .filterHolder {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-    }
-
-    input, textarea, form button {
+    input,
+    :global(.locationSelect){
         background-color: var(--color-background-secondary);
         border: none;
-        color: var(--color-text-secondary);
-        display: inline-block !important;
-        align-self: center;
-        text-align: center;
+        border-radius: 15px !important;
     }
 
-    textarea {
-        text-align: left;
+    :not(.filterHolder) :global(.locationSelect){
+        padding: 0 20px;
     }
+
 </style>

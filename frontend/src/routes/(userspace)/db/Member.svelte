@@ -116,128 +116,15 @@
 {/if}
 
 <style>
-    svg{
-        width: 20px;
-        height: 20px;
-    }
-
-    div.textarea {
+    .row{
+        margin: 10px 0;
+        display: table-row;
         width: 100%;
-        height: 100%;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        font-size: 0.8em;
     }
 
-    :global(.locationSelect),
-    form input {
-        /*font-size: 1.5rem !important;*/
-    }
-
-    .data button {
-        padding: 15px;
-        border-radius: 15px;
-        background-color: var(--color-background-secondary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        width: 100%;
-        height: 100%;
-        margin: 0 auto
-    }
-
-    .data button.first {
-        border-radius: 15px 0 0 15px;
-    }
-
-    .data button.last {
-        border-radius: 0 15px 15px 0;
-    }
-
-    .data:not(:has(button)){
-        padding: 5px 10px;
-    }
-
-    form.hidden, form.hidden input {
-        border: none;
-        background: none;
-        margin: 0;
-        box-sizing: border-box;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    * {
-        /*font-size: 1.5rem;*/
-        color: #E0E0E0;
-        box-sizing: border-box;
-        padding: 0;
-    }
-
-    input,
-    :global(.locationSelect)
-    {
-        padding: 0 10px !important;
-        display: block;
-        height: 1.4em;
-        border-radius: 10px;
-    }
-
-    .row {
-        outline: 2px solid var(--color-border);
-        display: table-row !important;
-        border-radius: 15px;
-        height: fit-content;
-    }
-
-    .data {
+    .row > * {
         display: table-cell;
-        height: fit-content;
-        max-width: 20%;
-        min-width: 3em;
-        width: fit-content;
-        vertical-align: middle;
-        text-wrap: nowrap;
-        align-content: center;
-        align-items: center;
     }
-
-    textarea {
-        border-radius: 10px;
-        height: 1.2rem !important;
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: none;
-        font-size: 0.6em;
-        field-sizing: content;
-        resize: none;
-        text-wrap: nowrap;
-        vertical-align: middle;
-    }
-
-    span:has(svg), button:has(svg) {
-        cursor: pointer;
-    }
-
-    svg {
-        fill: var(--color-text-primary);
-    }
-
-    input {
-        background-color: var(--color-background-secondary);
-        border: none;
-        color: var(--color-text-secondary);
-        display: inline-block !important;
-        align-self: center;
-        text-align: center;
-        width: 100%;
-    }
-
 </style>
 
 <!--    Background: #121212 (charcoal black)

@@ -48,8 +48,7 @@
         display: inline-block !important;
         align-self: center;
         text-align: center;
-        /*font-size: 0.8em;*/
-        /*line-height: 2em;*/
+        border-radius: 10px;
         padding: 0;
         width: fit-content;
     }
