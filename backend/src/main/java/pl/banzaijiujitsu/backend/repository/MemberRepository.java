@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +31,7 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     Collection<Member> findAllByIsActiveTrue();
 
     @Query("""
-    SELECT m FROM Member m
+    SELECT DISTINCT m FROM Member m
     LEFT JOIN FETCH m.payments p
     WHERE m.isActive = true
     AND m.location IN :locations
@@ -38,6 +40,6 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 """)
     List<Member> findActiveMembersInLocationsWithRecentPayments(
             @Param("locations") Collection<Location> locations,
-            @Param("threeMonthsAgo") YearMonth threeMonthsAgo
+            @Param("threeMonthsAgo") LocalDate threeMonthsAgo
     );
 }

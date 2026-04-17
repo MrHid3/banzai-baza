@@ -8,6 +8,7 @@ import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
     Optional<Payment> findByUuid(UUID uuid);
 
-    Optional<Payment> findByMonthIsAndPayer(YearMonth month, Member member);
+    Optional<Payment> findByMonthIsAndPayer(LocalDate date, Member member);
 
     List<Payment> findByPayerLocation(Location location);
 
@@ -27,5 +28,5 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
     List<Payment> findByPayerInUuid(UUID uuid);
 
-    List<Payment> findByMonthAfterAndPayerLocationIsIn(YearMonth month, List<Location> locations);
+    List<Payment> findByMonthAfterAndPayerLocationIsIn(LocalDate date, List<Location> locations);
 }

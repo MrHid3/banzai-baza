@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.YearMonth;
 import java.util.Date;
 import java.util.UUID;
@@ -29,7 +29,7 @@ public class Payment {
 
     private PaymentType paymentType;
 
-    private YearMonth month;
+    private LocalDate month;
 
     @Column(nullable = false)
     private LocalDateTime timeStamp;
@@ -43,5 +43,5 @@ public class Payment {
     @JsonBackReference
     private Member payer;
 
-    private String comment;
+//    private String comment;
 }

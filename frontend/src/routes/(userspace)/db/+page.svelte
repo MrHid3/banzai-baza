@@ -132,6 +132,7 @@
 {/if}
 
 <style>
+
     input:not(:focus):invalid {
         border: 1px solid red;
     }
@@ -153,7 +154,6 @@
     }
 
     * {
-        padding: 0;
         margin: 0;
         box-sizing: border-box;
     }
@@ -168,7 +168,6 @@
     }
 
     span.data form{
-        padding: 0 !important;
         height: fit-content !important;
     }
 
@@ -180,7 +179,6 @@
         line-height: 1.1em !important;
         width: 100% !important;
         vertical-align: middle !important;
-        padding: 10px;
     }
 
     .small {
@@ -189,17 +187,17 @@
     }
 
     .data button {
-        border-radius: 15px;
+        border-radius: 0 15px 15px 0 ;
         background-color: var(--color-background-secondary);
         display: flex;
         align-items: center;
         justify-content: center;
         border: none;
-        width: 50px;
-        height: 50px !important;
+        width: 100%;
+        height: 100% !important;
+        padding: 10px;
         margin: 0 auto;
         align-content: center;
-        padding: 10px;
     }
 
     button {
@@ -208,7 +206,6 @@
 
     form textarea {
         resize: vertical;
-        padding: 0 5px;
         overflow: hidden;
         /*font-size: 0.6em !important;*/
         /*height: 100% !important;*/
@@ -222,16 +219,15 @@
         width: 100%;
         text-align: center;
         font-size: 2em;
-        padding: 10px;
     }
 
     .filterHolder * {
-        padding: 5px;
         vertical-align: middle;
     }
 
     .membersTable {
         display: table;
+        border-spacing: 0 15px;
         text-align: center;
         line-height: 2.4rem;
         font-size: 1.2em;
@@ -240,25 +236,23 @@
     }
 
     .data:not(:has(*)) {
-        padding: 5px 20px;
     }
 
     .data {
         display: table-cell !important;
         width: auto;
         max-width: 20%;
-        padding: 5px 5px;
         height: fit-content;
     }
 
     span.data {
         /*line-height: 0;*/
-        padding: 10px;
         font-size: 1.2em;
     }
 
     .header {
         display: table-row;
+        line-height: 0;
         /*position: relative;*/
         width: 100%;
         outline: var(--color-border) solid 2px;
@@ -266,6 +260,7 @@
         top: 10px;
         background-color: var(--color-background-primary);
         z-index: 10;
+        border-radius: 15px;
     }
 
     .data:has(.plusSvg) {
@@ -277,8 +272,8 @@
         /*top: 50%;*/
         /*left: -70%;*/
         /*transform: translate(-50%, -50%);*/
-        width: 30px;
-        height: 30px;
+        width: 20px;
+        height: 20px;
         fill: var(--color-text-primary);
         align-self: center;
     }

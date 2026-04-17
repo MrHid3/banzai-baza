@@ -7,9 +7,9 @@ backend:
 - memberzy:
   - [x] edycja memberów
 - płatności:
-  - [ ] wymyślenie do końca jak to działa
-  - [ ] dodawanie
-  - [ ] czytanie
+  - [x] wymyślenie do końca jak to działa
+  - [x] dodawanie
+  - [x] czytanie
 - [ ] 2fa może ale troche jebać
 - [ ] logi?
 
@@ -30,3 +30,4 @@ frontend:
   - [x] przypisywanie do lokalizacji i gaszenie
 - [ ] logi?
 - [ ] beautiful
+- [ ] alt dla svg

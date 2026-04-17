@@ -1,6 +1,7 @@
 package pl.banzaijiujitsu.backend.controller;
 
 import io.micrometer.core.instrument.config.validate.Validated;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import pl.banzaijiujitsu.backend.service.PaymentService;
 
 import javax.naming.AuthenticationException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
@@ -73,29 +75,38 @@ public class PaymentController {
 
         if(req.year != null && req.month != null){
             Month month = Month.of(req.month);
-            YearMonth paymentMonth = YearMonth.of(req.year, month);
-            System.out.println(month);
-            System.out.println(paymentMonth);
-            Optional<Payment> optionalPayment = paymentService.findByMonthAndMember(paymentMonth, member);
+            LocalDate paymentMonth = LocalDate.of(req.year, month, 1);
+            Optional<Payment> optionalPayment = paymentService.findByMonthAndMember(LocalDate.from(paymentMonth), member);
             if(optionalPayment.isPresent()){
                 payment = optionalPayment.get();
-                if(paymentMonth.isBefore(YearMonth.now().minusMonths(3))){
+                if(paymentMonth.isBefore(LocalDate.now().minusMonths(3))){
                     throw new InvalidPaymentException("TOO_EARLY");
                 }
             }
-            payment.setMonth(YearMonth.of(req.year, month));
-        }else if(req.paymentType != PaymentType.STARTING_FEE){
+            payment.setMonth(LocalDate.of(req.year, month, 1));
+        }else if(PaymentType.valueOf(req.paymentType) != PaymentType.STARTING_FEE){
             throw new InvalidPaymentException("MONTH_NEEDED");
         }
 
         payment.setAmount(req.amount);
-        payment.setPaymentMethod(req.paymentMethod);
-        payment.setPaymentType(req.paymentType);
+        payment.setPaymentMethod(PaymentMethod.valueOf(req.paymentMethod));
+        payment.setPaymentType(PaymentType.valueOf(req.paymentType));
         payment.setPayer(member);
         payment.setPayerIn(appUser);
-        payment.setComment(req.comment);
+//        payment.setComment(req.comment);
 
         paymentService.save(payment);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    @Transactional
+    ResponseEntity<?> delete(@RequestBody DeletePaymentRequest req){
+        System.out.println(req.uuid);
+        Payment payment = paymentService.findByUuid(UUID.fromString(req.uuid)).orElseThrow(InvalidUuidException::new);
+
+        paymentService.delete(payment);
 
         return ResponseEntity.ok().build();
     }
@@ -124,12 +135,16 @@ public class PaymentController {
 
     public record AddPaymentRequest(
             @NotNull BigDecimal amount,
-            @NotNull PaymentMethod paymentMethod,
-            @NotNull PaymentType paymentType,
+            @NotNull String paymentMethod,
+            @NotNull String paymentType,
             @NotNull String payerUuid,
             Integer year,
-            Integer month,
-            String comment
+            Integer month
+//            String comment
+    ){}
+
+    public record DeletePaymentRequest(
+            @NotNull String uuid
     ){}
 
 }

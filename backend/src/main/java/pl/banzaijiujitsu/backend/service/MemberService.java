@@ -1,12 +1,15 @@
 package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
+import pl.banzaijiujitsu.backend.model.YearMonthDateAttributeConverter;
 import pl.banzaijiujitsu.backend.repository.MemberRepository;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.List;
@@ -52,7 +55,7 @@ public class MemberService {
     }
 
     public List<MemberPayments> getLastThreeMonthsGroupedByMember(Collection<Location> locations) {
-        YearMonth threeMonthsAgo = YearMonth.now().minusMonths(2);
+        LocalDate threeMonthsAgo = LocalDate.now().withDayOfMonth(1).minusMonths(3);
 
         List<Member> members = memberRepository
                 .findActiveMembersInLocationsWithRecentPayments(locations, threeMonthsAgo);

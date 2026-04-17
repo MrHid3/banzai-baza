@@ -19,7 +19,7 @@ export async function serverFetch(
 		}
 	});
 
-	if (res.status === 401) {
+	if (res.status === 403) {
 		// Try refresh
 		const refreshRes = await fetch(`${PUBLIC_BACKEND_2}/api/auth/refresh`, {
 			method: 'POST',

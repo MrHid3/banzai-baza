@@ -8,6 +8,7 @@ import pl.banzaijiujitsu.backend.model.Payment;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
 import pl.banzaijiujitsu.backend.model.Member;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.Collection;
@@ -34,8 +35,8 @@ public class PaymentService {
         return  paymentRepository.findByPayerLocation(location);
     }
 
-    public Optional<Payment> findByMonthAndMember(YearMonth month, Member member) {
-        return paymentRepository.findByMonthIsAndPayer(month, member);
+    public Optional<Payment> findByMonthAndMember(LocalDate date, Member member) {
+        return paymentRepository.findByMonthIsAndPayer(date, member);
     }
 
     public List<Payment> findByPayerInUuid(UUID uuid) {
@@ -51,7 +52,11 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public List<Payment> findByTimeAndLocations(YearMonth month, List<Location> locations){
-        return paymentRepository.findByMonthAfterAndPayerLocationIsIn(month, locations);
+    public List<Payment> findByTimeAndLocations(LocalDate date, List<Location> locations){
+        return paymentRepository.findByMonthAfterAndPayerLocationIsIn(date, locations);
+    }
+
+    public void delete(Payment payment){
+        paymentRepository.delete(payment);
     }
 }
