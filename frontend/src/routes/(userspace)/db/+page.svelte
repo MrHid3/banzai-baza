@@ -1,6 +1,5 @@
 <script lang="ts">
     import Member from "./Member.svelte";
-    import Modal from "$lib/Modal.svelte";
     import {enhance} from "$app/forms";
     import LocationSelect from "$lib/LocationSelect.svelte";
     import {untrack} from "svelte";
@@ -38,16 +37,16 @@
 
     const phonePattern = "(?:[+][0-9]{1,3} )?[0-9]{3}[\\- ]?[0-9]{3}[\\- ]?[0-9]{3,6}";
 
-    let deleteQueue : string[] = $state([]);
+    let deleteQueue: string[] = $state([]);
 
     $effect(() => {
         if (form?.ok)
             if (form?.type == "delete") {
-                const uuid : String = form?.uuid as String;
+                const uuid: String = form?.uuid as String;
                 untrack(() => {
                     deleteQueue = [...deleteQueue, uuid]
                 })
-            }else if (form?.type == "undelete") {
+            } else if (form?.type == "undelete") {
                 const uuid = form?.uuid as String;
                 untrack(() => {
                     const index = deleteQueue.indexOf(uuid);
@@ -85,21 +84,20 @@
             {#if deleteQueue.length > 0}
                    <form action="?/undelete" method="POST" use:enhance>
                        <input type="hidden" name="memberUuid" value={deleteQueue[deleteQueue.length - 1]}>
-                       <button type="submit">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z"/></svg>
+                       <button type="submit" class="left">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path
+                                  d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z"/></svg>
                        </button>
                    </form>
             {/if}
         </span>
         <span class="data small">
-            <div>
-            <button onclick={() => showAddFragment = !showAddFragment}>
+            <button class="right" onclick={(e) => { e.stopPropagation(); showAddFragment = !showAddFragment}}>
                 <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
                     <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
                     <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
                 </svg>
             </button>
-            </div>
         </span>
     </div>
     {#if showAddFragment}
@@ -113,12 +111,15 @@
             </span>
             <span class="data short"><input type="number" name="monthlyFee" value="150"></span>
             <span class="data"><textarea name="comment"></textarea></span>
-            <span class="data"><button type="submit">
-                <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                    <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
-                </svg>
-            </button></span>
+            <span class="data"></span>
+            <span class="data small">
+                <button type="submit" class="both">
+                    <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                        <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                        <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
+                    </svg>
+                </button>
+            </span>
         </form>
     {/if}
     {#each filteredMembers as member, index (index)}
@@ -132,27 +133,47 @@
 {/if}
 
 <style>
-    *{
+    * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    .filterHolder{
+    .filterHolder {
         display: flex;
         flex-direction: row;
     }
 
-    .membersTable{
+    .membersTable {
         width: 100%;
         display: table;
         border-spacing: 0 10px;
         table-layout: fixed;
     }
 
+    button.right {
+        border-radius: 0 15px 15px 0 !important;
+    }
+
+    button.left {
+        border-radius: 15px 0 0 15px !important;
+    }
+
+    button.both {
+        border-radius: 15px !important;
+    }
+
+    .header{
+        position: sticky;
+        top: 10px;
+        left: 0;
+        background-color: var(--color-background-primary);
+        z-index: 2137;
+    }
+
     .header,
     .filterHolder,
-    .addFragment{
+    .addFragment {
         outline: 2px solid var(--color-border);
         border-radius: 15px;
         display: table-row;
@@ -160,34 +181,37 @@
         padding: 10px;
     }
 
-    .addFragment > * > input{
-        /*table-layout: 0.5;*/
+    .addFragment button {
+        height: 100% !important;
+        padding: 12px !important;
     }
 
     .header > *,
-    .addFragment > *{
+    .addFragment > * {
         display: table-cell;
         vertical-align: middle;
         max-width: 100%;
     }
 
-    .addFragment input{
+    .addFragment input {
         color: var(--color-text-primary);
         /*font-size: 1.2em;*/
         max-width: 100%;
+        width: 95%;
         text-align: center;
     }
 
-    .short{
+    .short {
         width: 10%;
         table-layout: fixed;
     }
 
-    .data:has(button){
+    .data:has(button) {
         width: 5%;
     }
 
-    .header button {
+    .header button,
+    .addFragment button {
         border: none;
         background-color: var(--color-background-secondary);
         width: 100%;
@@ -199,25 +223,45 @@
         text-align: center;
     }
 
-    svg{
+    .data.small{
+        table-layout: fixed;
+        width: 5%;
+    }
+
+    svg {
         width: 20px;
         height: 20px;
         fill: var(--color-text-primary);
-    }
-
-    button {
         cursor: pointer;
     }
 
+    button {
+        cursor: pointer !important;
+    }
+
     input,
-    :global(.locationSelect){
+    :global(.locationSelect) {
         background-color: var(--color-background-secondary);
         border: none;
         border-radius: 15px !important;
     }
 
-    :not(.filterHolder) :global(.locationSelect){
+    :not(.filterHolder) :global(.locationSelect) {
         padding: 0 20px;
+    }
+
+    .data:has(textarea){
+        padding: 5px 0 ;
+    }
+
+    textarea {
+        background-color: var(--color-background-secondary);
+        border: none;
+        border-radius: 10px;
+        color: var(--color-text-primary);
+        padding: 0 5px;
+        resize: vertical;
+        width: 80%;
     }
 
 </style>

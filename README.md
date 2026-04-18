@@ -31,3 +31,4 @@ frontend:
 - [ ] logi?
 - [ ] beautiful
 - [ ] alt dla svg
+- [ ] handlowanie loada

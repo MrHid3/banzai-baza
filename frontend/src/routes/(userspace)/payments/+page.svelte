@@ -83,7 +83,6 @@
     {/if}
 {/snippet}
 
-<meta charset="UTF-8">
 
 <div id="filterHolder">
     <!--    TODO: dodaj lupe-->
@@ -155,15 +154,29 @@
         font-optical-sizing: auto;
     }
 
-    table {
-        font-size: 1.2rem;
-        line-height: 2.4rem;
+    #filterHolder{
+        outline: 2px solid var(--color-border);
+        border-radius: 15px;
+        width: 100%;
+        padding: 10px;
+    }
+
+    table{
+        border-spacing: 0 10px;
+    }
+
+    input{
+        background-color: var(--color-background-secondary);
+        border: none;
+        border-radius: 15px !important;
     }
 
     thead {
         outline: var(--color-border) solid 2px;
         border-radius: 15px;
         margin-bottom: 200px !important;
+        padding: 10px;
+        height: 45px;
     }
 
     thead td {
@@ -190,9 +203,6 @@
     td.payment.ok span {
         text-align: center;
         color: lime;
-        /*padding: 5px 0 0 15px;*/
-        padding: 5px 0;
-        padding-left: 5%;
     }
 
     td.payment.bad form * {
@@ -230,7 +240,13 @@
         fill: var(--color-text-primary);
         color: var(--color-text-primary);
         background-color: var(--color-background-secondary);
-        padding: 5px 15px;
+    }
+
+    td.payment form select,
+    td.payment form input,
+    td.payment span,
+    td.payment i {
+        padding: 1em 0.5em;
     }
 
     option,
@@ -268,7 +284,6 @@
         display: inline-block !important;
         align-self: center;
         text-align: center;
-        padding: 5px;
         /*width: 50%;*/
     }
 

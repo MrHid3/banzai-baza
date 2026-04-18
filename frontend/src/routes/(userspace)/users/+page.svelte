@@ -38,12 +38,12 @@
                 inviting = false;
             }
         }}>
-                <input name="email" type="email">
+                <input name="email" type="email" class="left">
                 <select name="role">
                     <option value="ROLE_ADMIN">Administrator</option>
                     <option value="ROLE_COACH">Trener</option>
                 </select>
-                <button disabled={inviting} type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
+                <button disabled={inviting} class="right" type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
             </form>
         </div>
 
@@ -87,7 +87,6 @@
         </ul>
     </div>
 
-
     <div class="locations">
         <h2>Lokalizacje</h2>
         <div id="addLocation">
@@ -96,9 +95,9 @@
                     await update();
                     await locations.load(true);
         }}}>
-                <input name="name" type="text">
+                <input name="name" type="text" class="left">
                 <input name="shortname" type="text">
-                <button type="submit">Dodaj</button>
+                <button type="submit" class="right">Dodaj</button>
             </form>
         </div>
 
@@ -122,6 +121,19 @@
 </div>
 
 <style>
+    button {
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .right{
+        border-radius: 0 15px 15px 0;
+    }
+
+    .left {
+        border-radius: 15px 0 0 15px;
+    }
+
     label {
         user-select: none;
         cursor: pointer;
@@ -150,15 +162,11 @@
     }
 
     #addUser form *,
+    #addLocation form *,
     .hideable button {
         /*display: block !important;*/
         height: 100% !important;
     }
-
-    .hideable button[type="submit"] {
-
-    }
-
 
     .container {
         display: flex;
