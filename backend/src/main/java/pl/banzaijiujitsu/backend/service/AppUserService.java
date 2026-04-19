@@ -107,7 +107,7 @@ public class AppUserService {
     }
 
     public List<AppUser> findAll() {
-        return appUserRepository.findAll();
+        return appUserRepository.findAllByOrderByEmail();
     }
 
     public List<AppUser> findByLocationsContains(Location location) {

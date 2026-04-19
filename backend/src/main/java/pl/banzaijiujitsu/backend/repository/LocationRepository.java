@@ -19,7 +19,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     List<Location> findAll();
 
-    List<Location> findByIsActive(Boolean isActive);
+    List<Location> findByIsActiveOrderById(Boolean isActive);
 
     void deleteById(Long id);
 }

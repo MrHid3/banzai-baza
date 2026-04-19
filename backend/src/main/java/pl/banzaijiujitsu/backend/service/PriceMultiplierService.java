@@ -17,7 +17,7 @@ public class PriceMultiplierService {
     private PriceMultiplayerRepository priceMultiplayerRepository;
 
     public List<PriceMultiplier> findByLocationIsIn(List <Location> locations){
-        return priceMultiplayerRepository.findByLocationIsInAndMonthGreaterThanEqualAndMonthLessThanEqual(
+        return priceMultiplayerRepository.findByLocationIsInAndMonthGreaterThanEqualAndMonthLessThanEqualOrderById(
                 locations,
                 LocalDate.now().withMonth(1).withDayOfMonth(11),
                 LocalDate.now().plusYears(1).withMonth(1).withDayOfMonth(11)

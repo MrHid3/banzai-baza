@@ -25,4 +25,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
     void deleteByUuid(UUID uuid);
 
     List<AppUser> findByLocationsContains(Location location);
+
+    List<AppUser> findAllByOrderByEmail();
 }

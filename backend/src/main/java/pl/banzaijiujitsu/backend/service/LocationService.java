@@ -43,7 +43,7 @@ public class LocationService {
     }
 
     public List<Location> findAllActive(){
-        return locationRepository.findByIsActive(true);
+        return locationRepository.findByIsActiveOrderById(true);
     }
 
     public Optional<Location> findByIdAndIsActive(Long id) {

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface PriceMultiplayerRepository extends JpaRepository<PriceMultiplier, Long> {
 
-    List<PriceMultiplier> findByLocationIsInAndMonthGreaterThanEqualAndMonthLessThanEqual(
+    List<PriceMultiplier> findByLocationIsInAndMonthGreaterThanEqualAndMonthLessThanEqualOrderById(
             List<Location> locations,
             LocalDate from,
             LocalDate to
