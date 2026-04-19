@@ -8,19 +8,21 @@ import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
 import pl.banzaijiujitsu.backend.model.YearMonthDateAttributeConverter;
 import pl.banzaijiujitsu.backend.repository.MemberRepository;
+import pl.banzaijiujitsu.backend.repository.PaymentRepository;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public List<Member> findByEmail(String email) {
         return  memberRepository.findByEmail(email);
@@ -54,14 +56,36 @@ public class MemberService {
         return memberRepository.findAllByIsActiveTrue();
     }
 
+//    public List<MemberPayments> getLastThreeMonthsGroupedByMember(Collection<Location> locations) {
+//        LocalDate threeMonthsAgo = LocalDate.now().withDayOfMonth(1).minusMonths(3);
+//
+//        List<Member> members = memberRepository
+//                .findActiveMembersInLocationsWithRecentPayments(locations, threeMonthsAgo);
+//
+//        return members.stream()
+//                .map(m -> new MemberPayments(m, m.getPayments()))
+//                .toList();
+//    }
+
     public List<MemberPayments> getLastThreeMonthsGroupedByMember(Collection<Location> locations) {
         LocalDate threeMonthsAgo = LocalDate.now().withDayOfMonth(1).minusMonths(3);
 
-        List<Member> members = memberRepository
-                .findActiveMembersInLocationsWithRecentPayments(locations, threeMonthsAgo);
+        List<Member> members = memberRepository.findActiveByLocations(locations);
+
+        if (members.isEmpty()) {
+            return List.of();
+        }
+
+        List<Payment> payments = paymentRepository.findRecentByMembers(members, threeMonthsAgo);
+
+        Map<UUID, List<Payment>> paymentsByMember = payments.stream()
+                .collect(Collectors.groupingBy(p -> p.getPayer().getUuid()));
 
         return members.stream()
-                .map(m -> new MemberPayments(m, m.getPayments()))
+                .map(m -> new MemberPayments(
+                        m,
+                        paymentsByMember.getOrDefault(m.getUuid(), List.of())
+                ))
                 .toList();
     }
 

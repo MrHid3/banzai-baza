@@ -16,15 +16,20 @@
     $effect(() => {
         let result = members;
         if (selectedLocation != null) {
-            result = result.filter((a) => a.location.id == selectedLocation?.id);
+            result = result.filter((a) => {a.location.id == selectedLocation?.id});
         }
         if (memberTextFilter.length >= 3) {
-            result = result.filter((a) =>
-                (a.name != null && a.name.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                (a.surname != null && a.surname.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                a.email.toLowerCase().includes(memberTextFilter.toLowerCase()) ||
-                (a.phoneNumber != null && a.phoneNumber.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                (a.comment != null && a.comment.toLowerCase().includes(memberTextFilter.toLowerCase())));
+            const search = memberTextFilter.toLowerCase();
+
+            result = result.filter((a) => {
+                return (
+                    String(a.name?).toLowerCase().includes(search) ||
+                    String(a.surname?).toLowerCase().includes(search) ||
+                    a.email?.toLowerCase().includes(search) ||
+                    a.phoneNumber?.toLowerCase().includes(search) ||
+                    a.comment?.toLowerCase().includes(search)
+                );
+            });
         }
 
         filteredMembers = result;
@@ -133,6 +138,11 @@
 {/if}
 
 <style>
+    .noResults{
+        font-size: 2em;
+        text-align: center;
+    }
+
     * {
         margin: 0;
         padding: 0;
@@ -149,6 +159,7 @@
         display: table;
         border-spacing: 0 10px;
         table-layout: fixed;
+        /*border-collapse: collapse;*/
     }
 
     button.right {
@@ -157,6 +168,7 @@
 
     button.left {
         border-radius: 15px 0 0 15px !important;
+        padding: 10px !important;
     }
 
     button.both {
@@ -262,6 +274,11 @@
         padding: 0 5px;
         resize: vertical;
         width: 80%;
+    }
+
+    input{
+        color: var(--color-text-secondary);
+        text-align: center;
     }
 
 </style>

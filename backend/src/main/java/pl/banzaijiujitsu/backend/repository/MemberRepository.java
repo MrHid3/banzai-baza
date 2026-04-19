@@ -30,16 +30,19 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 
     Collection<Member> findAllByIsActiveTrue();
 
-    @Query("""
-    SELECT DISTINCT m FROM Member m
-    LEFT JOIN FETCH m.payments p
-    WHERE m.isActive = true
-    AND m.location IN :locations
-    AND (p IS NULL OR p.month >= :threeMonthsAgo OR p.month IS NULL)
-    ORDER BY m.uuid
-""")
-    List<Member> findActiveMembersInLocationsWithRecentPayments(
-            @Param("locations") Collection<Location> locations,
-            @Param("threeMonthsAgo") LocalDate threeMonthsAgo
-    );
+//    @Query("""
+//    SELECT DISTINCT m FROM Member m
+//    LEFT JOIN FETCH m.payments p
+//    WHERE m.isActive = true
+//    AND m.location IN :locations
+//    AND (p IS NULL OR p.month >= :threeMonthsAgo OR p.month IS NULL)
+//    ORDER BY m.uuid
+//""")
+//    List<Member> findActiveMembersInLocationsWithRecentPayments(
+//            @Param("locations") Collection<Location> locations,
+//            @Param("threeMonthsAgo") LocalDate threeMonthsAgo
+//    );
+
+    @Query("SELECT m FROM Member m WHERE m.isActive = true AND m.location IN :locations ORDER BY m.uuid")
+    List<Member> findActiveByLocations(@Param("locations") Collection<Location> locations);
 }

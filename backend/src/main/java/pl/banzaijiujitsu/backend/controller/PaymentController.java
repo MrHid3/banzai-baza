@@ -48,11 +48,6 @@ public class PaymentController {
         this.memberService = memberService;
     }
 
-    @GetMapping
-    ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(paymentService.findAll());
-    }
-
     @PostMapping
     ResponseEntity<?> add(@RequestBody AddPaymentRequest req) throws AuthenticationException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -88,11 +83,14 @@ public class PaymentController {
             throw new InvalidPaymentException("MONTH_NEEDED");
         }
 
+        Location location = member.getLocation();
+
         payment.setAmount(req.amount);
         payment.setPaymentMethod(PaymentMethod.valueOf(req.paymentMethod));
         payment.setPaymentType(PaymentType.valueOf(req.paymentType));
         payment.setPayer(member);
         payment.setPayerIn(appUser);
+        payment.setLocation(location);
 //        payment.setComment(req.comment);
 
         paymentService.save(payment);
@@ -109,6 +107,28 @@ public class PaymentController {
         paymentService.delete(payment);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    ResponseEntity<?> getAll(){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<Location> allowed_locations;
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            allowed_locations = new ArrayList<>(locationService.findAllActive());
+        } else {
+            allowed_locations = new ArrayList<>(appUserService
+                    .findByEmail(auth.getName())
+                    .orElseThrow(InvalidUuidException::new)
+                    .getLocations());
+        }
+
+        return ResponseEntity.ok(paymentService.findByPayerLocationIsIn(allowed_locations));
     }
 
     @GetMapping("/recent")

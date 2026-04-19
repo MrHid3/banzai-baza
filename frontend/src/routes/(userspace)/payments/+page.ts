@@ -2,15 +2,15 @@ import type {PageLoad} from "../../../../.svelte-kit/types/src/routes/$types";
 
 export const load: PageLoad = async (event) => {
 
-    const res1 = await event.fetch(`/api/member`, {method: "GET"})
     const paymentsRequest = await event.fetch('/api/payment/recent')
+    const multipliersRequest = await event.fetch('/api/multiplier')
 
-    if(res1.ok && paymentsRequest.ok){
-        const res1json = await res1.json();
+    if(paymentsRequest.ok && multipliersRequest.ok) {
         const paymentJson = await paymentsRequest.json()
+        const multipliersJson = await multipliersRequest.json()
         return {
-            members: res1json,
-            payments: paymentJson
+            payments: paymentJson,
+            multipliers: multipliersJson
         };
     }else{
         return { error: true }

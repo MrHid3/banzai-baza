@@ -35,6 +35,10 @@ public class PaymentService {
         return  paymentRepository.findByPayerLocation(location);
     }
 
+    public List<Payment> findByPayerLocationIsIn(List<Location> locations){
+        return paymentRepository.findByPayerLocationIsIn(locations);
+    }
+
     public Optional<Payment> findByMonthAndMember(LocalDate date, Member member) {
         return paymentRepository.findByMonthIsAndPayer(date, member);
     }

@@ -1,5 +1,6 @@
 @import '@fontsource/fira-mono';
 @import 'normalize.css';
+@import url("../../public/fontawesome-free-7.2.0-web/css/all.min.css");
 
 :root {
 }

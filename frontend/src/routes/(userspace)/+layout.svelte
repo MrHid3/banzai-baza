@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Header from './Header.svelte';
 
-	let { children } = $props();
+	let { data, children } = $props();
 </script>
 <div class="app">
-	<Header />
+	<Header user={data.user}/>
 
 	<main>
 		{@render children()}

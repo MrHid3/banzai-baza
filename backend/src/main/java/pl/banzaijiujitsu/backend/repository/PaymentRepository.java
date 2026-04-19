@@ -24,9 +24,14 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
     List<Payment> findByPayerLocation(Location location);
 
+    List<Payment> findByPayerLocationIsIn(List<Location> locations);
+
     List<Payment> findByPayerUuid(UUID uuid);
 
     List<Payment> findByPayerInUuid(UUID uuid);
 
     List<Payment> findByMonthAfterAndPayerLocationIsIn(LocalDate date, List<Location> locations);
+
+    @Query("SELECT p FROM Payment p WHERE p.payer IN :members AND (p.month >= :threeMonthsAgo OR p.month IS NULL)")
+    List<Payment> findRecentByMembers(@Param("members") List<Member> members, @Param("threeMonthsAgo") LocalDate threeMonthsAgo);
 }

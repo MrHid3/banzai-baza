@@ -64,7 +64,7 @@
                                     <input type="hidden" name="userUuid" value={user.uuid}>
                                     <input type="hidden" name="status"
                                            value={user.status === "ACTIVE" ? "DISABLED" : "ACTIVE"}>
-                                    <button type="submit">{user.status === "ACTIVE" ? "WYŁĄCZ KONTO" : "WŁĄCZ KONTO"}</button>
+                                    <button type="submit" class="deleteAccount">{user.status === "ACTIVE" ? "WYŁĄCZ KONTO" : "WŁĄCZ KONTO"}</button>
                                 </form>
                             {/if}
                             {#each user.locations as location}
@@ -77,8 +77,8 @@
                             {/each}
                             <form action="?/addLocationToUser" method="POST" use:enhance>
                                 <input type="hidden" value={user.uuid} name="userUuid">
-                                <LocationSelect all={false}></LocationSelect>
-                                <button type="submit">Dodaj</button>
+                                <LocationSelect all={false} class="left"></LocationSelect>
+                                <button type="submit" class="right">Dodaj</button>
                             </form>
                         {/if}
                     </div>
@@ -121,6 +121,10 @@
 </div>
 
 <style>
+    .deleteAccount{
+        padding: 5px 20px;
+    }
+
     button {
         border-radius: 10px;
         padding: 10px;
@@ -130,13 +134,16 @@
         border-radius: 0 15px 15px 0;
     }
 
-    .left {
-        border-radius: 15px 0 0 15px;
+    .left,
+    :global(.left){
+        border-radius: 15px 0 0 15px !important;
+        padding: 5px !important;
     }
 
     label {
         user-select: none;
         cursor: pointer;
+        border-radius: 10px;
     }
 
     h2 {

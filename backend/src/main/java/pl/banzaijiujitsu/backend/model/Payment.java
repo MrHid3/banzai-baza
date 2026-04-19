@@ -8,9 +8,6 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.YearMonth;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -42,6 +39,10 @@ public class Payment {
     @JoinColumn(nullable = false)
     @JsonBackReference
     private Member payer;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Location location;
 
 //    private String comment;
 }

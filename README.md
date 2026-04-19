@@ -10,6 +10,7 @@ backend:
   - [x] wymyślenie do końca jak to działa
   - [x] dodawanie
   - [x] czytanie
+- [ ] migracja
 - [ ] 2fa może ale troche jebać
 - [ ] logi?
 
@@ -19,7 +20,7 @@ frontend:
   - [x] usuwanie
   - [x] edycja
 - [x] zapomniałem hasła
-- [ ] płatności
+- [x] płatności
 - [ ] layout dla coachy
 - [ ] layout na telefony
 - [x] zarządzanie lokalizacjami
@@ -28,7 +29,13 @@ frontend:
   - [x] /set-password
   - [ ] /profile?
   - [x] przypisywanie do lokalizacji i gaszenie
+- [ ] podsumowanie
 - [ ] logi?
 - [ ] beautiful
 - [ ] alt dla svg
 - [ ] handlowanie loada
+
+(płatności od 11)
+(przycisk nie przenika)
+
+- [ ] docker

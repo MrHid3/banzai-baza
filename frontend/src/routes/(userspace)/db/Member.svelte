@@ -120,9 +120,15 @@
         margin: 10px 0;
         display: table-row;
         width: 100%;
+        /*border: 2px solid var(--color-border);*/
         outline: 2px solid var(--color-border);
         border-radius: 15px;
         z-index: 1;
+        transition-duration: 0.4s;
+    }
+
+    .row:hover{
+        outline: 2px solid transparent;
     }
 
     .row > * {
@@ -133,6 +139,11 @@
 
     span.data{
         text-align: center;
+        height: 100%;
+    }
+
+    span.data:has(textarea){
+        padding: 5px 0;
     }
 
     textarea{
@@ -140,6 +151,7 @@
         border: none;
         border-radius: 10px;
         width: 80%;
+        color: var(--color-text-secondary);
     }
 
     button{
@@ -172,6 +184,7 @@
         border-radius: 10px;
         color: var(--color-text-primary);
         text-align: center;
+        max-width: 100%;
     }
 
 </style>
