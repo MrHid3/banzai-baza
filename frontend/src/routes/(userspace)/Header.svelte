@@ -74,7 +74,6 @@
 
     #logout {
         background-color: var(--background-special);
-        color: white;
         border: none;
         padding: 0 10px;
         text-align: center;
