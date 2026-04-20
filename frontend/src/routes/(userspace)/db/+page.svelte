@@ -7,32 +7,38 @@
     let {data, form} = $props();
 
     let members = $state(data.members ?? []);
-    let filteredMembers = $state(members)
 
     $effect(() => {
         members = data.members ?? [];
     })
 
+    let filteredMembers = $state(members);
+
     $effect(() => {
         let result = members;
-        if (selectedLocation != null) {
-            result = result.filter((a) => {a.location.id == selectedLocation?.id});
-        }
-        if (memberTextFilter.length >= 3) {
-            const search = memberTextFilter.toLowerCase();
 
-            result = result.filter((a) => {
+        if(selectedLocation != null){
+            result = result.filter((m) => {
+                return m.location.id == selectedLocation.id
+            })
+        }
+
+        const search = memberTextFilter;
+        if(search.length >= 3){
+            result = result.filter((m) => {
                 return (
-                    String(a.name?).toLowerCase().includes(search) ||
-                    String(a.surname?).toLowerCase().includes(search) ||
-                    a.email?.toLowerCase().includes(search) ||
-                    a.phoneNumber?.toLowerCase().includes(search) ||
-                    a.comment?.toLowerCase().includes(search)
-                );
-            });
+                    m.name?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.surnname?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.email?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.comment?.toLowerCase().includes(search.toLowerCase())
+                )
+            })
         }
 
-        filteredMembers = result;
+        untrack(() => {
+            filteredMembers = result;
+        })
     })
 
     let memberTextFilter = $state("");
@@ -127,8 +133,9 @@
             </span>
         </form>
     {/if}
-    {#each filteredMembers as member, index (index)}
-        <Member bind:member={members[index]}></Member>
+    {#each filteredMembers as member (member.uuid)}
+        <Member bind:member={members[members.findIndex(m => m.uuid === member.uuid)]}></Member>
+<!--        <Member bind:member={member}></Member>-->
     {/each}
 </div>
 {#if filteredMembers.length == 0}
@@ -243,8 +250,14 @@
     svg {
         width: 20px;
         height: 20px;
-        fill: var(--color-text-primary);
+        fill: var(--color-text-secondary);
         cursor: pointer;
+        transition-duration: 0.6s;
+    }
+
+    button:hover svg,
+    svg:hover{
+        fill: var(--color-text-primary);
     }
 
     button {

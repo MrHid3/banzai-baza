@@ -158,7 +158,7 @@
     const filteredPayments = $derived(
         selectedYear === null
             ? payments
-            : payments.filter(p => paymentYear(p) === selectedYear)
+            : payments.filter(p => {return (paymentYear(p) === selectedYear && p.amount > 0)})
     );
 
     // ── Build breakdown ───────────────────────────────────────────────────────
@@ -207,8 +207,6 @@
 </script>
 
 <div class="page">
-
-    <h1>Zestawienie płatności</h1>
 
     {#if !data.error && payments.length > 0}
         <div id="filterHolder">

@@ -2,7 +2,7 @@
     import LocationSelect from "$lib/LocationSelect.svelte";
     import {enhance} from "$app/forms"
     import {locations} from "$lib/stores/locations.svelte.ts";
-    import {onMount} from "svelte";
+    import {onMount, untrack} from "svelte";
 
     const {data, form} = $props();
 
@@ -19,19 +19,29 @@
 
     $effect(() => {
         let result = members;
-        if (selectedLocation != null) {
-            result = result.filter((a) => a.member.location.id == selectedLocation?.id);
-        }
-        if (memberTextFilter.length >= 3) {
-            result = result.filter((a) =>
-                (a.member.name != null && a.member.name.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                (a.member.surname != null && a.member.surname.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                a.member.email.toLowerCase().includes(memberTextFilter.toLowerCase()) ||
-                (a.member.phoneNumber != null && a.member.phoneNumber.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
-                (a.member.comment != null && a.member.comment.toLowerCase().includes(memberTextFilter.toLowerCase())));
+
+        if(selectedLocation != null){
+            result = result.filter((m) => {
+                return m.location.id == selectedLocation.id
+            })
         }
 
-        filteredMembers = result;
+        const search = memberTextFilter;
+        if(search.length >= 3){
+            result = result.filter((m) => {
+                return (
+                    m.member.name?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.member.surnname?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.member.email?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.member.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.member.comment?.toLowerCase().includes(search.toLowerCase())
+                )
+            })
+        }
+
+        untrack(() => {
+            filteredMembers = result;
+        })
     })
 
     let memberTextFilter = $state("");

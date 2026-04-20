@@ -25,6 +25,8 @@
 
     let inviting = $state(false);
 
+    console.log(users)
+
 </script>
 
 <div class="container">

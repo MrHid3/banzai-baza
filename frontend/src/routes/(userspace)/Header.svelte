@@ -82,6 +82,11 @@
         line-height: 3em;
         font-weight: 800;
         height: 3em;
+        transition-duration: 0.1s;
+    }
+
+    #logout:hover{
+        color: var(--color-text-primary)
     }
 
     .corner svg {
@@ -153,7 +158,11 @@
     }
 
     a{
-        color: var(--color-background-primary) !important;
+        color: var(--color-background-primary);
+    }
+
+    a:hover{
+        color: var(--color-background-secondary)
     }
 
     li[aria-current='page'] a {
@@ -165,7 +174,7 @@
         height: 100%;
         align-items: center;
         padding: 0 0.5rem;
-        color: var(--color-text);
+        /*color: var(--color-text);*/
         font-weight: 700;
         font-size: 0.8rem;
         text-transform: uppercase;

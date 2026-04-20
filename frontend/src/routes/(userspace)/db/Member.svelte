@@ -173,9 +173,15 @@
     }
 
     svg{
-        fill: var(--color-text-primary);
+        fill: var(--color-text-secondary);
         height: 25px;
         width: 25px;
+        transition-duration: 0.6s;
+    }
+
+    button:hover svg,
+    svg:hover{
+        fill: var(--color-text-primary);
     }
 
     input{
