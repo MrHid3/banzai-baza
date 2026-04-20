@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +20,15 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 
     Optional<Member> findByUuid(UUID uuid);
 
-    List<Member> findByEmailOrderByUuid(String email);
+    List<Member> findByEmail(String email);
 
-    List<Member> findByLocationOrderByUuid(Location location);
+    List<Member> findByLocation(Location location);
 
-    Collection<Member> findByLocationIsInOrderByUuid(Collection<Location> locations);
+    Collection<Member> findByLocationIsIn(Collection<Location> locations);
 
-    Collection<Member> findByIsActiveTrueAndLocationIsInOrderByUuid(Collection<Location> locations);
+    Collection<Member> findByIsActiveTrueAndLocationIsIn(Collection<Location> locations);
 
-    Collection<Member> findAllByIsActiveTrueOrderByUuid();
+    Collection<Member> findAllByIsActiveTrue();
 
 //    @Query("""
 //    SELECT DISTINCT m FROM Member m
@@ -41,5 +44,5 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 //    );
 
     @Query("SELECT m FROM Member m WHERE m.isActive = true AND m.location IN :locations ORDER BY m.uuid")
-    List<Member> findActiveByLocationsOrderByUuid(@Param("locations") Collection<Location> locations);
+    List<Member> findActiveByLocations(@Param("locations") Collection<Location> locations);
 }

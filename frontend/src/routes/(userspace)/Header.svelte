@@ -82,7 +82,6 @@
         line-height: 3em;
         font-weight: 800;
         height: 3em;
-        color: var(--color-background-primary);
     }
 
     .corner svg {

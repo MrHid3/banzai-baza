@@ -1,14 +1,17 @@
 package pl.banzaijiujitsu.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
+import pl.banzaijiujitsu.backend.model.YearMonthDateAttributeConverter;
 import pl.banzaijiujitsu.backend.repository.MemberRepository;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,11 +25,11 @@ public class MemberService {
     private PaymentRepository paymentRepository;
 
     public List<Member> findByEmail(String email) {
-        return  memberRepository.findByEmailOrderByUuid(email);
+        return  memberRepository.findByEmail(email);
     }
 
     public List<Member> findByLocation(Location location) {
-        return  memberRepository.findByLocationOrderByUuid(location);
+        return  memberRepository.findByLocation(location);
     }
 
     public Optional<Member> findByUuid(UUID uuid) {
@@ -42,15 +45,15 @@ public class MemberService {
     }
 
     public Collection<Member> findByLocationIsIn(Collection<Location> locations){
-        return memberRepository.findByLocationIsInOrderByUuid(locations);
+        return memberRepository.findByLocationIsIn(locations);
     }
 
     public Collection<Member> findByIsActiveTrueAndLocationIsIn(Collection<Location> locations){
-        return memberRepository.findByIsActiveTrueAndLocationIsInOrderByUuid(locations);
+        return memberRepository.findByIsActiveTrueAndLocationIsIn(locations);
     }
 
     public Collection<Member> findAllByIsActiveTrue(){
-        return memberRepository.findAllByIsActiveTrueOrderByUuid();
+        return memberRepository.findAllByIsActiveTrue();
     }
 
 //    public List<MemberPayments> getLastThreeMonthsGroupedByMember(Collection<Location> locations) {
@@ -67,7 +70,7 @@ public class MemberService {
     public List<MemberPayments> getLastThreeMonthsGroupedByMember(Collection<Location> locations) {
         LocalDate threeMonthsAgo = LocalDate.now().withDayOfMonth(1).minusMonths(3);
 
-        List<Member> members = memberRepository.findActiveByLocationsOrderByUuid(locations);
+        List<Member> members = memberRepository.findActiveByLocations(locations);
 
         if (members.isEmpty()) {
             return List.of();

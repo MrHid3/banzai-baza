@@ -7,26 +7,24 @@
     let {data, form} = $props();
 
     let members = $state(data.members ?? []);
+    let filteredMembers = $state(members)
 
     $effect(() => {
         members = data.members ?? [];
     })
 
-    let filteredMembers = $state(members.map((m, i) => ({ ...m, _i: i })));
-
     $effect(() => {
-        let result = members.map((m, i) => ({ ...m, _i: i }));
-
+        let result = members;
         if (selectedLocation != null) {
-            result = result.filter((a) => a.location?.id == selectedLocation?.id);
+            result = result.filter((a) => {a.location.id == selectedLocation?.id});
         }
-
         if (memberTextFilter.length >= 3) {
             const search = memberTextFilter.toLowerCase();
+
             result = result.filter((a) => {
                 return (
-                    a.name?.toLowerCase().includes(search) ||
-                    a.surname?.toLowerCase().includes(search) ||
+                    String(a.name?).toLowerCase().includes(search) ||
+                    String(a.surname?).toLowerCase().includes(search) ||
                     a.email?.toLowerCase().includes(search) ||
                     a.phoneNumber?.toLowerCase().includes(search) ||
                     a.comment?.toLowerCase().includes(search)
@@ -35,7 +33,7 @@
         }
 
         filteredMembers = result;
-    });
+    })
 
     let memberTextFilter = $state("");
     let selectedLocation = $state(null);
@@ -129,9 +127,8 @@
             </span>
         </form>
     {/if}
-    {#each filteredMembers as member (member.uuid)}
-        <Member bind:member={members[member._i]}></Member>
-<!--        <Member bind:member={member}></Member>-->
+    {#each filteredMembers as member, index (index)}
+        <Member bind:member={members[index]}></Member>
     {/each}
 </div>
 {#if filteredMembers.length == 0}

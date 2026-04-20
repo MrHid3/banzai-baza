@@ -208,7 +208,7 @@
 
 <div class="page">
 
-<!--    <h1>Zestawienie płatności</h1>-->
+    <h1>Zestawienie płatności</h1>
 
     {#if !data.error && payments.length > 0}
         <div id="filterHolder">
@@ -587,9 +587,9 @@
         padding-left: 15px;
     }
 
-    /*tbody tr:nth-child(even) {*/
-    /*    background-color: var(--color-background-secondary);*/
-    /*}*/
+    tbody tr:nth-child(even) {
+        background-color: var(--color-background-secondary);
+    }
 
     tbody tr:hover {
         background-color: var(--color-background-secondary);

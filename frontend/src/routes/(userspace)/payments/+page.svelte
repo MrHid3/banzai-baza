@@ -7,6 +7,7 @@
     const {data, form} = $props();
 
     let members = $state(data.payments ?? []);
+    let filteredMembers = $state(members)
 
     onMount(() => {
         locations.load();
@@ -16,30 +17,22 @@
         members = data.payments ?? [];
     })
 
-    let filteredMembers = $state(members.map((m, i) => ({ ...m, _i: i })));
-
     $effect(() => {
-        let result = members.map((m, i) => ({ ...m, _i: i }));
-
+        let result = members;
         if (selectedLocation != null) {
-            result = result.filter((a) => a.member.location?.id == selectedLocation?.id);
+            result = result.filter((a) => a.member.location.id == selectedLocation?.id);
         }
-
         if (memberTextFilter.length >= 3) {
-            const search = memberTextFilter.toLowerCase();
-            result = result.filter((a) => {
-                return (
-                    a.member.name?.toLowerCase().includes(search) ||
-                    a.member.surname?.toLowerCase().includes(search) ||
-                    a.member.email?.toLowerCase().includes(search) ||
-                    a.member.phoneNumber?.toLowerCase().includes(search) ||
-                    a.member.comment?.toLowerCase().includes(search)
-                );
-            });
+            result = result.filter((a) =>
+                (a.member.name != null && a.member.name.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
+                (a.member.surname != null && a.member.surname.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
+                a.member.email.toLowerCase().includes(memberTextFilter.toLowerCase()) ||
+                (a.member.phoneNumber != null && a.member.phoneNumber.toLowerCase().includes(memberTextFilter.toLowerCase())) ||
+                (a.member.comment != null && a.member.comment.toLowerCase().includes(memberTextFilter.toLowerCase())));
         }
 
         filteredMembers = result;
-    });
+    })
 
     let memberTextFilter = $state("");
     let selectedLocation = $state(null);
