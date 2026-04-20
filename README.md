@@ -29,13 +29,12 @@ frontend:
   - [x] /set-password
   - [ ] /profile?
   - [x] przypisywanie do lokalizacji i gaszenie
-- [ ] podsumowanie
+- [x] podsumowanie
 - [ ] logi?
-- [ ] beautiful
+- [x] beautiful
 - [ ] alt dla svg
 - [ ] handlowanie loada
 
-(płatności od 11)
 (przycisk nie przenika)
 
 - [ ] docker
