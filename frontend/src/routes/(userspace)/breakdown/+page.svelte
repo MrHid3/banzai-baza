@@ -253,6 +253,7 @@
                         class="block-header"
                         onclick={() => toggle(block.monthKey)}
                         aria-expanded={!isCollapsed}
+                        aria-label="Pokaż/schowaj sekcję"
                 >
                     <span class="block-label">{block.label}</span>
                     <span class="block-right">
@@ -585,7 +586,7 @@
         padding-left: 15px;
     }
 
-    tbody tr:nth-child(even) {
+    tbody tr:nth-child {
         background-color: var(--color-background-secondary);
     }
 

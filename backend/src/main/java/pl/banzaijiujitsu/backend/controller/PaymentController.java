@@ -101,7 +101,6 @@ public class PaymentController {
     @DeleteMapping
     @Transactional
     ResponseEntity<?> delete(@RequestBody DeletePaymentRequest req){
-        System.out.println(req.uuid);
         Payment payment = paymentService.findByUuid(UUID.fromString(req.uuid)).orElseThrow(InvalidUuidException::new);
 
         paymentService.delete(payment);

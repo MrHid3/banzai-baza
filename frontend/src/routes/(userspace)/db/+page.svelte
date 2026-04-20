@@ -95,7 +95,7 @@
             {#if deleteQueue.length > 0}
                    <form action="?/undelete" method="POST" use:enhance>
                        <input type="hidden" name="memberUuid" value={deleteQueue[deleteQueue.length - 1]}>
-                       <button type="submit" class="left">
+                       <button type="submit" class="left" aria-label="Od-usuń członka">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path
                                   d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z"/></svg>
                        </button>
@@ -103,7 +103,7 @@
             {/if}
         </span>
         <span class="data small">
-            <button class="right" onclick={(e) => { e.stopPropagation(); showAddFragment = !showAddFragment}}>
+            <button class="right" onclick={(e) => { e.stopPropagation(); showAddFragment = !showAddFragment}} aria-label="Pokaż interfejs dodawania użytkownika">
                 <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
                     <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
                     <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
@@ -124,7 +124,7 @@
             <span class="data"><textarea name="comment"></textarea></span>
             <span class="data"></span>
             <span class="data small">
-                <button type="submit" class="both">
+                <button type="submit" class="both" aria-label="Dodaj członka">
                     <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
                         <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
                         <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>

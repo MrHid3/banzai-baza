@@ -1,7 +1,7 @@
 <script lang="ts">
     import {resolve} from '$app/paths';
     import {page} from '$app/state';
-    import {logout} from "$lib/stores/auth.ts";
+    import {logout} from "$lib/stores/auth";
 
     let {user} = $props();
 </script>
@@ -30,7 +30,7 @@
             <li aria-current={page.url.pathname === '/breakdown' ? 'page' : undefined}>
                 <a href={resolve('/breakdown')}>Podsumowanie</a>
             </li>
-            {#if user?.role == "ROLE_ADMIN"}
+            {#if user?.role === "ROLE_ADMIN"}
                 <li aria-current={page.url.pathname === '/users' ? 'page' : undefined}>
                     <a href={resolve('/users')}>Zarządzanie</a>
                 </li>
@@ -41,11 +41,11 @@
         </svg>
     </nav>
 
-    <button class="corner" onclick={() => logout()}>
+    <button class="corner" onclick={() => logout()} aria-label="Logout">
         <svg aria-hidden="true" viewBox="0 0 2 3">
             <path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z"/>
         </svg>
-        <div id="logout">Wyloguj się</div>
+        <span id="logout">Wyloguj się</span>
         <!--		<a href="https://github.com/sveltejs/kit">-->
         <!--			<img src={github} alt="GitHub" />-->
         <!--		</a>-->
@@ -82,7 +82,7 @@
         line-height: 3em;
         font-weight: 800;
         height: 3em;
-        transition-duration: 0.1s;
+        transition-duration: 0.4s;
     }
 
     #logout:hover{
@@ -96,19 +96,19 @@
         /*left: 50%;*/
     }
 
-    .corner a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-    }
+    /*.corner a {*/
+    /*    display: flex;*/
+    /*    align-items: center;*/
+    /*    justify-content: center;*/
+    /*    width: 100%;*/
+    /*    height: 100%;*/
+    /*}*/
 
-    .corner img {
-        width: 2em;
-        height: 2em;
-        object-fit: contain;
-    }
+    /*.corner img {*/
+    /*    width: 2em;*/
+    /*    height: 2em;*/
+    /*    object-fit: contain;*/
+    /*}*/
 
     nav {
         display: flex;
