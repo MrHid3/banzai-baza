@@ -66,4 +66,8 @@
     form:has(input:invalid:not(:focus)) #send {
         opacity: 0.7;
     }
+
+    button{
+        cursor: pointer;
+    }
 </style>

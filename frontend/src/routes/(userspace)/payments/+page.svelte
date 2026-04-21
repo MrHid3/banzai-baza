@@ -256,7 +256,7 @@
 
     td.payment.ok span {
         text-align: center;
-        color: lime;
+        color: green;
     }
 
     td.payment.bad form * {

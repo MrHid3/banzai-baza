@@ -73,7 +73,8 @@
     }
 
     #logout {
-        background-color: var(--background-special);
+        background-color: #b3b3b3;
+        color: var(--color-text-secondary);
         border: none;
         padding: 0 10px;
         text-align: center;
@@ -90,7 +91,7 @@
     }
 
     .corner svg {
-        fill: var(--background-special);
+        fill: #b3b3b3;
         /*position: relative;*/
         /*top: 50%;*/
         /*left: 50%;*/
@@ -166,7 +167,7 @@
     }
 
     li[aria-current='page'] a {
-        color: white !important;
+        color: var(--color-text-primary) !important;
     }
 
     nav a {

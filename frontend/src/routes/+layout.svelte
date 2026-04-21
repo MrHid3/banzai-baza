@@ -17,13 +17,23 @@
         --font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
         'Open Sans', 'Helvetica Neue', sans-serif;
         --font-mono: 'Fira Mono', monospace;
-        --color-background-primary: #121212;
-        --color-background-secondary: #252525;
-        --color-text-primary: #E0E0E0;
-        --color-text-secondary: #B0B0B0;
-        --color-border: #444444;
-        --accent: #888888;
-        --background-special: #b3b3b3;
+        /*--color-background-primary: #121212;*/
+        /*--color-background-secondary: #252525;*/
+        /*--color-text-primary: #E0E0E0;*/
+        /*--color-text-secondary: #B0B0B0;*/
+        /*--color-border: #444444;*/
+        /*--accent: #888888;*/
+        /*--background-special: #b3b3b3;*/
+        /*font-family: var(--font-body);*/
+        /*color: var(--color-text-primary);*/
+        /*background-color: var(--color-background-primary);*/
+        --color-background-primary: #ededed;
+        --color-background-secondary: #dadada;
+        --color-text-primary: #141414;
+        --color-text-secondary: #4f4f4f;
+        --color-border: #bbbbbb;
+        --accent: #777777;
+        --background-special: #4c4c4c;
         /*font-family: var(--font-body);*/
         color: var(--color-text-primary);
         background-color: var(--color-background-primary);

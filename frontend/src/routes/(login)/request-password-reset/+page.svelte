@@ -25,15 +25,35 @@
 {/if}
 
 <style>
-    form, p, a {
+    form,
+    p,
+    a {
         display: flex;
         flex-direction: column;
         width: fit-content;
         margin: 20px auto;
     }
 
+    form{
+        gap: 5px;
+    }
+
     a{
         color: var(--color-text-secondary);
         text-decoration: underline;
     }
+
+    input,
+    button {
+        border: none;
+        border-radius: 10px;
+        padding: 5px;
+        background-color: var(--color-background-secondary);
+        color: var(--color-text-primary);
+    }
+
+    button{
+        cursor: pointer;
+    }
+
 </style>
