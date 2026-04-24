@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,17 @@ import pl.banzaijiujitsu.backend.service.VerificationTokenService;
 @RequiredArgsConstructor
 public class AppUserRegistrationController {
 
-    private final AppUserService appUserService;
-    private final EmailService emailService;
-    private final VerificationTokenService verificationTokenService;
-    private final RoleService roleService;
+    @Autowired
+    private AppUserService appUserService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private VerificationTokenService verificationTokenService;
+
+    @Autowired
+    private RoleService roleService;
 
     @PostMapping("/invite")
     @PreAuthorize("hasRole('ADMIN')")

@@ -37,7 +37,7 @@
 </script>
 
 {#if !edit}
-    <div class="row">
+    <div class="row desktop">
         <span class="data">{member.name}</span>
         <span class="data">{member.surname}</span>
         <span class="data">{member.email}</span>
@@ -46,7 +46,8 @@
         <span class="data">{member.monthlyFee}</span>
         <span class="data">
             <div class="textarea">
-                <textarea readonly>{member.comment}</textarea>
+                <textarea readonly>{member.comment}
+                </textarea>
             </div>
         </span>
         <span class="data">
@@ -71,8 +72,22 @@
             </form>
         </span>
     </div>
+    <div class="mobile">
+<!--        <div class="horizontal">-->
+<!--            <span>{member.name}</span>-->
+<!--            <span>{member.surname}</span>-->
+<!--            <span><button>Rozwiń</button></span>-->
+<!--        </div>-->
+        <div class="horizontal"><span class="bold">Imię</span><span>{member.name}</span></div>
+        <div class="horizontal"><span class="bold">Nazwisko</span><span>{member.surname}</span></div>
+        <div class="horizontal"><span class="bold">Email</span><span>{member.email}</span></div>
+        <div class="horizontal"><span class="bold">Nr. tel</span><span>{member.phoneNumber}</span></div>
+        <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member.location.shortname}</span></div>
+        <div class="horizontal"><span class="bold">Cena/mieś.</span><span>{member.monthlyFee}</span></div>
+        <div class="horizontal" style="height: 20px"><span class="bold">Komentarz</span><span><textarea>{member.comment}</textarea></span></div>
+    </div>
 {:else}
-    <form action="?/update" method="POST" class="row" use:enhance={() => {
+    <form action="?/update" method="POST" class="row desktop" use:enhance={() => {
            return({ result }) => {
                if (result.type === "success") {
                    edit = false;
@@ -199,6 +214,62 @@
         max-width: 100%;
     }
 
+    .mobile{
+        display: none;
+    }
+
+    @media screen and (width <= 1000px){
+        .desktop{
+            display: none;
+        }
+
+        .mobile{
+            display: block;
+            outline: 2px solid var(--color-border);
+            height: fit-content;
+            border-radius: 15px;
+            padding: 10px;
+            width: calc(100vw - 30px);
+            margin: 10px 0;
+        }
+
+        span textarea{
+            width: min-content;
+            max-width: 100%;
+            background-color: transparent;
+            text-align: right;
+            pointer-events: none;
+            user-select: none;
+            text-decoration: none;
+            display: block;
+            height: fit-content;
+        }
+
+        .mobile span{
+            min-height: 1em;
+            line-height: 1em;
+            height: fit-content;
+        }
+
+        .mobile button{
+            padding: 0;
+            margin: 0;
+            height: 1em;
+            line-height: 1em;
+            background-color: transparent;
+        }
+
+        .horizontal{
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            height: fit-content;
+        }
+
+        .bold{
+            font-weight: 700;
+        }
+    }
 </style>
 
 <!--    Background: #121212 (charcoal black)

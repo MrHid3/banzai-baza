@@ -168,9 +168,7 @@
 
         for (const p of filteredPayments) {
             const isEntry  = p.paymentType === ENTRY_FEE_TYPE;
-            const monthKey = isEntry
-                ? timestampToMonthKey(p.timeStamp)
-                : (p.month ?? timestampToMonthKey(p.timeStamp));
+            const monthKey = timestampToMonthKey(p.timeStamp)
 
             if (!map.has(monthKey)) {
                 map.set(monthKey, {

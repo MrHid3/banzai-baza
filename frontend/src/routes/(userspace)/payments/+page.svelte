@@ -144,8 +144,8 @@
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
     <span>Filtruj po lokalizacji:</span>
     <LocationSelect all={true} bind:location={selectedLocation} short={false}></LocationSelect>
-    <label for="showEntryFeeCheckbox">Pokaż wpisowe</label>
-    <input bind:checked={showEntryFee} id="showEntryFeeCheckbox" type="checkbox">
+    <label for="showEntryFeeCheckbox" class="desktop">Pokaż wpisowe</label>
+    <input bind:checked={showEntryFee} id="showEntryFeeCheckbox" type="checkbox" class="desktop">
 
     {#if form?.error}
         <span class="error">{form.error}</span>
@@ -153,7 +153,7 @@
 </div>
 
 <table>
-    <thead>
+    <thead class="desktop">
     <tr>
         <td>Imię</td>
         <td>Nazwisko</td>
@@ -169,7 +169,7 @@
     </thead>
     <tbody>
     {#each filteredMembers as member (member.member.uuid)}
-        <tr>
+        <tr class="desktop">
             <td>{member.member.name}</td>
             <td>{member.member.surname}</td>
             <td>{member.member.location.shortname}</td>
@@ -192,6 +192,12 @@
                     member.member.uuid
                 )}
             {/each}
+        </tr>
+        <tr class="mobile">
+            <td><span class="bold">Imię</span><span>{member.member.name}</span></td>
+            <td><span class="bold">Nazwisko</span><span>{member.member.surname}</span></td>
+            <td><span class="bold">Lokalizacja</span><span>{member.member.location.shortname}</span></td>
+            <td><span class="bold">Cena/mieś.</span><span>{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</span></td>
         </tr>
     {/each}
     </tbody>
@@ -352,5 +358,42 @@
 
     button {
         cursor: pointer;
+    }
+
+    .mobile{
+        display: none;
+    }
+
+    @media screen and (width <= 1000px){
+        .desktop{
+            display: none;
+        }
+
+        .mobile{
+            display: block;
+        }
+
+        #filterHolder{
+            display: flex;
+            flex-direction: column;
+        }
+
+        #filterHolder input,
+        #filterHolder :global(#locationSelect){
+            width: 100% !important;
+            display: block
+        }
+
+        tr.mobile{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile td{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
     }
 </style>

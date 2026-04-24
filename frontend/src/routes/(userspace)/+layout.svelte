@@ -52,4 +52,12 @@
 			padding: 12px 0;
 		}
 	}
+
+	@media screen and (width <= 1000px){
+		main{
+			max-width: 100%;
+			width: 100%;
+		}
+	}
+
 </style>

@@ -83,7 +83,7 @@
     {/if}
 </div>
 <div class="membersTable" style="--number-of-elements-minus-four: {members.length + 1 - 4}">
-    <div class="header">
+    <div class="header desktop">
         <span class="data">Imię</span>
         <span class="data">Nazwisko</span>
         <span class="data">Email</span>
@@ -294,4 +294,21 @@
         text-align: center;
     }
 
+    @media screen and (width <= 1000px){
+
+        .desktop{
+            display: none;
+        }
+
+        .filterHolder{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filterHolder input,
+        .filterHolder :global(#locationSelect){
+            width: 100% !important;
+            display: block
+        }
+    }
 </style>

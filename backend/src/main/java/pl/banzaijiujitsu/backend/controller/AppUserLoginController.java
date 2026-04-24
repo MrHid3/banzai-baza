@@ -43,24 +43,6 @@ public class AppUserLoginController {
         this.verificationTokenService = verificationTokenService;
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<String> registration(@RequestBody RegisterRequest registerRequest){
-//        try{
-//            AppUser appUser = new AppUser(registerRequest.getEmail(), registerRequest.getPassword());
-//            Role role = roleRepository.findByName(registerRequest.getRole())
-//                    .orElseThrow(() -> new RoleNotFoundException("Invalid role"));
-//            appUser.setRoles(Arrays.asList(role));
-//            appUserService.save(appUser);
-//            return ResponseEntity.ok("User registered succesfully");
-//        }catch (RoleNotFoundException e){
-//            return ResponseEntity.badRequest().body("Invalid role");
-//        }catch (InvalidPasswordException e){
-//            return ResponseEntity.badRequest().body("Invalid password");
-//        }catch (InvalidEmailException e){
-//            return ResponseEntity.badRequest().body("Invalid email");
-//        }
-//    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = customAuthenticationProvider.authenticate(

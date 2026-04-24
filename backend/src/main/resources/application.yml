@@ -36,7 +36,6 @@ jwt:
   expiration: 900000
   refresh-expiration: 2592000000
 
-
 backend:
   admin-email: gkornas@proton.me
   admin-password: 120608Gk!
