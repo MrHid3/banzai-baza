@@ -20,14 +20,14 @@
     $effect(() => {
         let result = members;
 
-        if(selectedLocation != null){
+        if (selectedLocation != null) {
             result = result.filter((m) => {
                 return m.member.location.id == selectedLocation?.id
             })
         }
 
         const search = memberTextFilter;
-        if(search.length >= 3){
+        if (search.length >= 3) {
             result = result.filter((m) => {
                 return (
                     m.member.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -110,7 +110,8 @@
                 <input type="hidden" name="uuid" value={payment.uuid}>
                 <span>{payment.amount}</span>
                 <button type="submit" aria-label="Usuń">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash3-fill"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                         class="bi bi-trash3-fill"
                          viewBox="0 0 16 16">
                         <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                     </svg>
@@ -144,8 +145,8 @@
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
     <span>Filtruj po lokalizacji:</span>
     <LocationSelect all={true} bind:location={selectedLocation} short={false}></LocationSelect>
-    <label for="showEntryFeeCheckbox" class="desktop">Pokaż wpisowe</label>
-    <input bind:checked={showEntryFee} id="showEntryFeeCheckbox" type="checkbox" class="desktop">
+    <label class="desktop" for="showEntryFeeCheckbox">Pokaż wpisowe</label>
+    <input bind:checked={showEntryFee} class="desktop" id="showEntryFeeCheckbox" type="checkbox">
 
     {#if form?.error}
         <span class="error">{form.error}</span>
@@ -193,20 +194,44 @@
                 )}
             {/each}
         </tr>
-        <tr class="mobile">
-            <td><span class="bold">Imię</span><span>{member.member.name}</span></td>
-            <td><span class="bold">Nazwisko</span><span>{member.member.surname}</span></td>
-            <td><span class="bold">Lokalizacja</span><span>{member.member.location.shortname}</span></td>
-            <td><span class="bold">Cena/mieś.</span><span>{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</span></td>
-        </tr>
+
     {/each}
     </tbody>
 </table>
-
+{#each filteredMembers as member (member.member.uuid)}
+<div class="mobile" style="outline: 2px solid var(--color-border); padding: 20px; border-radius: 15px; margin: 15px 0">
+    <div class="horizontal"><span class="bold flex-1">Imię</span><span class="text-right flex-1 block">{member.member.name}</span></div>
+    <div class="horizontal"><span class="bold flex-1">Nazwisko</span><span class="text-right flex-1 block">{member.member.surname}</span></div>
+    {#if !selectedLocation}
+        <div class="horizontal"><span
+                class="bold flex-1">Lokalizacja</span><span class="text-right flex-1 block">{member.member.location.shortname}</span></div>
+    {/if}
+    <div class="horizontal"><span class="bold flex-1">Cena/mieś.</span><span class="text-right flex-1 block">{member.member.monthlyFee}</span></div>
+    <div class="horizontal"><span class="bold flex-1 flex items-center">Wpisowe</span><span class="flex-3">{@render payment(
+        startingFees.get(member.member.uuid),
+        "STARTING_FEE",
+        null,
+        null,
+        member.member.uuid
+    )}</span></div>
+    {#each [2, 1, 0] as i}
+        <div class="horizontal flex"><span class="bold flex-1 flex items-center">{monthNames[currentMonth - i - 1]}</span><span class="flex-3">
+                {@render payment(
+                    paymentsByMonth.get(member.member.uuid)?.get(resolveMonthKey(i)),
+                    "MONTHLY_FEE",
+                    currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
+                    currentMonth - i > 0 ? currentYear : currentYear - 1,
+                    member.member.uuid
+                )}
+                </span></div>
+    {/each}
+</div>
+{/each}
 <style>
 
     @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css";
     @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Emoji:wght@300..700&display=swap');
+    @import "tailwindcss";
 
     * {
         font-weight: normal;
@@ -214,18 +239,18 @@
         font-optical-sizing: auto;
     }
 
-    #filterHolder{
+    #filterHolder {
         outline: 2px solid var(--color-border);
         border-radius: 15px;
         width: 100%;
         padding: 10px;
     }
 
-    table{
+    table {
         border-spacing: 0 10px;
     }
 
-    input{
+    input {
         background-color: var(--color-background-secondary);
         border: none;
         border-radius: 15px !important;
@@ -302,12 +327,12 @@
     }
 
 
-    svg{
+    svg {
         fill: var(--color-text-secondary);
     }
 
     button:hover svg,
-    svg:hover{
+    svg:hover {
         fill: var(--color-text-primary);
     }
 
@@ -360,40 +385,54 @@
         cursor: pointer;
     }
 
-    .mobile{
+    .mobile {
         display: none;
     }
 
-    @media screen and (width <= 1000px){
-        .desktop{
-            display: none;
+    @media screen and (width <= 1000px) {
+        .desktop {
+            display: none !important;
         }
 
-        .mobile{
+        .mobile {
             display: block;
         }
 
-        #filterHolder{
+        #filterHolder {
             display: flex;
             flex-direction: column;
         }
 
         #filterHolder input,
-        #filterHolder :global(#locationSelect){
+        #filterHolder :global(#locationSelect) {
             width: 100% !important;
             display: block
         }
 
-        tr.mobile{
-            display: flex;
-            flex-direction: column;
-        }
-
-        .mobile td{
+        .mobile td {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
+        }
+
+        .bold{
+            font-weight: bold;
+        }
+
+        .horizontal{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .horizontal span+span{
+            text-align: right;
+        }
+
+        .mobile td.payment,
+        .mobile td.payment form{
+            width: 100% !important;
+            max-width: 100% !important;
         }
     }
 </style>

@@ -1,11 +1,8 @@
 <script lang="ts">
     import {enhance} from "$app/forms";
     import LocationSelect from "$lib/LocationSelect.svelte";
-    import type {ActionData} from "../../../../.svelte-kit/types/src/routes/$types";
-    import {onMount} from "svelte";
 
-    // eslint-disable-next-line svelte/no-unused-props
-    let {member = $bindable()}: {
+    let {member = $bindable(), mobileEdit, deleteMode}: {
         member: {
             uuid: string,
             name: string,
@@ -27,7 +24,9 @@
             //         amount: number,
             //         active: boolean
             //     }[]
-        }
+        },
+        mobileEdit: boolean,
+        deleteMode: boolean
     } = $props();
 
     let edit = $state(false);
@@ -42,7 +41,7 @@
         <span class="data">{member.surname}</span>
         <span class="data">{member.email}</span>
         <span class="data">{member.phoneNumber}</span>
-        <span class="data">{member.location? member.location.shortname : ""}</span>
+        <span class="data">{member.location ? member.location.shortname : ""}</span>
         <span class="data">{member.monthlyFee}</span>
         <span class="data">
             <div class="textarea">
@@ -64,7 +63,8 @@
             <form action="?/delete" method="POST" use:enhance class="hidden">
                 <input type="hidden" name="uuid" value={member.uuid}>
                 <button type="submit" title="delete" class="right" aria-label="Usuń">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash3-fill"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                         class="bi bi-trash3-fill"
                          viewBox="0 0 16 16">
                         <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                     </svg>
@@ -73,18 +73,63 @@
         </span>
     </div>
     <div class="mobile">
-<!--        <div class="horizontal">-->
-<!--            <span>{member.name}</span>-->
-<!--            <span>{member.surname}</span>-->
-<!--            <span><button>Rozwiń</button></span>-->
-<!--        </div>-->
-        <div class="horizontal"><span class="bold">Imię</span><span>{member.name}</span></div>
-        <div class="horizontal"><span class="bold">Nazwisko</span><span>{member.surname}</span></div>
-        <div class="horizontal"><span class="bold">Email</span><span>{member.email}</span></div>
-        <div class="horizontal"><span class="bold">Nr. tel</span><span>{member.phoneNumber}</span></div>
-        <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member.location.shortname}</span></div>
-        <div class="horizontal"><span class="bold">Cena/mieś.</span><span>{member.monthlyFee}</span></div>
-        <div class="horizontal" style="height: 20px"><span class="bold">Komentarz</span><span><textarea>{member.comment}</textarea></span></div>
+        {#if !mobileEdit}
+            <!--        <div class="horizontal">-->
+            <!--            <span>{member.name}</span>-->
+            <!--            <span>{member.surname}</span>-->
+            <!--            <span><button>Rozwiń</button></span>-->
+            <!--        </div>-->
+            <div class="horizontal"><span class="bold">Imię</span><span>{member.name}</span></div>
+            <div class="horizontal"><span class="bold">Nazwisko</span><span>{member.surname}</span></div>
+            <div class="horizontal"><span class="bold">Email</span><span>{member.email}</span></div>
+            <div class="horizontal"><span class="bold">Nr. tel</span><span>{member.phoneNumber}</span></div>
+            <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member.location.shortname}</span></div>
+            <div class="horizontal"><span class="bold">Cena/mieś.</span><span>{member.monthlyFee}</span></div>
+            <div class="horizontal"><span
+                    class="bold">Komentarz</span><span><textarea>{member.comment}</textarea></span></div>
+            {#if deleteMode}
+                <div class="horizontal" style="flex-direction: row-reverse;">
+                    <form action="?/delete" method="POST" use:enhance class="hidden" style="padding: 5px">
+                        <input type="hidden" name="uuid" value={member.uuid}>
+                        <button type="submit" title="delete" class="right" aria-label="Usuń">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                                 class="bi bi-trash3-fill"
+                                 viewBox="0 0 16 16">
+                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            {/if}
+        {:else}
+            <form action="?/update" method="POST" use:enhance>
+                <div class="horizontal"><span class="bold">Imię</span><span><input type="text" bind:value={member.name}></span>
+                </div>
+                <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text"
+                                                                                       bind:value={member.surname}></span>
+                </div>
+                <div class="horizontal"><span class="bold">Email</span><span><input type="email" required
+                                                                                    bind:value={member.email}></span>
+                </div>
+                <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text"
+                                                                                     bind:value={member.phoneNumber}></span>
+                </div>
+                <div class="horizontal"><span class="bold">Lokalizacja</span><span><LocationSelect all={false}
+                                                                                                   bind:location={member.location}
+                                                                                                   class="locationSelect"></LocationSelect></span>
+                </div>
+                <div class="horizontal"><span class="bold">Cena/mieś</span><span><input type="number" min="0"
+                                                                                        max="1000"
+                                                                                        bind:value={member.monthlyFee}></span>
+                </div>
+                <div class="horizontal"><span
+                        class="bold">Komentarz</span><span><textarea>{member.comment}</textarea></span></div>
+                <div class="horizontal">
+                    <span></span>
+                    <button type="submit" class="save">Zapisz</button>
+                </div>
+            </form>
+        {/if}
     </div>
 {:else}
     <form action="?/update" method="POST" class="row desktop" use:enhance={() => {
@@ -110,7 +155,7 @@
                 <LocationSelect all={false} bind:location={member.location} class="locationSelect"></LocationSelect>
         </span>
         <span class="data">
-                <input type="number" name="monthlyFee" bind:value={member.monthlyFee}>
+                <input type="number" name="monthlyFee" bind:value={member.monthlyFee} min="0" max="1000">
         </span>
         <span class="data">
             <textarea bind:value={member.comment} name="comment"></textarea>
@@ -131,7 +176,7 @@
 {/if}
 
 <style>
-    .row{
+    .row {
         margin: 10px 0;
         display: table-row;
         width: 100%;
@@ -142,7 +187,7 @@
         transition-duration: 0.4s;
     }
 
-    .row:hover{
+    .row:hover {
         outline: 2px solid transparent;
     }
 
@@ -152,21 +197,21 @@
         display: table-cell;
     }
 
-    span.data{
+    span.data {
         text-align: center;
         height: 100%;
     }
 
-    textarea:focus{
+    textarea:focus {
         outline: none !important;
         border: none !important;
     }
 
-    span.data:has(textarea){
+    span.data:has(textarea) {
         padding: 5px 0;
     }
 
-    textarea{
+    textarea {
         background-color: var(--color-background-secondary);
         border: none;
         border-radius: 10px;
@@ -174,7 +219,7 @@
         color: var(--color-text-secondary);
     }
 
-    button{
+    button {
         background-color: var(--color-background-secondary);
         border: none;
         width: 100%;
@@ -184,16 +229,16 @@
         cursor: pointer;
     }
 
-    button.right{
+    button.right {
         border-radius: 0 15px 15px 0 !important;
     }
 
-    button.left{
+    button.left {
         border-radius: 15px 0 0 15px !important;
         padding: 10px !important;
     }
 
-    svg{
+    svg {
         fill: var(--color-text-secondary);
         height: 25px;
         width: 25px;
@@ -201,11 +246,11 @@
     }
 
     button:hover svg,
-    svg:hover{
+    svg:hover {
         fill: var(--color-text-primary);
     }
 
-    input{
+    input {
         background-color: var(--color-background-secondary);
         border: none;
         border-radius: 10px;
@@ -214,16 +259,16 @@
         max-width: 100%;
     }
 
-    .mobile{
+    .mobile {
         display: none;
     }
 
-    @media screen and (width <= 1000px){
-        .desktop{
+    @media screen and (width <= 1000px) {
+        .desktop {
             display: none;
         }
 
-        .mobile{
+        .mobile {
             display: block;
             outline: 2px solid var(--color-border);
             height: fit-content;
@@ -233,7 +278,7 @@
             margin: 10px 0;
         }
 
-        span textarea{
+        .mobile > div span textarea {
             width: min-content;
             max-width: 100%;
             background-color: transparent;
@@ -245,13 +290,24 @@
             height: fit-content;
         }
 
-        .mobile span{
+        .mobile > form textarea,
+        .mobile > form input,
+        .mobile > form :global(.locationSelect) {
+            width: 100%;
+        }
+
+        .mobile > form div > span + span {
+            width: 70%;
+        }
+
+        .mobile span {
             min-height: 1em;
             line-height: 1em;
             height: fit-content;
+            width: fit-content;
         }
 
-        .mobile button{
+        .mobile button {
             padding: 0;
             margin: 0;
             height: 1em;
@@ -259,21 +315,28 @@
             background-color: transparent;
         }
 
-        .horizontal{
+        .horizontal {
             display: flex;
             justify-content: space-between;
             margin: 5px 0;
             height: fit-content;
         }
 
-        .bold{
+        .bold {
             font-weight: 700;
+        }
+
+        .horizontal:has(.save){
+            height: fit-content;
+        }
+
+        .save {
+            background-color: var(--color-background-secondary) !important;
+            border-radius: 15px;
+            display: block;
+            width: min-content;
+            padding: 10px !important;
+            height: auto !important;
         }
     }
 </style>
-
-<!--    Background: #121212 (charcoal black)
-    Primary Text: #E0E0E0 (light gray)
-    Secondary Text: #B0B0B0 (medium gray)
-    Borders/Dividers: #444444 (dark gray)
-    Accent: #888888 (soft gray)-->

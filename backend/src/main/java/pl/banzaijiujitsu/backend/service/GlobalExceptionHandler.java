@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import pl.banzaijiujitsu.backend.exception.*;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+    public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidEmailException.class)
     public ResponseEntity<String> handleInvalidEmailException(InvalidEmailException ex) {

@@ -206,6 +206,8 @@
 
 <div class="page">
 
+    <div class="mobile">Obróć telefon aby uzyskać więcej szczegółów</div>
+
     {#if !data.error && payments.length > 0}
         <div id="filterHolder">
             <label for="yearSelect">Rok:</label>
@@ -277,7 +279,7 @@
                                 <thead>
                                 <tr>
                                     <td>Lokalizacja</td>
-                                    {#each methodList as m}<td>{methodLabel(m)}</td>{/each}
+                                    {#each methodList as m}<td class="desktop">{methodLabel(m)}</td>{/each}
                                     <td>Suma</td>
                                 </tr>
                                 </thead>
@@ -287,7 +289,7 @@
                                         <td class="loc-cell">{row.location}</td>
                                         {#each methodList as m}
                                             {@const bucket = row.methods.get(m)}
-                                            <td>
+                                            <td class="desktop">
                                                 {#if bucket}
                                                     <div class="cell-amount">{fmt(bucket.total)}</div>
                                                     <div class="cell-count">{bucket.count} wpł.</div>
@@ -308,7 +310,7 @@
                                             .reduce((s, r) => s + (r.methods.get(m)?.total ?? 0), 0)}
                                         {@const colCount = [...section.locations.values()]
                                             .reduce((s, r) => s + (r.methods.get(m)?.count ?? 0), 0)}
-                                        <td>
+                                        <td class="desktop">
                                             <div class="cell-amount">{fmt(colTotal)}</div>
                                             <div class="cell-count">{colCount} wpł.</div>
                                         </td>
@@ -333,7 +335,7 @@
                                 <thead>
                                 <tr>
                                     <td>Lokalizacja</td>
-                                    {#each methodList as m}<td>{methodLabel(m)}</td>{/each}
+                                    {#each methodList as m}<td class="desktop">{methodLabel(m)}</td>{/each}
                                     <td>Suma</td>
                                 </tr>
                                 </thead>
@@ -343,7 +345,7 @@
                                         <td class="loc-cell">{row.location}</td>
                                         {#each methodList as m}
                                             {@const bucket = row.methods.get(m)}
-                                            <td>
+                                            <td class="desktop">
                                                 {#if bucket}
                                                     <div class="cell-amount">{fmt(bucket.total)}</div>
                                                     <div class="cell-count">{bucket.count} wpł.</div>
@@ -364,7 +366,7 @@
                                             .reduce((s, r) => s + (r.methods.get(m)?.total ?? 0), 0)}
                                         {@const colCount = [...section.locations.values()]
                                             .reduce((s, r) => s + (r.methods.get(m)?.count ?? 0), 0)}
-                                        <td>
+                                        <td class="desktop">
                                             <div class="cell-amount">{fmt(colTotal)}</div>
                                             <div class="cell-count">{colCount} wpł.</div>
                                         </td>
@@ -648,6 +650,20 @@
         .summary-item + .summary-item {
             border-left: none;
             border-top: 2px solid var(--color-border);
+        }
+    }
+
+    .mobile {
+        display: none;
+    }
+
+    @media screen and (width <= 500px) {
+        .desktop {
+            display: none !important;
+        }
+
+        .mobile {
+            display: block !important;
         }
     }
 </style>

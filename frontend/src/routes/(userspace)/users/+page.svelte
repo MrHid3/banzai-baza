@@ -243,4 +243,28 @@
     .user:has(.hide-checkbox:not(:checked)) + .hideable {
         display: none;
     }
+
+    @media screen and (width <= 1000px){
+        .container{
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            padding: 0;
+        }
+
+        .container > * {
+            width: 100% !important;
+        }
+
+        #addUser form {
+            width: 100%;
+            display: flex;
+            flex-direction: column !important;
+            margin: 0;
+        }
+
+        #addUser form *{
+            border-radius: 15px;
+        }
+    }
 </style>

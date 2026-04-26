@@ -3,6 +3,7 @@ package pl.banzaijiujitsu.backend.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +163,7 @@ public class MemberController {
 
     @PutMapping("/{uuid}")
     @Transactional
-    public ResponseEntity<?> updateMember(@PathVariable String uuid, @RequestBody UpdateMemberRequest memberRequest) {
+        public ResponseEntity<?> updateMember(@PathVariable String uuid, @RequestBody UpdateMemberRequest memberRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null) {
@@ -197,7 +198,7 @@ public class MemberController {
 
     public record CreateMemberRequest(
             @NotNull Long locationId,
-            @Email String email,
+            @NotNull @NotEmpty @Email String email,
             String name,
             String surname,
             String comment,
@@ -207,8 +208,8 @@ public class MemberController {
     }
 
     public record UpdateMemberRequest(
-            @Email String email,
-            @NotNull Long locationId,
+            @NotNull @NotEmpty @Email String email,
+            @NotNull @NotEmpty Long locationId,
             String name,
             String surname,
             String comment,
