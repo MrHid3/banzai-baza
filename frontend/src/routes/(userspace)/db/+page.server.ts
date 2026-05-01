@@ -44,7 +44,7 @@ export const actions: Actions = {
 		const res = await serverFetch('/api/member', {
 			method: 'DELETE',
 			body: JSON.stringify({
-				uuid: data.get('uuid')
+				uuid: data.get('memberUuid')
 			}),
 			},
 			cookies,
@@ -61,7 +61,7 @@ export const actions: Actions = {
 
 		return {
 			type: "delete",
-			uuid: data.get("uuid"),
+			uuid: data.get("memberUuid"),
 			ok: true
 		}
 	},
@@ -89,13 +89,13 @@ export const actions: Actions = {
 
 		return {
 			type: "undelete",
-			uuid: data.get("uuid"),
+			uuid: data.get("memberUuid"),
 			ok: true
 		}
 	},
 	update: async ({ request, cookies, locals }) => {
 		const data = await request.formData();
-		const uuid = data.get('uuid');
+		const uuid = data.get('memberUuid');
 
 		const res = await serverFetch(
 			`/api/member/${uuid}`,

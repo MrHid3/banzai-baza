@@ -21,9 +21,9 @@ export const actions : Actions = {
         )
 
         if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: body.message,
+                error: body,
                 values: Object.fromEntries(data)
             });
         }

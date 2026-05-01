@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(AuthenticationService authenticationService) {
         return email -> authenticationService.loadUserByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
     }
 
     @Bean

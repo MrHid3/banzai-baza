@@ -9,7 +9,7 @@
         class: componentClass = ""
     }
         = $props();
-    onMount(() => locations.load());
+    onMount(() => locations.load(true));
 
     $effect(() => {
         if (selectedLocationId != -1) {
@@ -19,7 +19,7 @@
         }
     })
 
-    let selectedLocationId = $state(-1);
+    let selectedLocationId = $state(($locations.data ?? []).find(e => e.id === location?.id)?.id ?? -1);
 
     $effect(() => {
         if (!all && location != null) {

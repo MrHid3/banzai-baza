@@ -49,7 +49,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
         AppUser user = appUserService.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
         if (!user.isEnabled()) {
             throw new UserNotActiveException();
         }
@@ -79,7 +79,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByPhoneNumber(String phoneNumber) throws UsernameNotFoundException {
         AppUser user = appUserService.findByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
         return new User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user.getRole()));
     }
 

@@ -1,11 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:svelte="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>
+	<svelte:head>
+		<link rel="icon" href="/favicon.ico">
+	</svelte:head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>

@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -50,10 +49,15 @@ public class Member {
     private String email;
     private String name;
     private String surname;
+
+    @Column(nullable = false)
     private String phoneNumber;
+
+    @Column(nullable = false)
     private Integer monthlyFee;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Location location;
 
     private String comment;

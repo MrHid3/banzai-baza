@@ -1,6 +1,7 @@
 <script lang="ts">
     import {enhance} from "$app/forms"
     import {goto} from "$app/navigation";
+    import Error from "$lib/Error.svelte"
 
     let {form} = $props()
 
@@ -22,8 +23,8 @@
 </svelte:head>
 
 <form action="?/login" method="POST" use:enhance>
-    <input name="email" placeholder="Email" type="email" bind:value={email}>
-    <input name="password" pattern={passwordPattern} placeholder="Hasło" type={showPassword? "text" : "password"}>
+    <input name="email" placeholder="Email" type="email" bind:value={email} required>
+    <input name="password" placeholder="Hasło" type={showPassword? "text" : "password"} required>
     <label for="show">
         <input bind:checked={showPassword} name="show" type="checkbox">
         Pokaż hasło
@@ -32,7 +33,7 @@
     <a href={"/request-password-reset?email=" + encodeURIComponent(email)}>Zapomniałem/-am hasła</a>
 
     {#if form?.error}
-        {form.error}
+        <Error code={form?.error}></Error>
     {/if}
 </form>
 
@@ -52,14 +53,14 @@
         gap: 10px;
     }
 
-    input:not([type=checkbox]), #send {
+    input:not([type=checkbox]), #send{
         width: 15vw;
         min-width: 200px;
         padding: 10px;
         border: 1px solid var(--color-border)
     }
 
-    input:invalid:not(:focus) {
+    input:invalid:not(:focus):not(:placeholder-shown){
         border: 1px solid red;
     }
 
@@ -70,4 +71,5 @@
     button{
         cursor: pointer;
     }
+
 </style>

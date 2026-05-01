@@ -10,11 +10,11 @@
     let filteredMembers = $state(members)
 
     onMount(() => {
-        locations.load();
+        locations.load(true);
     })
 
     $effect(() => {
-        members = data.payments ?? [];
+        members = data.payments.sort((a, b) => a.member.uuid.localeCompare(b.member.uuid)) ?? [];
     })
 
     $effect(() => {
@@ -100,14 +100,14 @@
 
 {#snippet payment(payment, type, month, year, payerUuid)}
     {#if payment}
-        <td class="payment ok">
+        <div class="td payment ok">
             <form action="?/deletePayment" method="POST" use:enhance>
                 {#if payment.paymentMethod == "CASH"}
                     <i>💵</i>
                 {:else}
                     <i>💳</i>
                 {/if}
-                <input type="hidden" name="uuid" value={payment.uuid}>
+                <input type="hidden" name="paymentUuid" value={payment.uuid}>
                 <span>{payment.amount}</span>
                 <button type="submit" aria-label="Usuń">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
@@ -117,9 +117,9 @@
                     </svg>
                 </button>
             </form>
-        </td>
+        </div>
     {:else}
-        <td class="payment bad">
+        <div class="td payment bad">
             <form action="?/addPayment" method="POST" use:enhance>
                 <input type="hidden" name="paymentType" value={type}>
                 <input type="hidden" name="month" value={month}>
@@ -129,14 +129,14 @@
                     <option value="CASH">💵</option>
                     <option value="DEBIT">💳</option>
                 </select>
-                <input type="number" name="amount" value={0}>
+                <input type="number" name="amount" value={0} required min="0" max="1000">
                 <button type="submit" aria-label="Zapisz">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30">
                         <path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/>
                     </svg>
                 </button>
             </form>
-        </td>
+        </div>
     {/if}
 {/snippet}
 
@@ -153,51 +153,50 @@
     {/if}
 </div>
 
-<table>
-    <thead class="desktop">
-    <tr>
-        <td>Imię</td>
-        <td>Nazwisko</td>
-        <td>Lokalizacja</td>
-        <td>Cena/mieś.</td>
-        {#if showEntryFee}
-            <td>Wpisowe</td>
-        {/if}
-        <td>{monthNames[currentMonth - 3]}</td>
-        <td>{monthNames[currentMonth - 2]}</td>
-        <td>{monthNames[currentMonth - 1]}</td>
-    </tr>
-    </thead>
-    <tbody>
-    {#each filteredMembers as member (member.member.uuid)}
-        <tr class="desktop">
-            <td>{member.member.name}</td>
-            <td>{member.member.surname}</td>
-            <td>{member.member.location.shortname}</td>
-            <td>{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</td>
+<div class="table desktop">
+    <div class="thead">
+        <div class="tr">
+            <div class="td">Imię</div>
+            <div class="td">Nazwisko</div>
+            <div class="td">Lokalizacja</div>
+            <div class="td">Cena/mieś.</div>
             {#if showEntryFee}
-                {@render payment(
-                    startingFees.get(member.member.uuid),
-                    "STARTING_FEE",
-                    null,
-                    null,
-                    member.member.uuid
-                )}
+                <div class="td">Wpisowe</div>
             {/if}
-            {#each [2, 1, 0] as i}
-                {@render payment(
-                    paymentsByMonth.get(member.member.uuid)?.get(resolveMonthKey(i)),
-                    "MONTHLY_FEE",
-                    currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
-                    currentMonth - i > 0 ? currentYear : currentYear - 1,
-                    member.member.uuid
-                )}
-            {/each}
-        </tr>
-
-    {/each}
-    </tbody>
-</table>
+            <div class="td">{monthNames[currentMonth - 3]}</div>
+            <div class="td">{monthNames[currentMonth - 2]}</div>
+            <div class="td">{monthNames[currentMonth - 1]}</div>
+        </div>
+    </div>
+    <div class="tbody">
+        {#each filteredMembers as member (member.member.uuid)}
+            <div class="tr">
+                <div class="td">{member.member.name}</div>
+                <div class="td">{member.member.surname}</div>
+                <div class="td">{member.member.location.shortname}</div>
+                <div class="td">{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</div>
+                {#if showEntryFee}
+                    {@render payment(
+                        startingFees.get(member.member.uuid),
+                        "STARTING_FEE",
+                        null,
+                        null,
+                        member.member.uuid
+                    )}
+                {/if}
+                {#each [2, 1, 0] as i}
+                    {@render payment(
+                        paymentsByMonth.get(member.member.uuid)?.get(resolveMonthKey(i)),
+                        "MONTHLY_FEE",
+                        currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
+                        currentMonth - i > 0 ? currentYear : currentYear - 1,
+                        member.member.uuid
+                    )}
+                {/each}
+            </div>
+        {/each}
+    </div>
+</div>
 {#each filteredMembers as member (member.member.uuid)}
 <div class="mobile" style="outline: 2px solid var(--color-border); padding: 20px; border-radius: 15px; margin: 15px 0">
     <div class="horizontal"><span class="bold flex-1">Imię</span><span class="text-right flex-1 block">{member.member.name}</span></div>
@@ -229,7 +228,6 @@
 {/each}
 <style>
 
-    @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css";
     @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Emoji:wght@300..700&display=swap');
     @import "tailwindcss";
 
@@ -244,10 +242,7 @@
         border-radius: 15px;
         width: 100%;
         padding: 10px;
-    }
-
-    table {
-        border-spacing: 0 10px;
+        margin: 0 0 10px 0;
     }
 
     input {
@@ -256,77 +251,6 @@
         border-radius: 15px !important;
     }
 
-    thead {
-        outline: var(--color-border) solid 2px;
-        border-radius: 15px;
-        margin-bottom: 200px !important;
-        padding: 10px;
-        height: 45px;
-    }
-
-    thead td {
-        text-transform: math-auto;
-    }
-
-    td {
-        text-align: center;
-        padding: 5px;
-        margin: 10px;
-        max-width: 10%;
-        width: 10%;
-    }
-
-    td.payment {
-        max-width: 20% !important;
-    }
-
-    td.payment input {
-        width: 100% !important;
-        display: block;
-    }
-
-    td.payment.ok span {
-        text-align: center;
-        color: green;
-    }
-
-    td.payment.bad form * {
-        background-color: var(--color-background-primary);
-    }
-
-    td.payment.bad form {
-        outline: 2px solid var(--color-border);
-        border-radius: 15px;
-    }
-
-    td.payment.bad input {
-        color: red;
-    }
-
-    td.payment form {
-        display: flex;
-        flex-direction: row;
-    }
-
-    td.payment form > * {
-        flex: 1;
-        width: fit-content;
-        height: 50px;
-        text-align: center;
-        border: none;
-    }
-
-    td.payment form button,
-    td.payment form select,
-    td.payment form input,
-    td.payment span,
-    td.payment i {
-        font-style: normal;
-        color: var(--color-text-primary);
-        background-color: var(--color-background-secondary);
-    }
-
-
     svg {
         fill: var(--color-text-secondary);
     }
@@ -334,13 +258,6 @@
     button:hover svg,
     svg:hover {
         fill: var(--color-text-primary);
-    }
-
-    td.payment form select,
-    td.payment form input,
-    td.payment span,
-    td.payment i {
-        padding: 1em 0.5em;
     }
 
     option,
@@ -353,21 +270,115 @@
         outline: none;
     }
 
+    .tbody{
+        display: table-row-group;
+        width: 100%;
+    }
+
     input::selection {
         border: none;
     }
 
-    td.payment form button {
+    .table {
+        display: table;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    .thead {
+        outline: var(--color-border) solid 2px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        height: 45px;
+        display: table-header-group;
+    }
+
+    .thead .td {
+        text-transform: math-auto;
+        display: table-cell;
+    }
+
+    .tr {
+        display: table-row;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .td {
+        text-align: center;
+        padding: 5px;
+        min-width: 0;
+        display: table-cell;
+    }
+
+    .td.payment {
+        display: table-cell;
+    }
+
+    .td.payment input {
+        width: 100% !important;
+        display: block;
+    }
+
+    .td.payment.ok span {
+        text-align: center;
+        color: green;
+    }
+
+    .td.payment.bad form * {
+        background-color: var(--color-background-primary);
+    }
+
+    .td.payment.bad form {
+        outline: 2px solid var(--color-border);
+        border-radius: 15px;
+    }
+
+    .td.payment.bad input {
+        color: red;
+    }
+
+    .td.payment form {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .td.payment form > * {
+        flex: 1;
+        width: fit-content;
+        height: 50px;
+        text-align: center;
+        border: none;
+    }
+
+    .td.payment form button,
+    .td.payment form select,
+    .td.payment form input,
+    .td.payment span,
+    .td.payment i {
+        font-style: normal;
+        color: var(--color-text-primary);
+        background-color: var(--color-background-secondary);
+    }
+
+    .td.payment form select,
+    .td.payment form input,
+    .td.payment span,
+    .td.payment i {
+        padding: 1em 0.5em;
+    }
+
+    .td.payment form button {
         border-radius: 0 15px 15px 0;
     }
 
-    td.payment form select,
-    td.payment.ok i {
+    .td.payment form select,
+    .td.payment.ok i {
         border-radius: 15px 0 0 15px;
     }
 
-    td.payment form input,
-    td.payment form span {
+    .td.payment form input,
+    .td.payment form span {
         flex: 2 !important;
     }
 
@@ -409,7 +420,7 @@
             display: block
         }
 
-        .mobile td {
+        .mobile .td {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -429,8 +440,8 @@
             text-align: right;
         }
 
-        .mobile td.payment,
-        .mobile td.payment form{
+        .mobile .td.payment,
+        .mobile .td.payment form{
             width: 100% !important;
             max-width: 100% !important;
         }

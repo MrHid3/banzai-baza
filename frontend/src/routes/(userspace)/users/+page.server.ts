@@ -23,10 +23,11 @@ export const actions : Actions = {
         )
 
         if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: body.message ?? 'Failed to invite user',
-                values: Object.fromEntries(data)
+                error: body,
+                values: Object.fromEntries(data),
+                type: "user"
             });
         }
     },
@@ -51,10 +52,11 @@ export const actions : Actions = {
         )
 
         if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: body.message ?? 'Failed to add location',
-                values: Object.fromEntries(data)
+                error: body,
+                values: Object.fromEntries(data),
+                type: "location"
             });
         }
     },
@@ -79,10 +81,11 @@ export const actions : Actions = {
         )
 
         if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: body.message ?? 'Failed to add location',
-                values: Object.fromEntries(data)
+                error: body,
+                values: Object.fromEntries(data),
+                type: "location"
             });
         }
     },
@@ -107,10 +110,11 @@ export const actions : Actions = {
         )
 
         if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: body.message ?? 'Nie udało się usunąć lokalizacji',
-                values: Object.fromEntries(data)
+                error: body,
+                values: Object.fromEntries(data),
+                type: "location"
             });
         }
     },
@@ -128,10 +132,11 @@ export const actions : Actions = {
         )
 
         if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: body.message ?? 'Nie udało się usunąć lokalizacji',
-                values: Object.fromEntries(data)
+                error: body,
+                values: Object.fromEntries(data),
+                type: "location"
             });
         }
     },
@@ -153,10 +158,11 @@ export const actions : Actions = {
         )
 
         if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: body.message ?? 'Nie udało się zmienić statusu',
-                values: Object.fromEntries(data)
+                error: body,
+                values: Object.fromEntries(data),
+                type: 'user'
             });
         }
     }

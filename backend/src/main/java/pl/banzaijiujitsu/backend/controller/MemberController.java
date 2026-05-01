@@ -198,23 +198,23 @@ public class MemberController {
 
     public record CreateMemberRequest(
             @NotNull Long locationId,
-            @NotNull @NotEmpty @Email String email,
+            @Email String email,
             String name,
             String surname,
             String comment,
-            Integer monthlyFee,
-            String phoneNumber
+            @NotNull Integer monthlyFee,
+            @NotNull @NotEmpty String phoneNumber
     ) {
     }
 
     public record UpdateMemberRequest(
-            @NotNull @NotEmpty @Email String email,
+            @Email String email,
             @NotNull @NotEmpty Long locationId,
             String name,
             String surname,
             String comment,
-            Integer monthlyFee,
-            String phoneNumber
+            @NotNull Integer monthlyFee,
+            @NotNull @NotEmpty String phoneNumber
     ) {
     }
 

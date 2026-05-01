@@ -3,12 +3,13 @@
     import {onMount} from "svelte";
     import {locations} from "$lib/stores/locations.svelte";
     import LocationSelect from "$lib/LocationSelect.svelte";
+    import Error from "$lib/Error.svelte"
 
     onMount(() => {
         locations.load(true);
     })
 
-    let {data} = $props();
+    let {data, form} = $props();
 
     let users = $derived(data.users);
 
@@ -25,13 +26,14 @@
 
     let inviting = $state(false);
 
-    console.log(users)
-
 </script>
 
 <div class="container">
     <div class="users">
         <h2>Użytkownicy</h2>
+        {#if form?.error && form?.type == "user"}
+            <Error code={form?.error}></Error>
+        {/if}
         <div id="addUser">
             <form action="?/invite" method="POST" use:enhance={() => {
             inviting = true;
@@ -40,12 +42,12 @@
                 inviting = false;
             }
         }}>
-                <input name="email" type="email" class="left">
+                <input class="left" name="email" placeholder="trener@email.com" required type="email">
                 <select name="role">
                     <option value="ROLE_ADMIN">Administrator</option>
                     <option value="ROLE_COACH">Trener</option>
                 </select>
-                <button disabled={inviting} class="right" type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
+                <button class="right" disabled={inviting} type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
             </form>
         </div>
 
@@ -66,7 +68,8 @@
                                     <input type="hidden" name="userUuid" value={user.uuid}>
                                     <input type="hidden" name="status"
                                            value={user.status === "ACTIVE" ? "DISABLED" : "ACTIVE"}>
-                                    <button type="submit" class="deleteAccount">{user.status === "ACTIVE" ? "WYŁĄCZ KONTO" : "WŁĄCZ KONTO"}</button>
+                                    <button type="submit"
+                                            class="deleteAccount">{user.status === "ACTIVE" ? "WYŁĄCZ KONTO" : "WŁĄCZ KONTO"}</button>
                                 </form>
                             {/if}
                             {#each user.locations as location}
@@ -91,15 +94,18 @@
 
     <div class="locations">
         <h2>Lokalizacje</h2>
+        {#if form?.error && form?.type == "location"}
+            <Error code={form?.error}></Error>
+        {/if}
         <div id="addLocation">
             <form action="?/addLocation" method="POST" use:enhance={(update) => {
                 return async ({update}) => {
                     await update();
                     await locations.load(true);
         }}}>
-                <input name="name" type="text" class="left">
-                <input name="shortname" type="text">
-                <button type="submit" class="right">Dodaj</button>
+                <input class="left" name="name" placeholder="Szkoła Podstawowa nr 720" required type="text">
+                <input name="shortname" placeholder="SP720" required type="text">
+                <button class="right" type="submit">Dodaj</button>
             </form>
         </div>
 
@@ -123,7 +129,7 @@
 </div>
 
 <style>
-    .deleteAccount{
+    .deleteAccount {
         padding: 5px 20px;
     }
 
@@ -132,12 +138,12 @@
         padding: 10px;
     }
 
-    .right{
+    .right {
         border-radius: 0 15px 15px 0;
     }
 
     .left,
-    :global(.left){
+    :global(.left) {
         border-radius: 15px 0 0 15px !important;
         padding: 5px !important;
     }
@@ -164,6 +170,11 @@
         justify-content: center;
     }
 
+    .error {
+        text-align: center;
+        color: red;
+    }
+
     #addUser form {
         display: flex;
         justify-content: center;
@@ -173,7 +184,6 @@
     #addUser form *,
     #addLocation form *,
     .hideable button {
-        /*display: block !important;*/
         height: 100% !important;
     }
 
@@ -234,6 +244,7 @@
 
     ul {
         list-style-type: none;
+        padding: 0;
     }
 
     .hide-checkbox {
@@ -244,27 +255,89 @@
         display: none;
     }
 
-    @media screen and (width <= 1000px){
-        .container{
+    @media screen and (width <= 1000px) {
+        .container {
             display: flex;
             flex-direction: column;
-            width: 100vw;
+            width: 100%;
             padding: 0;
+            box-sizing: border-box;
         }
 
         .container > * {
             width: 100% !important;
+            box-sizing: border-box;
         }
 
+        /* Invite form */
         #addUser form {
             width: 100%;
             display: flex;
             flex-direction: column !important;
             margin: 0;
+            gap: 4px;
         }
 
-        #addUser form *{
-            border-radius: 15px;
+        #addUser form * {
+            border-radius: 15px !important;
+            width: 100% !important;
+            box-sizing: border-box;
+            margin: 0 !important;
+        }
+
+        /* Add location form */
+        #addLocation form {
+            width: 100%;
+            display: flex;
+            flex-direction: column !important;
+            margin: 0;
+            gap: 4px;
+        }
+
+        #addLocation form * {
+            border-radius: 15px !important;
+            width: 100% !important;
+            box-sizing: border-box;
+            margin: 0 !important;
+        }
+
+        /* Location delete rows in the list */
+        .locations li form {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .locations li form span {
+            flex: 1;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        /* hideable section (add location to user, location tags) */
+        .hideable {
+            width: 100%;
+        }
+
+        .hideable form {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+
+        /* addLocationToUser form specifically — select + button inline */
+        .hideable form :global(.left) {
+            flex: 1;
+        }
+
+        .container * {
+            margin: 3px;
         }
     }
 </style>

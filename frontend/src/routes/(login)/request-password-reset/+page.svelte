@@ -1,10 +1,9 @@
 <script lang="ts">
     import {enhance} from "$app/forms";
     import {browser} from "$app/environment";
+    import Error from "$lib/Error.svelte"
 
     let {form} = $props();
-
-    console.log(form)
 
     const email = browser ? new URLSearchParams(window.location.search).get("email") : null;
 
@@ -13,11 +12,11 @@
 {#if !form?.ok}
     <form action="?/request" method="POST" use:enhance>
         Email:
-        <input name="email" type="email" value={email}>
+        <input name="email" type="email" value={email} required>
         <button type="submit">Resetuj hasło</button>
     </form>
     {#if form?.error}
-        <p class="error">{form.error}</p>
+        <Error code={form?.error}></Error>
     {/if}
 {:else}
     <p>Email został wysłany</p>

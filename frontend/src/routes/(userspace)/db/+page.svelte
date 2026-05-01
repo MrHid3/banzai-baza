@@ -141,25 +141,25 @@
 </div>
 <div class="mobile flex">
     <form action="?/add" method="POST" use:enhance class="addForm">
-        <div class="horizontal"><span class="bold">Imię</span><span><input type="text"></span>
+        <div class="horizontal"><span class="bold">Imię</span><span><input type="text" name="name"></span>
         </div>
-        <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text"
+        <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text" name="surname"
         ></span>
         </div>
-        <div class="horizontal"><span class="bold">Email</span><span><input type="email" required
+        <div class="horizontal"><span class="bold">Email</span><span><input type="email" name="email"
         ></span>
         </div>
-        <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text"
+        <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text" name="phoneNumber" required pattern={phonePattern}
         ></span>
         </div>
         <div class="horizontal"><span class="bold">Lokalizacja</span><span><LocationSelect all={false}
                                                                                            class="locationSelect"></LocationSelect></span>
         </div>
-        <div class="horizontal"><span class="bold">Cena/mieś</span><span><input max="1000" min="0"
+        <div class="horizontal"><span class="bold">Cena/mieś</span><span><input max="1000" min="0" name="monthlyFee"
                                                                                 type="number"></span>
         </div>
         <div class="horizontal"><span
-                class="bold">Komentarz</span><span><textarea></textarea></span></div>
+                class="bold">Komentarz</span><span><textarea name="comment"></textarea></span></div>
         <div class="horizontal">
             <span></span>
             <button class="save" type="submit">Dodaj</button>
@@ -201,7 +201,7 @@
             <span class="data"><input type="text" name="name"></span>
             <span class="data"><input type="text" name="surname"></span>
             <span class="data"><input type="text" name="email"></span>
-            <span class="data short"><input type="text" name="phoneNumber" pattern={phonePattern}></span>
+            <span class="data short"><input type="text" name="phoneNumber" pattern={phonePattern} required></span>
             <span class="data">
                 <LocationSelect class="locationSelect"></LocationSelect>
             </span>
@@ -286,6 +286,11 @@
     .horizontal {
         display: flex;
         flex-direction: row;
+    }
+
+
+    button{
+        border: none;
     }
 
     button.right {
@@ -375,7 +380,7 @@
         height: 20px;
         fill: var(--color-text-secondary);
         cursor: pointer;
-        transition-duration: 0.6s;
+        transition: fill 0.6s;
     }
 
     button:hover svg,
@@ -417,6 +422,13 @@
         text-align: center;
     }
 
+    svg{
+        width: 100%;
+        display: block;
+        align-self: center;
+        justify-self: center;
+    }
+
     .mobile {
         display: none;
     }
@@ -449,10 +461,10 @@
         }
 
         .flex form button{
-            transition-duration: 0.4s;
+            transition: background-color 0.4s;
         }
 
-        .flex form button:last-child{
+        .flex form button:last-child:not(.save){
             border-radius: 0 15px 15px 0 !important;
         }
 
@@ -483,7 +495,7 @@
         }
 
         .save{
-            border-radius: 15px;
+            border-radius: 15px !important;
         }
     }
 </style>

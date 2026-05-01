@@ -33,9 +33,9 @@ export const actions: Actions = {
             locals);
 
         if(!res.ok){
-            const body = await res.json().catch(() => ({}));
+            const body = await res.text();
             return fail(res.status, {
-                error: 'Nie udało się zmienić hasła',
+                error: body,
                 values: Object.fromEntries(data)
             });
         }

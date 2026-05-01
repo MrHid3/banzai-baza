@@ -51,7 +51,7 @@
         </span>
         <span class="data">
             <button onclick={() => edit = true} class="left" aria-label="Edytuj">
-                <svg class="bi bi-pencil-square" fill="currentColor" height="30" viewBox="0 0 16 16" width="30"
+                <svg fill="currentColor" viewBox="0 0 16 16"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                     <path d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
@@ -59,18 +59,17 @@
                 </svg>
             </button>
         </span>
-        <span class="data">
-            <form action="?/delete" method="POST" use:enhance class="hidden">
-                <input type="hidden" name="uuid" value={member.uuid}>
+        <div class="data">
+            <form action="?/delete" method="POST" use:enhance>
+                <input type="hidden" name="memberUuid" value={member.uuid}>
                 <button type="submit" title="delete" class="right" aria-label="Usuń">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                         class="bi bi-trash3-fill"
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                          viewBox="0 0 16 16">
                         <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                     </svg>
                 </button>
             </form>
-        </span>
+        </div>
     </div>
     <div class="mobile">
         {#if !mobileEdit}
@@ -83,17 +82,16 @@
             <div class="horizontal"><span class="bold">Nazwisko</span><span>{member.surname}</span></div>
             <div class="horizontal"><span class="bold">Email</span><span>{member.email}</span></div>
             <div class="horizontal"><span class="bold">Nr. tel</span><span>{member.phoneNumber}</span></div>
-            <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member.location.shortname}</span></div>
+            <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member.location?.shortname}</span></div>
             <div class="horizontal"><span class="bold">Cena/mieś.</span><span>{member.monthlyFee}</span></div>
             <div class="horizontal"><span
                     class="bold">Komentarz</span><span><textarea>{member.comment}</textarea></span></div>
             {#if deleteMode}
                 <div class="horizontal" style="flex-direction: row-reverse;">
                     <form action="?/delete" method="POST" use:enhance class="hidden" style="padding: 5px">
-                        <input type="hidden" name="uuid" value={member.uuid}>
+                        <input type="hidden" name="memberUuid" value={member.uuid}>
                         <button type="submit" title="delete" class="right" aria-label="Usuń">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
-                                 class="bi bi-trash3-fill"
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                  viewBox="0 0 16 16">
                                 <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                             </svg>
@@ -108,10 +106,10 @@
                 <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text"
                                                                                        bind:value={member.surname}></span>
                 </div>
-                <div class="horizontal"><span class="bold">Email</span><span><input type="email" required
+                <div class="horizontal"><span class="bold">Email</span><span><input type="email"
                                                                                     bind:value={member.email}></span>
                 </div>
-                <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text"
+                <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text" required pattern={phonePattern}
                                                                                      bind:value={member.phoneNumber}></span>
                 </div>
                 <div class="horizontal"><span class="bold">Lokalizacja</span><span><LocationSelect all={false}
@@ -138,7 +136,7 @@
                    edit = false;
            }
     }}}>
-        <input type="hidden" name="uuid" bind:value={member.uuid}>
+        <input type="hidden" name="memberUuid" bind:value={member.uuid}>
         <span class="data">
                 <input type="text" name="name" bind:value={member.name}>
         </span>
@@ -149,7 +147,7 @@
                 <input type="text" name="email" bind:value={member.email}>
         </span>
         <span class="data">
-                <input type="text" name="phoneNumber" bind:value={member.phoneNumber} pattern={phonePattern}>
+                <input type="text" name="phoneNumber" bind:value={member.phoneNumber} pattern={phonePattern} required>
         </span>
         <span class="data">
                 <LocationSelect all={false} bind:location={member.location} class="locationSelect"></LocationSelect>
@@ -184,7 +182,7 @@
         outline: 2px solid var(--color-border);
         border-radius: 15px;
         z-index: 1;
-        transition-duration: 0.4s;
+        transition: outline 0.4s;
     }
 
     .row:hover {
@@ -197,9 +195,16 @@
         display: table-cell;
     }
 
-    span.data {
+    .data {
         text-align: center;
         height: 100%;
+    }
+
+    svg{
+        width: 100%;
+        display: block;
+        align-self: center;
+        justify-self: center;
     }
 
     textarea:focus {
@@ -207,7 +212,7 @@
         border: none !important;
     }
 
-    span.data:has(textarea) {
+    .data:has(textarea) {
         padding: 5px 0;
     }
 
@@ -242,12 +247,16 @@
         fill: var(--color-text-secondary);
         height: 25px;
         width: 25px;
-        transition-duration: 0.6s;
+        transition: fill 0.6s;
     }
 
     button:hover svg,
     svg:hover {
         fill: var(--color-text-primary);
+    }
+
+    form button {
+        align-self: center !important;
     }
 
     input {
@@ -326,7 +335,7 @@
             font-weight: 700;
         }
 
-        .horizontal:has(.save){
+        .horizontal:has(.save) {
             height: fit-content;
         }
 

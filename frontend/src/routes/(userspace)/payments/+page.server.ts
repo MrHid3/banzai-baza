@@ -39,7 +39,7 @@ export const actions : Actions = {
             {
                 method: 'DELETE',
                 body: JSON.stringify({
-                    uuid: data.get('uuid'),
+                    uuid: data.get('paymentUuid'),
                 })
             },
             cookies,
