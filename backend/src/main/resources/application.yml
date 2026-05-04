@@ -4,9 +4,9 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/banzai-baza
-    username: spring
-    password: password
+    url:
+    username:
+    password:
 
   flyway:
     enabled: true
@@ -20,10 +20,10 @@ spring:
   #      ddl-auto: create
 #      ddl-auto: update
   mail:
-    host: sandbox.smtp.mailtrap.io
+    host:
     port: 2525
-    username: 3362863db29627
-    password: 00e479a4ad8579
+    username:
+    password:
     properties:
       mail:
         smtp:
@@ -32,15 +32,19 @@ spring:
             enable: true
 
 jwt:
-  secret: iwrhghjiqreijoahjlhadjkladhofvjkeahiodhvadoijuhadfviohaeijohvaouheqadouch
+  secret:
   expiration: 900000
   refresh-expiration: 2592000000
 
 backend:
-  admin-email: gkornas@proton.me
-  admin-password: 120608Gk!
+  admin-email:
+  admin-password:
 
 app:
-  frontend-url: http://localhost:5173
+  frontend-url: http://localhost:3000
   magic-link:
     expiry-hours: 24
+
+logging:
+    level:
+        root: INFO

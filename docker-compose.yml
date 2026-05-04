@@ -19,7 +19,7 @@ services:
 
   backend:
     build:
-      context: ./banzai-baza
+      context: ./backend
     restart: unless-stopped
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
@@ -39,12 +39,12 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        BACKEND_URL: http://backend:8080
     restart: unless-stopped
     environment:
       BACKEND_URL: http://backend:8080
       ORIGIN: ${ORIGIN}          # required by SvelteKit node adapter, e.g. https://yourdomain.com
-    ports:
-      - "3000:3000"
     depends_on:
       - backend
     networks:

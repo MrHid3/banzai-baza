@@ -75,7 +75,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // your Svelte dev URL
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000", "http://localhost", "http://frontend:3000")); // your Svelte dev URL
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // this tells Spring to accept credentialed requests
