@@ -1,40 +1,7 @@
-backend:
-- [x] przeniesienie requestów z klas do recordów
-- [x] error handling dla całej strony (@RestControllerAdvice)
-- [x] zapomniałem hasła
-- [ ] zmiana maila?
-- [ ] ratelimiter
-- memberzy:
-  - [x] edycja memberów
-- płatności:
-  - [x] wymyślenie do końca jak to działa
-  - [x] dodawanie
-  - [x] czytanie
-- [ ] migracja
-- [ ] 2fa może ale troche jebać
-- [ ] logi?
+# Banzai - baza
 
-frontend:
-- memberzy:
-  - [x] dodawanie
-  - [x] usuwanie
-  - [x] edycja
-- [x] zapomniałem hasła
-- [x] płatności
-- [ ] layout dla coachy
-- [ ] layout na telefony
-- [x] zarządzanie lokalizacjami
-- [x] zarządzanie użytkownikami:
-  - [x] /invite
-  - [x] /set-password
-  - [ ] /profile?
-  - [x] przypisywanie do lokalizacji i gaszenie
-- [x] podsumowanie
-- [ ] logi?
-- [x] beautiful
-- [ ] alt dla svg
-- [ ] handlowanie loada
+A revolutionary piece of sports club payment managment software, tailor made for Banzai Jiu-jitsu. 
 
-(przycisk nie przenika)
+There are no docs, this is an internal tool
 
-- [ ] docker
+Written in Spring Boot + SvelteKit
