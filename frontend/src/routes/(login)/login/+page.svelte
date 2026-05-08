@@ -2,6 +2,7 @@
     import {enhance} from "$app/forms"
     import {goto} from "$app/navigation";
     import Error from "$lib/Error.svelte"
+    import {PUBLIC_BACKEND_2} from "$env/static/public";
 
     let {form} = $props()
 
@@ -15,6 +16,8 @@
             goto('/db');
         }
     })
+
+    console.log(PUBLIC_BACKEND_2)
 
     //TODO: Fancy loading type shit
 </script>

@@ -272,6 +272,10 @@
         display: none;
     }
 
+    svg{
+        width: 100%;
+    }
+
     @media screen and (width <= 1000px) {
         .desktop {
             display: none;

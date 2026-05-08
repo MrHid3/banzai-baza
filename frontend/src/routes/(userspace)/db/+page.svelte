@@ -28,7 +28,7 @@
             result = result.filter((m) => {
                 return (
                     m.name?.toLowerCase().includes(search.toLowerCase()) ||
-                    m.surnname?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.surname?.toLowerCase().includes(search.toLowerCase()) ||
                     m.email?.toLowerCase().includes(search.toLowerCase()) ||
                     m.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
                     m.comment?.toLowerCase().includes(search.toLowerCase())

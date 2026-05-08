@@ -31,7 +31,7 @@
             result = result.filter((m) => {
                 return (
                     m.member.name?.toLowerCase().includes(search.toLowerCase()) ||
-                    m.member.surnname?.toLowerCase().includes(search.toLowerCase()) ||
+                    m.member.surname?.toLowerCase().includes(search.toLowerCase()) ||
                     m.member.email?.toLowerCase().includes(search.toLowerCase()) ||
                     m.member.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
                     m.member.comment?.toLowerCase().includes(search.toLowerCase())
@@ -288,14 +288,17 @@
     .thead {
         outline: var(--color-border) solid 2px;
         border-radius: 15px;
-        margin-bottom: 10px;
-        height: 45px;
+        /*height: 45px;*/
         display: table-header-group;
+        position: sticky;
+        top: 0;
+        background-color: var(--color-background-primary);
     }
 
     .thead .td {
         text-transform: math-auto;
         display: table-cell;
+        padding: 10px 0;
     }
 
     .tr {

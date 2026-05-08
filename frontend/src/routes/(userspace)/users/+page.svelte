@@ -42,7 +42,7 @@
                 inviting = false;
             }
         }}>
-                <input class="left" name="email" placeholder="trener@email.com" required type="email">
+                <input class="left" name="email" placeholder="trener@email.com" required type="email" autocomplete="off" />
                 <select name="role">
                     <option value="ROLE_ADMIN">Administrator</option>
                     <option value="ROLE_COACH">Trener</option>
@@ -170,12 +170,8 @@
         justify-content: center;
     }
 
-    .error {
-        text-align: center;
-        color: red;
-    }
-
-    #addUser form {
+    #addUser form,
+    #addLocation form{
         display: flex;
         justify-content: center;
         align-items: center;
