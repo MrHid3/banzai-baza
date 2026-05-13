@@ -174,6 +174,7 @@
         <span class="data short">Nr telefonu</span>
         <span class="data short">Lokalizacja</span>
         <span class="data short">Cena/mieś.</span>
+        <span class="data short">Kategorie</span>
         <span class="data">Komentarz</span>
         <span class="data small">
             {#if deleteQueue.length > 0}

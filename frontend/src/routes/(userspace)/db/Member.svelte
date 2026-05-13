@@ -15,7 +15,12 @@
                 shortname: string,
                 id: number
             },
-            comment: string
+            comment: string,
+            categories: [{
+                id: number,
+                name: string,
+                shortname: string,
+            }]
             // payments:
             //     {
             //         month: number,
@@ -33,6 +38,9 @@
 
     const phonePattern = "(?:[+][0-9]{1,3} )?[0-9]{3}[\\- ]?[0-9]{3}[\\- ]?[0-9]{3,6}";
 
+    function deleteCategoryFromUser(userUuid: string, categoryId: number) {
+        return [userUuid, categoryId];
+    }
 </script>
 
 {#if !edit}
@@ -43,6 +51,11 @@
         <span class="data">{member.phoneNumber}</span>
         <span class="data">{member.location ? member.location.shortname : ""}</span>
         <span class="data">{member.monthlyFee}</span>
+        <span class="data">
+            {#each member.categories as category (category.id)}
+                <span class="category">{category.shortname}</span>
+            {/each}
+        </span>
         <span class="data">
             <div class="textarea">
                 <textarea readonly>{member.comment}
@@ -109,7 +122,8 @@
                 <div class="horizontal"><span class="bold">Email</span><span><input type="email"
                                                                                     bind:value={member.email}></span>
                 </div>
-                <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text" required pattern={phonePattern}
+                <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text" required
+                                                                                     pattern={phonePattern}
                                                                                      bind:value={member.phoneNumber}></span>
                 </div>
                 <div class="horizontal"><span class="bold">Lokalizacja</span><span><LocationSelect all={false}
@@ -156,6 +170,21 @@
                 <input type="number" name="monthlyFee" bind:value={member.monthlyFee} min="0" max="1000">
         </span>
         <span class="data">
+            {#each member.categories as category (category.id)}
+               <span>{category.shortname}
+                   <button onclick={() => deleteCategoryFromUser(member.uuid, category.id)}>
+                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path
+                           d="M504.6 148.5C515.9 134.9 514.1 114.7 500.5 103.4C486.9 92.1 466.7 93.9 455.4 107.5L320 270L184.6 107.5C173.3 93.9 153.1 92.1 139.5 103.4C125.9 114.7 124.1 134.9 135.4 148.5L278.3 320L135.4 491.5C124.1 505.1 125.9 525.3 139.5 536.6C153.1 547.9 173.3 546.1 184.6 532.5L320 370L455.4 532.5C466.7 546.1 486.9 547.9 500.5 536.6C514.1 525.3 515.9 505.1 504.6 491.5L361.7 320L504.6 148.5z"/></svg>
+                </button></span>
+            {/each}
+            <select name="category" id="category">
+                <option value="">Wybierz kategorię</option>
+                {#each categories as category}
+                    <option value={category.id}>{category.shortname}</option>
+                {/each}
+            </select>
+        </span>
+        <span class="data">
             <textarea bind:value={member.comment} name="comment"></textarea>
         </span>
         <span class="data">
@@ -171,6 +200,7 @@
         </button>
             </span>
     </form>
+    <form action="?/add" id="groupForm"></form>
 {/if}
 
 <style>
@@ -200,7 +230,7 @@
         height: 100%;
     }
 
-    svg{
+    svg {
         width: 100%;
         display: block;
         align-self: center;
@@ -272,7 +302,7 @@
         display: none;
     }
 
-    svg{
+    svg {
         width: 100%;
     }
 
