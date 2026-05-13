@@ -65,7 +65,10 @@ public class Member {
     @Column(nullable = false)
     private Boolean isActive = true;
 
+    @OneToMany
+    private List<MemberCategory> categories = new ArrayList<MemberCategory>();
+
     @OneToMany(mappedBy = "payer")
     @JsonManagedReference
-    private List<Payment> payments = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<Payment>();
 }

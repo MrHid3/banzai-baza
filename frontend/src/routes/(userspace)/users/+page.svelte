@@ -12,6 +12,8 @@
     let {data, form} = $props();
 
     let users = $derived(data.users);
+    let categories = $derived(data.categories);
+    // let categories = [];
 
     const roles = {
         "ROLE_ADMIN": "Administrator",
@@ -29,12 +31,12 @@
 </script>
 
 <div class="container">
-    <div class="users">
+    <div class="locations">
         <h2>Użytkownicy</h2>
         {#if form?.error && form?.type == "user"}
             <Error code={form?.error}></Error>
         {/if}
-        <div id="addUser">
+        <div class="addLocation">
             <form action="?/invite" method="POST" use:enhance={() => {
             inviting = true;
             return async ({update}) => {
@@ -97,11 +99,11 @@
         {#if form?.error && form?.type == "location"}
             <Error code={form?.error}></Error>
         {/if}
-        <div id="addLocation">
+        <div class="addLocation">
             <form action="?/addLocation" method="POST" use:enhance={(update) => {
                 return async ({update}) => {
                     await update();
-                    await locations.load(true);
+                    await categories.load(true);
         }}}>
                 <input class="left" name="name" placeholder="Szkoła Podstawowa nr 720" required type="text">
                 <input name="shortname" placeholder="SP720" required type="text">
@@ -126,9 +128,50 @@
             {/each}
         </ul>
     </div>
+
+    <div class="locations">
+        <h2>Kategorie</h2>
+        {#if form?.error && form?.type == "category"}
+            <Error code={form?.error}></Error>
+        {/if}
+        <div class="addLocation">
+            <form action="?/addCategory" method="POST" use:enhance>
+                <input class="left" name="name" placeholder="Grupa 1" required type="text">
+                <input name="shortname" placeholder="Gr1" required type="text">
+                <button class="right" type="submit">Dodaj</button>
+            </form>
+        </div>
+
+        <ul>
+            {#each categories as category, index (index)}
+                <li>
+                    <form action="?/deleteCategory" method="POST" use:enhance
+                >
+                        <span>{category.name} ({category.shortname})</span>
+                        <input type="hidden" name="categoryId" value={category.id}>
+                        <button type="submit">Usuń</button>
+                    </form>
+                </li>
+            {/each}
+        </ul>
+    </div>
 </div>
 
 <style>
+    input, select{
+        width: 100% !important;
+    }
+
+    .addLocation button[type='submit'] {
+        width: 100% !important;
+    }
+
+    .addLocation input,
+    .addLocation select,
+    .addLocation button{
+        padding: 10px !important;
+    }
+
     .deleteAccount {
         padding: 5px 20px;
     }
@@ -139,12 +182,12 @@
     }
 
     .right {
-        border-radius: 0 15px 15px 0;
+        border-radius: 0 0 15px 15px;
     }
 
     .left,
     :global(.left) {
-        border-radius: 15px 0 0 15px !important;
+        border-radius: 15px 15px 0 0 !important;
         padding: 5px !important;
     }
 
@@ -165,8 +208,9 @@
     }
 
     #addUser,
-    #addLocation {
+    .addLocation {
         display: flex;
+        flex-direction: column;
         justify-content: center;
     }
 
@@ -186,6 +230,7 @@
     .container {
         display: flex;
         flex-direction: row;
+        justify-content: space-evenly;
     }
 
     .container * {

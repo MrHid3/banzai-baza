@@ -165,5 +165,54 @@ export const actions : Actions = {
                 type: 'user'
             });
         }
-    }
+    },
+    addCategory: async ({request, cookies, locals}) => {
+        const data = await request.formData();
+
+        const res = await serverFetch(
+            '/api/memberCategory',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: data.get("name"),
+                    shortname: data.get("shortname")
+                }),
+            },
+            cookies,
+            locals
+        )
+
+        if (!res.ok) {
+            const body = await res.text();
+            return fail(res.status, {
+                error: body,
+                values: Object.fromEntries(data),
+                type: "category"
+            });
+        }
+    },
+    deleteCategory: async ({request, cookies, locals}) => {
+        const data = await request.formData();
+
+        const res = await serverFetch(
+            `/api/memberCategory/${data.get("categoryId")}`,
+            {
+                method: 'DELETE'
+            },
+            cookies,
+            locals
+        )
+
+        if (!res.ok) {
+            const body = await res.text();
+            return fail(res.status, {
+                error: body,
+                values: Object.fromEntries(data),
+                type: "category"
+            });
+        }
+    },
 }

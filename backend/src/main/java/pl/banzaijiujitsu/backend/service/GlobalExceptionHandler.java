@@ -75,4 +75,9 @@ import pl.banzaijiujitsu.backend.exception.*;
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "NO_ACCESS");
     }
+
+    @ExceptionHandler(MemberCategoryException.class)
+    public ResponseEntity<String> handleMemberCategoryException(MemberCategoryException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "MEMBER_CATEGORY_ERROR");
+    }
 }
