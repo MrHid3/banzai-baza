@@ -85,7 +85,7 @@ export const actions : Actions = {
             return fail(res.status, {
                 error: body,
                 values: Object.fromEntries(data),
-                type: "location"
+                type: "user"
             });
         }
     },
@@ -114,7 +114,7 @@ export const actions : Actions = {
             return fail(res.status, {
                 error: body,
                 values: Object.fromEntries(data),
-                type: "location"
+                type: "user"
             });
         }
     },

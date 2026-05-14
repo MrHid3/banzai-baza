@@ -84,8 +84,8 @@
                             {/each}
                             <form action="?/addLocationToUser" method="POST" use:enhance>
                                 <input type="hidden" value={user.uuid} name="userUuid">
-                                <LocationSelect all={false} class="left"></LocationSelect>
-                                <button type="submit" class="right">Dodaj</button>
+                                <LocationSelect all={false} class="leftleft"></LocationSelect>
+                                <button type="submit" class="rightright">Dodaj</button>
                             </form>
                         {/if}
                     </div>
@@ -183,6 +183,15 @@
 
     .right {
         border-radius: 0 0 15px 15px;
+    }
+
+    .leftleft,
+    :global(.leftleft){
+        border-radius: 15px 0 0 15px !important;
+    }
+
+    .rightright{
+        border-radius: 0 15px 15px 0 !important;
     }
 
     .left,

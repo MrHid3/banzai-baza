@@ -7,9 +7,10 @@
     let {data, form} = $props();
 
     let members = $state(data.members ?? []);
+    let categories = $derived(data.categories)
 
     $effect(() => {
-        members = data.members.sort((a, b) => a.uuid.localeCompare(b.uuid)) ?? [];
+        members = data.members?.sort((a, b) => a.uuid.localeCompare(b.uuid)) ?? [];
     })
 
     let filteredMembers = $state(members);
@@ -89,6 +90,7 @@
             }
         }
     }
+
 
 </script>
 
@@ -209,6 +211,7 @@
             <span class="data short"><input type="number" name="monthlyFee" value="150"></span>
             <span class="data"><textarea name="comment"></textarea></span>
             <span class="data"></span>
+            <span class="data"></span>
             <span class="data small">
                 <button type="submit" class="both" aria-label="Dodaj członka">
                     <svg class="plusSvg" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
@@ -221,14 +224,14 @@
     {/if}
     {#each filteredMembers as member (member.uuid)}
         <Member bind:member={members[members.findIndex(m => m.uuid === member.uuid)]} mobileEdit={mobileEdit}
-                deleteMode={deleteMode}></Member>
+                deleteMode={deleteMode} categories={categories}></Member>
         <!--        <Member bind:member={member}></Member>-->
     {/each}
 </div>
 <div class="mobile">
     {#each filteredMembers as member (member.uuid)}
         <Member bind:member={members[members.findIndex(m => m.uuid === member.uuid)]} mobileEdit={mobileEdit}
-                deleteMode={deleteMode}></Member>
+                deleteMode={deleteMode} categories={categories}></Member>
         <!--        <Member bind:member={member}></Member>-->
     {/each}
 </div>

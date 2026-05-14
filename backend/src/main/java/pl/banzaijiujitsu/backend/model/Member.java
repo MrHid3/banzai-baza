@@ -65,7 +65,7 @@ public class Member {
     @Column(nullable = false)
     private Boolean isActive = true;
 
-    @OneToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<MemberCategory> categories = new ArrayList<MemberCategory>();
 
     @OneToMany(mappedBy = "payer")

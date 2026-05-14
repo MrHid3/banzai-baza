@@ -6,7 +6,8 @@
         ["MEMBER_HAS_LOCATION", "Do lokalizacji są przypisani członkowie"],
         ["USER_NOT_FOUND", "Nie ma takiego użytkownika"],
         ["USER_NOT_ACTIVE", "Użytkownik nie jest aktywny"],
-        ["INVALID_PASSWORD", "Zły email lub hasło"]
+        ["INVALID_PASSWORD", "Zły email lub hasło"],
+        ["LOCATION_ALREADY_EXISTS", "Lokalizacja już istnieje"]
     ])
 
 </script>

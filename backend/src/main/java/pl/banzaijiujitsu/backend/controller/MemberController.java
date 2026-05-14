@@ -14,14 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
-import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
+import pl.banzaijiujitsu.backend.exception.*;
 import pl.banzaijiujitsu.backend.model.*;
-import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
-import pl.banzaijiujitsu.backend.service.AppUserService;
-import pl.banzaijiujitsu.backend.service.JwtService;
-import pl.banzaijiujitsu.backend.service.LocationService;
-import pl.banzaijiujitsu.backend.service.MemberService;
+import pl.banzaijiujitsu.backend.service.*;
 
 import java.util.*;
 
@@ -40,6 +35,8 @@ public class MemberController {
 
     @Autowired
     private LocationService locationService;
+    @Autowired
+    private MemberCategoryService memberCategoryService;
 
     @PostMapping
     public ResponseEntity<String> addMember(@RequestBody CreateMemberRequest memberRequest, HttpServletResponse response) {
@@ -196,6 +193,23 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{uuid}/category")
+    public ResponseEntity<?> addCategory(@PathVariable String uuid, @RequestBody AddCategoryRequest req) {
+        Member member = memberService.findByUuid(UUID.fromString(uuid)).orElseThrow(() -> new MemberException("MEMBER_NOT_FOUND"));
+        MemberCategory cat = memberCategoryService.findById(req.id).orElseThrow(() -> new MemberCategoryException("MEMBER_CATEGORY_NOT_FOUND"));
+        memberService.addCategory(member, cat);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{uuid}/category/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable String uuid, @PathVariable Long id) {
+        Member member = memberService.findByUuid(UUID.fromString(uuid)).orElseThrow(() -> new MemberException("MEMBER_NOT_FOUND"));
+        MemberCategory cat = memberCategoryService.findById(id).orElseThrow(() -> new MemberCategoryException("MEMBER_CATEGORY_NOT_FOUND"));
+        memberService.removeCategory(member, cat);
+        return ResponseEntity.ok().build();
+    }
+
     public record CreateMemberRequest(
             @NotNull Long locationId,
             @Email String email,
@@ -222,4 +236,8 @@ public class MemberController {
             @NotNull String uuid
     ) {
     }
+
+    public record AddCategoryRequest(
+            @NotNull Long id
+    ){}
 }

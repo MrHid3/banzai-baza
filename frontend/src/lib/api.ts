@@ -29,7 +29,7 @@ export async function serverFetch(
 
 		if (!refreshRes.ok) redirect(303, '/login');
 
-		const { accessToken } = await refreshRes.json();
+		const accessToken = await refreshRes.text();
 		cookies.set('accessToken', accessToken, {
 			path: '/',
 			httpOnly: true,

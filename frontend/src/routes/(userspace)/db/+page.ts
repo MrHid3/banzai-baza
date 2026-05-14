@@ -4,10 +4,13 @@ import {PUBLIC_BACKEND_2} from "$env/static/public";
 export const load: PageLoad = async (event) => {
 
     const res1 = await event.fetch(`/api/member`, {method: "GET"})
+    const categories = await event.fetch("/api/memberCategory")
 
-    if(res1.ok){
-        const res1json = await res1.json();
-        return { members: res1json };
+    if(res1.ok && categories.ok){
+        return {
+            members: await res1.json(),
+            categories: await categories.json(),
+        };
     } else {
         return { error : true };
     }

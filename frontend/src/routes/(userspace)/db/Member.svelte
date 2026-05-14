@@ -1,8 +1,9 @@
 <script lang="ts">
-    import {enhance} from "$app/forms";
+    import {applyAction, enhance} from "$app/forms";
     import LocationSelect from "$lib/LocationSelect.svelte";
+    import {invalidate} from "$app/navigation";
 
-    let {member = $bindable(), mobileEdit, deleteMode}: {
+    let {member = $bindable(), mobileEdit, deleteMode, categories}: {
         member: {
             uuid: string,
             name: string,
@@ -31,16 +32,50 @@
             //     }[]
         },
         mobileEdit: boolean,
-        deleteMode: boolean
+        deleteMode: boolean,
+        categories: [{
+            id: number,
+            name: string,
+            shortname: string
+        }]
     } = $props();
 
     let edit = $state(false);
 
     const phonePattern = "(?:[+][0-9]{1,3} )?[0-9]{3}[\\- ]?[0-9]{3}[\\- ]?[0-9]{3,6}";
 
-    function deleteCategoryFromUser(userUuid: string, categoryId: number) {
-        return [userUuid, categoryId];
+    async function deleteCategoryFromUser(memberUuid: string, categoryId: number) {
+        const form = new FormData();
+        form.append("memberUuid", memberUuid);
+        form.append("categoryId", categoryId.toString());
+
+        const response = await fetch("?/deleteCategoryFromUser", {
+            method: "POST",
+            body: form
+        })
+
+        const result = await response.json();
+        await applyAction(result)
+        await invalidate("/api/member")
     }
+
+
+    async function addCategoryToUser(memberUuid: string, categoryId: number) {
+        const form = new FormData();
+        form.append("memberUuid", memberUuid);
+        form.append("categoryId", categoryId.toString());
+
+        const response = await fetch("?/addCategoryToUser", {
+            method: "POST",
+            body: form
+        })
+
+        const result = await response.json();
+        await applyAction(result)
+        await invalidate("/api/member")
+    }
+
+    let selectedCategoryId = categories[0]?.id ?? -1;
 </script>
 
 {#if !edit}
@@ -171,18 +206,20 @@
         </span>
         <span class="data">
             {#each member.categories as category (category.id)}
-               <span>{category.shortname}
-                   <button onclick={() => deleteCategoryFromUser(member.uuid, category.id)}>
+               <span class="category no-padding">{category.shortname}
+                   <button onclick={() => deleteCategoryFromUser(member.uuid, category.id)} type="button">
                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path
                            d="M504.6 148.5C515.9 134.9 514.1 114.7 500.5 103.4C486.9 92.1 466.7 93.9 455.4 107.5L320 270L184.6 107.5C173.3 93.9 153.1 92.1 139.5 103.4C125.9 114.7 124.1 134.9 135.4 148.5L278.3 320L135.4 491.5C124.1 505.1 125.9 525.3 139.5 536.6C153.1 547.9 173.3 546.1 184.6 532.5L320 370L455.4 532.5C466.7 546.1 486.9 547.9 500.5 536.6C514.1 525.3 515.9 505.1 504.6 491.5L361.7 320L504.6 148.5z"/></svg>
                 </button></span>
             {/each}
-            <select name="category" id="category">
-                <option value="">Wybierz kategorię</option>
+            <span class="category no-">
+            <select name="category" id="category" bind:value={selectedCategoryId}>
                 {#each categories as category}
                     <option value={category.id}>{category.shortname}</option>
                 {/each}
             </select>
+            <button onclick={() => addCategoryToUser(member.uuid, selectedCategoryId)} type="button">+</button>
+            </span>
         </span>
         <span class="data">
             <textarea bind:value={member.comment} name="comment"></textarea>
@@ -200,10 +237,40 @@
         </button>
             </span>
     </form>
-    <form action="?/add" id="groupForm"></form>
 {/if}
 
 <style>
+
+    .category {
+        display: inline-block;
+        background-color: var(--color-background-secondary);
+        font-size: 0.7rem;
+        line-height: 15px;
+        height: fit-content;
+        align-content: center;
+        width: fit-content;
+        padding: 5px !important;
+        border-radius: 10px !important;
+        vertical-align: middle;
+        margin: 5px;
+    }
+    .no-padding{
+        padding: 0 5px !important;
+    }
+
+    .category button {
+        height: min-content;
+        width: min-content;
+    }
+
+    .category button svg,
+    .category button path,
+    .category button{
+        width: 10px;
+        height: 100%;
+        vertical-align: middle;
+    }
+
     .row {
         margin: 10px 0;
         display: table-row;

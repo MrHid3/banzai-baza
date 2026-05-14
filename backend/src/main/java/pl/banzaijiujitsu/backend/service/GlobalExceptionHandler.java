@@ -80,4 +80,9 @@ import pl.banzaijiujitsu.backend.exception.*;
     public ResponseEntity<String> handleMemberCategoryException(MemberCategoryException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "MEMBER_CATEGORY_ERROR");
     }
+
+    @ExceptionHandler(MemberException.class)
+    public ResponseEntity<String> handleMemberException(MemberException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "MEMBER_ERROR");
+    }
 }

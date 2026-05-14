@@ -1,12 +1,11 @@
 package pl.banzaijiujitsu.backend.service;
 
+import jdk.jfr.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
-import pl.banzaijiujitsu.backend.model.Location;
-import pl.banzaijiujitsu.backend.model.Member;
-import pl.banzaijiujitsu.backend.model.Payment;
-import pl.banzaijiujitsu.backend.model.YearMonthDateAttributeConverter;
+import org.springframework.transaction.annotation.Transactional;
+import pl.banzaijiujitsu.backend.model.*;
 import pl.banzaijiujitsu.backend.repository.MemberRepository;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
 
@@ -87,6 +86,26 @@ public class MemberService {
                         paymentsByMember.getOrDefault(m.getUuid(), List.of())
                 ))
                 .toList();
+    }
+
+    @Transactional
+    public void addCategory(Member member, MemberCategory category) {
+        List<MemberCategory> categories = member.getCategories();
+        if(!categories.contains(category)){
+            categories.add(category);
+            member.setCategories(categories);
+            this.save(member);
+        }
+    }
+
+    @Transactional
+    public void removeCategory(Member member, MemberCategory category) {
+        List<MemberCategory> categories = member.getCategories();
+        if(categories.contains(category)){
+            categories.remove(category);
+            member.setCategories(categories);
+            this.save(member);
+        }
     }
 
     public record MemberPayments(Member member, List<Payment> payments) {}
