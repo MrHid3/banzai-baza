@@ -17,14 +17,12 @@ import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
 import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
-import pl.banzaijiujitsu.backend.repository.AppUserRepository;
 import pl.banzaijiujitsu.backend.service.AppUserService;
 import pl.banzaijiujitsu.backend.service.LocationService;
 import pl.banzaijiujitsu.backend.service.MemberService;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/location")
@@ -86,13 +84,13 @@ public class LocationController {
         Location location = locationService.findByIdAndIsActive(locationId).orElseThrow(InvalidLocationException::new);
         List<Member> member = memberService.findByLocation(location);
 
-        if(!member.isEmpty()) {
+        if (!member.isEmpty()) {
             throw new InvalidLocationException("MEMBER_HAS_LOCATION");
         }
 
         List<AppUser> appUsers = appUserService.findByLocationsContains(location);
 
-        for( AppUser appUser : appUsers) {
+        for (AppUser appUser : appUsers) {
             appUserService.deleteLocation(appUser, location);
         }
 
@@ -104,9 +102,11 @@ public class LocationController {
     public record LocationCreationRequest(
             @NotNull String name,
             @NotNull String shortname
-    ){}
+    ) {
+    }
 
     public record DeleteLocationRequest(
             @NotNull Long locationId
-    ){}
+    ) {
+    }
 }

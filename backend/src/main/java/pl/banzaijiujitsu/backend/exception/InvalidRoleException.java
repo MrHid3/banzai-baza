@@ -5,5 +5,8 @@ public class InvalidRoleException extends RuntimeException {
         super(message);
     }
 
-    public InvalidRoleException(){};
+    public InvalidRoleException() {
+    }
+
+    ;
 }

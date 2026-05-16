@@ -38,7 +38,7 @@ public class AppUserRegistrationController {
 
     @PostMapping("/invite")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> invite (@RequestBody @Valid InviteRequest inviteRequest){
+    public ResponseEntity<?> invite(@RequestBody @Valid InviteRequest inviteRequest) {
         AppUser appUser = appUserService.createPending(inviteRequest.email(), roleService.findByName(inviteRequest.role()).orElseThrow(
                 InvalidRoleException::new
         ));
@@ -64,12 +64,15 @@ public class AppUserRegistrationController {
     public record InviteRequest(
             @NotBlank @Email String email,
             @NotNull String role
-    ){}
+    ) {
+    }
 
     public record ConfirmRequest(
             @NotBlank String token,
-            @NotBlank @Size(min=8) String password
-    ){}
+            @NotBlank @Size(min = 8) String password
+    ) {
+    }
 
-    public record ValidateResponse(String email){}
+    public record ValidateResponse(String email) {
+    }
 }

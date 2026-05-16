@@ -1,8 +1,8 @@
 <script lang="ts">
 
-    let { code }  : {code: string} = $props();
+    let {code}: { code: string } = $props();
 
-    const map : Map<string, string> = new Map([
+    const map: Map<string, string> = new Map([
         ["MEMBER_HAS_LOCATION", "Do lokalizacji są przypisani członkowie"],
         ["USER_NOT_FOUND", "Nie ma takiego użytkownika"],
         ["USER_NOT_ACTIVE", "Użytkownik nie jest aktywny"],
@@ -17,7 +17,7 @@
 </div>
 
 <style>
-    .error{
+    .error {
         color: red;
         text-align: center;
     }

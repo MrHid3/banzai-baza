@@ -1,5 +1,5 @@
 <script>
-    let { showModal = $bindable(), header, children} = $props();
+    let {showModal = $bindable(), header, children} = $props();
 
     let dialog = $state(); // HTMLDialogElement
 
@@ -18,9 +18,9 @@
         <div class="header">
             {@render header?.()}
         </div>
-        <hr />
+        <hr/>
         {@render children?.()}
-        <hr />
+        <hr/>
         <!-- svelte-ignore a11y_autofocus -->
     </div>
     <div class="buttons">
@@ -45,33 +45,40 @@
         height: fit-content;
         color: var(--color-text);
     }
-    div.buttons{
+
+    div.buttons {
         display: flex;
         flex-direction: row;
     }
-    div.header{
+
+    div.header {
         /*border-color: var(--color-border);*/
         /*border-width: 0 0 2px 0;*/
         /*border-style: solid;*/
         margin: 1em 0;
         width: 100%;
     }
-    .buttons button{
+
+    .buttons button {
         padding: 0.8em;
         margin: 0.2em;
         background-color: var(--background-special);
         border: none;
         border-radius: 0.2em;
     }
+
     dialog::backdrop {
         background: rgba(0, 0, 0, 0.3);
     }
+
     dialog > div {
         padding: 1em;
     }
+
     dialog[open] {
         animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+
     @keyframes zoom {
         from {
             transform: scale(0.95) translate(-50%, -50%);
@@ -80,9 +87,11 @@
             transform: scale(1) translate(-50%, -50%);
         }
     }
+
     dialog[open]::backdrop {
         animation: fade 0.2s ease-out;
     }
+
     @keyframes fade {
         from {
             opacity: 0;
@@ -91,6 +100,7 @@
             opacity: 1;
         }
     }
+
     button {
         display: block;
     }

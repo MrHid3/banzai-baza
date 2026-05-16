@@ -17,7 +17,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     final private EncodingService encodingService;
 
     @Autowired
-    public CustomAuthenticationProvider(AppUserDetailsService appUserDetailsService, EncodingService encodingService){
+    public CustomAuthenticationProvider(AppUserDetailsService appUserDetailsService, EncodingService encodingService) {
         this.appUserDetailsService = appUserDetailsService;
         this.encodingService = encodingService;
     }
@@ -30,11 +30,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails userDetails = appUserDetailsService.loadUserByEmail(email);
 
-        if(userDetails == null){
+        if (userDetails == null) {
             throw new InvalidEmailException("EMAIL_NOT_FOUND");
         }
 
-        if(!encodingService.passwordMatches(password, userDetails.getPassword())){
+        if (!encodingService.passwordMatches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("INVALID_PASSWORD");
         }
 

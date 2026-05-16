@@ -1,6 +1,6 @@
 UPDATE member
-    SET phone_number = '000 000 000'
-    WHERE phone_number IS NULL;
+SET phone_number = '000 000 000'
+WHERE phone_number IS NULL;
 
 ALTER TABLE member
     ALTER COLUMN location_id SET NOT NULL;

@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class EncodingService {
 
-    private final PasswordEncoder passwordEncoder(){
+    private final PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    public String encodePassword(String password){
+    public String encodePassword(String password) {
         return this.passwordEncoder().encode(password);
     }
 
-    public boolean passwordMatches(String rawPassword, String encodedPassword){
+    public boolean passwordMatches(String rawPassword, String encodedPassword) {
         return this.passwordEncoder().matches(rawPassword, encodedPassword);
     }
 }

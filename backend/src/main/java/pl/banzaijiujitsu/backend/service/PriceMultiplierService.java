@@ -16,7 +16,7 @@ public class PriceMultiplierService {
     @Autowired
     private PriceMultiplayerRepository priceMultiplayerRepository;
 
-    public List<PriceMultiplier> findByLocationIsIn(List <Location> locations){
+    public List<PriceMultiplier> findByLocationIsIn(List<Location> locations) {
         return priceMultiplayerRepository.findByLocationIsInAndMonthGreaterThanEqualAndMonthLessThanEqual(
                 locations,
                 LocalDate.now().withMonth(1).withDayOfMonth(11),
@@ -24,11 +24,11 @@ public class PriceMultiplierService {
         );
     }
 
-    public Optional<PriceMultiplier> findByLocationAndMonth(Location location, LocalDate month){
+    public Optional<PriceMultiplier> findByLocationAndMonth(Location location, LocalDate month) {
         return priceMultiplayerRepository.findByLocationAndMonth(location, month);
     }
 
-    public void save(PriceMultiplier pm){
+    public void save(PriceMultiplier pm) {
         priceMultiplayerRepository.save(pm);
     }
 }

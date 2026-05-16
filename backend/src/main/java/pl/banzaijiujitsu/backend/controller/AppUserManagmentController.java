@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/appUser")
-public class AppUserManagmentController{
+public class AppUserManagmentController {
 
     @Autowired
     private AppUserService appUserService;
@@ -81,7 +81,7 @@ public class AppUserManagmentController{
     @PostMapping("/status")
     @Transactional
     public ResponseEntity<?> addAppUser(@RequestBody ChangeUserStatusRequest req) throws InvalidPasswordException {
-        if(req.status == AppUser.AppUserStatus.PENDING) {
+        if (req.status == AppUser.AppUserStatus.PENDING) {
             throw new InvalidStatusException();
         }
 
@@ -89,7 +89,7 @@ public class AppUserManagmentController{
                 InvalidUuidException::new
         );
 
-        if(appUser.getStatus() == AppUser.AppUserStatus.PENDING) {
+        if (appUser.getStatus() == AppUser.AppUserStatus.PENDING) {
             throw new InvalidStatusException();
         }
 
@@ -97,16 +97,18 @@ public class AppUserManagmentController{
 
 //        appUserService.save(appUser);
 
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     public record LocationRequest(
             @NotNull String userUuid,
             @NotNull Long locationId
-    ){}
+    ) {
+    }
 
     public record ChangeUserStatusRequest(
             @NotNull String userUuid,
             @NotNull AppUser.AppUserStatus status
-    ){}
+    ) {
+    }
 }

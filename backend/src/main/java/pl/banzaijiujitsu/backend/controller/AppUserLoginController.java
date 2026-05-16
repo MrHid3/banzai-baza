@@ -13,8 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import pl.banzaijiujitsu.backend.exception.*;
-import pl.banzaijiujitsu.backend.model.*;
+import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
+import pl.banzaijiujitsu.backend.exception.InvalidRefreshTokenException;
+import pl.banzaijiujitsu.backend.exception.UserNotActiveException;
+import pl.banzaijiujitsu.backend.model.AppUser;
+import pl.banzaijiujitsu.backend.model.RefreshToken;
+import pl.banzaijiujitsu.backend.model.VerificationToken;
 import pl.banzaijiujitsu.backend.repository.RoleRepository;
 import pl.banzaijiujitsu.backend.service.*;
 
@@ -53,7 +57,7 @@ public class AppUserLoginController {
         AppUser appUser = appUserService.findByEmail(loginRequest.email())
                 .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
 
-        if(appUser.getStatus() != AppUser.AppUserStatus.ACTIVE){
+        if (appUser.getStatus() != AppUser.AppUserStatus.ACTIVE) {
             throw new UserNotActiveException();
         }
 
@@ -75,7 +79,7 @@ public class AppUserLoginController {
 
         String token = refreshToken;
 
-        if(token == null){
+        if (token == null) {
             token = bodyRefreshToken.refreshToken();
         }
 
@@ -111,7 +115,7 @@ public class AppUserLoginController {
     }
 
     @PostMapping("/reset-password/request")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetRequest req){
+    public ResponseEntity<String> resetPassword(@RequestBody ResetRequest req) {
 
         AppUser appUser = appUserService.findByEmail(req.email).orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
 
@@ -137,13 +141,16 @@ public class AppUserLoginController {
     public record LoginRequest(
             @NotNull @Email String email,
             @NotNull String password
-    ) { }
+    ) {
+    }
 
     public record RefreshRequest(
             String refreshToken
-    ){}
+    ) {
+    }
 
     public record ResetRequest(
             @NotNull @Email String email
-    ){}
+    ) {
+    }
 }

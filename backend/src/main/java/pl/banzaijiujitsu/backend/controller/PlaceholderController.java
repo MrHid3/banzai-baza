@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlaceholderController {
 
     @GetMapping("/notsecure")
-    public String notsecure(){
+    public String notsecure() {
         return "not secure";
     }
 

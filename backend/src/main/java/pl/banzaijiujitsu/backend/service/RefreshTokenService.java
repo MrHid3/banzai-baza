@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.RefreshToken;
 import pl.banzaijiujitsu.backend.repository.RefreshTokenRepository;
-import pl.banzaijiujitsu.backend.model.AppUser;
 
 import java.time.Instant;
 import java.util.Optional;

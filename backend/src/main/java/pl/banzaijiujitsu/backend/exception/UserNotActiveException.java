@@ -5,5 +5,8 @@ public class UserNotActiveException extends RuntimeException {
         super(message);
     }
 
-    public UserNotActiveException(){};
+    public UserNotActiveException() {
+    }
+
+    ;
 }

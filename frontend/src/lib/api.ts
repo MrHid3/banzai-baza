@@ -1,12 +1,12 @@
-import { redirect } from '@sveltejs/kit';
 import type { Cookies } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { PUBLIC_BACKEND_2 } from '$env/static/public';
 
 export async function serverFetch(
 	url: string,
 	options: RequestInit,
 	cookies: Cookies,
-	locals: App.Locals,
+	locals: App.Locals
 ): Promise<Response> {
 	const token = locals.accessToken;
 

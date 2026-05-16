@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;

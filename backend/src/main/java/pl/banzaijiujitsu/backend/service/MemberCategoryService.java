@@ -41,7 +41,7 @@ public class MemberCategoryService {
     }
 
     @Transactional
-    public MemberCategory create(String name, String shortname){
+    public MemberCategory create(String name, String shortname) {
         MemberCategory memberCategory = new MemberCategory();
         memberCategory.setName(name);
         memberCategory.setShortname(shortname);
@@ -52,5 +52,9 @@ public class MemberCategoryService {
     @Transactional
     public void delete(MemberCategory memberCategory) {
         this.memberCategoryRepository.delete(memberCategory);
+    }
+
+    public List<MemberCategory> findAllByIds(List<Long> ids){
+        return memberCategoryRepository.findAllByIdIsIn(ids);
     }
 }

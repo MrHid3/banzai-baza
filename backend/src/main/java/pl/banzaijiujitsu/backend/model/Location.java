@@ -10,9 +10,10 @@ import lombok.Setter;
 @Table
 public class Location {
 
-    public Location(){}
+    public Location() {
+    }
 
-    public Location(String name, String shortname){
+    public Location(String name, String shortname) {
         this.name = name;
         this.shortname = shortname;
     }

@@ -23,7 +23,7 @@ public class VerificationTokenService {
     private int expiryHours;
 
     @Transactional
-    public VerificationToken createToken(AppUser user, VerificationToken.TokenType type){
+    public VerificationToken createToken(AppUser user, VerificationToken.TokenType type) {
 
         verificationTokenRepository.deleteByAppUserAndType(user, type);
 
@@ -35,23 +35,23 @@ public class VerificationTokenService {
         return verificationTokenRepository.save(token);
     }
 
-    public VerificationToken validateToken(String raw, VerificationToken.TokenType expectedType){
+    public VerificationToken validateToken(String raw, VerificationToken.TokenType expectedType) {
         VerificationToken token = verificationTokenRepository.findByToken(raw)
                 .orElseThrow(InvalidTokenException::new);
 
-        if(token.getType() != expectedType){
+        if (token.getType() != expectedType) {
             throw new InvalidTokenException("INVALID_TOKEN_TYPE");
         }
-        if (token.getUsed()){
+        if (token.getUsed()) {
             throw new InvalidTokenException("TOKEN_ALREADY_USED");
         }
-        if(token.getExpiresAt().isBefore(LocalDateTime.now())){
+        if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
             throw new InvalidTokenException("TOKEN_EXPIRED");
         }
         return token;
     }
 
-    public void consumeToken(VerificationToken token){
+    public void consumeToken(VerificationToken token) {
         token.setUsed(true);
         verificationTokenRepository.save(token);
     }

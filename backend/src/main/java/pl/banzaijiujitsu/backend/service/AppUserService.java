@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
+import pl.banzaijiujitsu.backend.model.AppUser;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Role;
 import pl.banzaijiujitsu.backend.repository.AppUserRepository;
-import pl.banzaijiujitsu.backend.model.AppUser;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AppUserService {
@@ -42,7 +45,7 @@ public class AppUserService {
     }
 
     public AppUser save(AppUser appUser) throws InvalidEmailException, InvalidPasswordException {
-        if(!appUserRepository.findByUsername(appUser.getEmail()).isEmpty()){
+        if (!appUserRepository.findByUsername(appUser.getEmail()).isEmpty()) {
             throw new InvalidEmailException("Email already exists");
         }
         return appUserRepository.save(appUser);
@@ -50,7 +53,7 @@ public class AppUserService {
 
     @Transactional
     public AppUser createPending(String email, Role role) {
-        if (appUserRepository.existsByEmail(email)){
+        if (appUserRepository.existsByEmail(email)) {
             throw new InvalidEmailException("Email already in use");
         }
         AppUser appUser = new AppUser();
@@ -79,8 +82,8 @@ public class AppUserService {
     }
 
     @Transactional
-    public void addLocation(AppUser appUser, Location location){
-        if(appUser.getLocations().contains(location)){
+    public void addLocation(AppUser appUser, Location location) {
+        if (appUser.getLocations().contains(location)) {
             throw new InvalidLocationException("LOCATION_ALREADY_EXISTS");
         }
 
@@ -93,8 +96,8 @@ public class AppUserService {
     }
 
     @Transactional
-    public void deleteLocation(AppUser appUser, Location location){
-        if(!appUser.getLocations().contains(location)){
+    public void deleteLocation(AppUser appUser, Location location) {
+        if (!appUser.getLocations().contains(location)) {
             throw new InvalidLocationException("LOCATION_NOT_EXISTS");
         }
 

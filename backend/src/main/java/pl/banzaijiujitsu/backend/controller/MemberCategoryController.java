@@ -47,5 +47,6 @@ public class MemberCategoryController {
     public record CreateMemberCategoryRequest(
             @NotNull String name,
             @NotNull String shortname
-    ){}
+    ) {
+    }
 }

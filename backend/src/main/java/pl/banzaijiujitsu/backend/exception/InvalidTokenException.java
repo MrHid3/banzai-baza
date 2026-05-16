@@ -5,5 +5,8 @@ public class InvalidTokenException extends RuntimeException {
         super(message);
     }
 
-    public InvalidTokenException(){};
+    public InvalidTokenException() {
+    }
+
+    ;
 }

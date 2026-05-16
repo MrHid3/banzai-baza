@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +14,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.*;
-import pl.banzaijiujitsu.backend.model.*;
+import pl.banzaijiujitsu.backend.model.Location;
+import pl.banzaijiujitsu.backend.model.Member;
+import pl.banzaijiujitsu.backend.model.MemberCategory;
 import pl.banzaijiujitsu.backend.service.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/member")
@@ -59,6 +63,7 @@ public class MemberController {
                 throw new InvalidLocationException();
             }
 
+            List<MemberCategory> memberCategories = memberCategoryService.findAllByIds(memberRequest.categories() == null ? Collections.emptyList() : memberRequest.categories());
             Member member = new Member(memberRequest.email());
             member.setName(memberRequest.name());
             member.setSurname(memberRequest.surname());
@@ -66,6 +71,7 @@ public class MemberController {
             member.setComment(memberRequest.comment());
             member.setMonthlyFee(memberRequest.monthlyFee());
             member.setPhoneNumber(memberRequest.phoneNumber());
+            member.setCategories(memberCategories);
 
             memberService.save(member);
         } catch (InvalidLocationException | InvalidEmailException e) {
@@ -160,7 +166,7 @@ public class MemberController {
 
     @PutMapping("/{uuid}")
     @Transactional
-        public ResponseEntity<?> updateMember(@PathVariable String uuid, @RequestBody UpdateMemberRequest memberRequest) {
+    public ResponseEntity<?> updateMember(@PathVariable String uuid, @RequestBody UpdateMemberRequest req) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null) {
@@ -177,36 +183,14 @@ public class MemberController {
                     .orElseThrow(InvalidUuidException::new)
                     .getLocations();
         }
-        if (allowed_locations.contains(member.getLocation())) {
-            member.setName(memberRequest.name());
-            member.setSurname(memberRequest.surname());
-            member.setEmail(memberRequest.email());
-            member.setPhoneNumber(memberRequest.phoneNumber());
-            member.setComment(memberRequest.comment());
-            member.setLocation(locationService.findByIdAndIsActive(memberRequest.locationId()).orElseThrow(InvalidLocationException::new));
-            member.setMonthlyFee(memberRequest.monthlyFee());
-            memberService.save(member);
-        }else{
-            throw new InvalidLocationException("NO_ACCESS_TO_LOCATION");
+        Location requestLocation = locationService.findById(req.locationId).orElseThrow(() -> new LocationException("LOCATION_NOT_FOUND"));
+        if(!allowed_locations.contains(requestLocation)) {
+            throw new LocationException("NO_ACCESS_TO_LOCATION");
         }
+        List<MemberCategory> memberCategories = memberCategoryService.findAllByIds(req.categories() == null ? Collections.emptyList() : req.categories());
 
-        return ResponseEntity.ok().build();
-    }
+        memberService.update(member, req.name, req.surname, req.email, requestLocation, req.monthlyFee, req.phoneNumber, memberCategories, req.comment);
 
-    @PostMapping("/{uuid}/category")
-    public ResponseEntity<?> addCategory(@PathVariable String uuid, @RequestBody AddCategoryRequest req) {
-        Member member = memberService.findByUuid(UUID.fromString(uuid)).orElseThrow(() -> new MemberException("MEMBER_NOT_FOUND"));
-        MemberCategory cat = memberCategoryService.findById(req.id).orElseThrow(() -> new MemberCategoryException("MEMBER_CATEGORY_NOT_FOUND"));
-        memberService.addCategory(member, cat);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{uuid}/category/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable String uuid, @PathVariable Long id) {
-        Member member = memberService.findByUuid(UUID.fromString(uuid)).orElseThrow(() -> new MemberException("MEMBER_NOT_FOUND"));
-        MemberCategory cat = memberCategoryService.findById(id).orElseThrow(() -> new MemberCategoryException("MEMBER_CATEGORY_NOT_FOUND"));
-        memberService.removeCategory(member, cat);
         return ResponseEntity.ok().build();
     }
 
@@ -217,7 +201,8 @@ public class MemberController {
             String surname,
             String comment,
             @NotNull Integer monthlyFee,
-            @NotNull @NotEmpty String phoneNumber
+            @NotNull @NotEmpty String phoneNumber,
+            List<Long> categories
     ) {
     }
 
@@ -228,7 +213,8 @@ public class MemberController {
             String surname,
             String comment,
             @NotNull Integer monthlyFee,
-            @NotNull @NotEmpty String phoneNumber
+            @NotNull @NotEmpty String phoneNumber,
+            List<Long> categories
     ) {
     }
 
@@ -236,8 +222,4 @@ public class MemberController {
             @NotNull String uuid
     ) {
     }
-
-    public record AddCategoryRequest(
-            @NotNull Long id
-    ){}
 }

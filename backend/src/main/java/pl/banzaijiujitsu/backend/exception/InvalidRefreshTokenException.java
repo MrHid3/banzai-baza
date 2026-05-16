@@ -5,5 +5,6 @@ public class InvalidRefreshTokenException extends RuntimeException {
         super(message);
     }
 
-    public InvalidRefreshTokenException(){}
+    public InvalidRefreshTokenException() {
+    }
 }

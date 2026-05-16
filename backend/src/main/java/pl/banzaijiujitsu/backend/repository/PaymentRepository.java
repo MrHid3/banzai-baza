@@ -9,8 +9,6 @@ import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

@@ -5,5 +5,6 @@ public class InvalidStatusException extends RuntimeException {
         super(message);
     }
 
-    public InvalidStatusException(){}
+    public InvalidStatusException() {
+    }
 }

@@ -5,11 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
 import pl.banzaijiujitsu.backend.service.EncodingService;
-import pl.banzaijiujitsu.backend.service.RoleService;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -23,7 +21,8 @@ import java.util.regex.Pattern;
 @Table
 public class AppUser {
 
-    public AppUser(){}
+    public AppUser() {
+    }
 
     public AppUser(String email, String password, EncodingService encodingService) throws InvalidEmailException, InvalidPasswordException {
         this.setEmail(email);
@@ -36,27 +35,27 @@ public class AppUser {
         this.setRole(role);
     }
 
-    public enum AppUserStatus{
+    public enum AppUserStatus {
         PENDING, ACTIVE, DISABLED
     }
 
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return this.status == AppUserStatus.ACTIVE;
     }
 
     public void setPassword(String password, EncodingService encodingService) throws InvalidPasswordException {
-            Pattern pattern = Pattern.compile("^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*?[?!\\\\|'\";:+=-_()*&^%$#@<>,.`~\\[\\]{}/]).{8,})\\S$");
+        Pattern pattern = Pattern.compile("^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*?[?!\\\\|'\";:+=-_()*&^%$#@<>,.`~\\[\\]{}/]).{8,})\\S$");
         Matcher matcher = pattern.matcher(password);
-        if(!matcher.find()){
+        if (!matcher.find()) {
             throw new InvalidPasswordException("Password is too easy");
         }
         this.password = encodingService.encodePassword(password);
     }
 
     public void setEmail(String email) throws InvalidEmailException {
-        Pattern pattern  = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
+        Pattern pattern = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
         Matcher matcher = pattern.matcher(email);
-        if(!matcher.find()){
+        if (!matcher.find()) {
             throw new InvalidEmailException();
         }
         this.email = email;
@@ -77,7 +76,7 @@ public class AppUser {
     @Setter(AccessLevel.NONE)
     private String password;
 
-    @ManyToOne(fetch =  FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
 
     @ManyToMany

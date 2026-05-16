@@ -5,5 +5,6 @@ public class InvalidUuidException extends RuntimeException {
         super(message);
     }
 
-    public InvalidUuidException() {}
+    public InvalidUuidException() {
+    }
 }

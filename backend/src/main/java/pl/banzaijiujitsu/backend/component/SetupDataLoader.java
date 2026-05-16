@@ -8,7 +8,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import pl.banzaijiujitsu.backend.exception.InvalidPasswordException;
-import pl.banzaijiujitsu.backend.model.*;
+import pl.banzaijiujitsu.backend.model.AppUser;
+import pl.banzaijiujitsu.backend.model.Location;
+import pl.banzaijiujitsu.backend.model.Privilege;
+import pl.banzaijiujitsu.backend.model.Role;
 import pl.banzaijiujitsu.backend.service.*;
 
 import java.util.Arrays;
@@ -44,7 +47,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
-        if (alreadySetup){
+        if (alreadySetup) {
             return;
         }
 
@@ -75,7 +78,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (optionalPrivilege.isEmpty()) {
             privilege = new Privilege(name);
             privilegeService.save(privilege);
-        }else{
+        } else {
             privilege = optionalPrivilege.get();
         }
         return privilege;
@@ -90,7 +93,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             role = new Role(name);
             role.setPrivileges(privileges);
             roleService.save(role);
-        }else{
+        } else {
             role = optionalRole.get();
         }
         return role;
@@ -108,7 +111,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 //                appUser.setUuid(uuid);
 //            }
             appUserService.save(appUser);
-        }else{
+        } else {
             appUser = optionalAppUser.get();
         }
 
@@ -120,10 +123,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Location location;
         Optional<Location> optionalLocaltion = locationService.findByName(name);
 
-        if(optionalLocaltion.isEmpty()){
+        if (optionalLocaltion.isEmpty()) {
             location = new Location(name, shortname);
             locationService.save(location);
-        }else{
+        } else {
             location = optionalLocaltion.get();
         }
 

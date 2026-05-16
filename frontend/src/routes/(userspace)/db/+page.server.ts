@@ -23,6 +23,7 @@ export const actions: Actions = {
 					phoneNumber: data.get('phoneNumber'),
 					monthlyFee: Number(data.get('monthlyFee')),
 					locationId: Number(data.get('locationId')),
+					categories: data.getAll('categories').map((category) => parseInt(category)),
 					comment: data.get('comment')
 				})
 			},
@@ -108,6 +109,7 @@ export const actions: Actions = {
 					phoneNumber: data.get('phoneNumber'),
 					monthlyFee: Number(data.get('monthlyFee')),
 					locationId: Number(data.get('locationId')),
+					categories: data.getAll("categories").map(category => parseInt(category)),
 					comment: data.get('comment')
 				})
 			},
@@ -121,55 +123,10 @@ export const actions: Actions = {
 				error: body.message ?? 'Nie udało się zaktualizować członka',
 				values: Object.fromEntries(data)
 			});
-		}
-	},
-	addCategoryToUser: async ({request, cookies, locals}) => {
-		const data = await request.formData();
-
-		const res = await serverFetch(
-			`/api/member/${data.get("memberUuid")}/category`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					id: data.get("categoryId")
-				}),
-			},
-			cookies,
-			locals
-		)
-
-
-		if (!res.ok) {
-			const body = await res.text();
-			return fail(res.status, {
-				error: body,
-				values: Object.fromEntries(data),
-				type: "category"
-			});
-		}
-	},
-	deleteCategoryFromUser: async ({request, cookies, locals}) => {
-		const data = await request.formData();
-
-		const res = await serverFetch(
-			`/api/member/${data.get("memberUuid")}/category/${data.get("categoryId")}`,
-			{
-				method: 'DELETE'
-			},
-			cookies,
-			locals
-		)
-
-		if (!res.ok) {
-			const body = await res.text();
-			return fail(res.status, {
-				error: body,
-				values: Object.fromEntries(data),
-				type: "category"
-			});
+		}else{
+			return{
+				categories: data.getAll("categories").map(category => parseInt(category))
+			}
 		}
 	},
 };

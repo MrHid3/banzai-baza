@@ -1,12 +1,12 @@
 import { PUBLIC_BACKEND_2, PUBLIC_DEV } from '$env/static/public';
 import { fail, redirect } from '@sveltejs/kit';
-import {user} from "$lib/stores/auth";
+import { user } from '$lib/stores/auth';
 
-export const load = ({locals}) => {
-	if(locals.user){
+export const load = ({ locals }) => {
+	if (locals.user) {
 		redirect(301, '/db');
 	}
-}
+};
 
 export const actions = {
 	login: async ({ request, cookies, fetch }) => {

@@ -9,14 +9,14 @@ spring:
     password: ${POSTGRES_PASSWORD}
 
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:/db/migration
     baseline-on-migrate: true  # safe if DB already has tables
 
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
 jwt:
   secret: ${JWT_SECRET}
@@ -33,8 +33,8 @@ app:
     expiry-hours: 24
 
 logging:
-    level:
-        root: INFO
+  level:
+    root: INFO
 
 resend:
   api-key: ${RESEND_API_KEY}

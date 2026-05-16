@@ -1,7 +1,6 @@
 <script lang="ts">
-    import {applyAction, enhance} from "$app/forms";
+    import {enhance} from "$app/forms";
     import LocationSelect from "$lib/LocationSelect.svelte";
-    import {invalidate} from "$app/navigation";
 
     let {member = $bindable(), mobileEdit, deleteMode, categories}: {
         member: {
@@ -17,11 +16,11 @@
                 id: number
             },
             comment: string,
-            categories: [{
+            categories: {
                 id: number,
                 name: string,
                 shortname: string,
-            }]
+            }[]
             // payments:
             //     {
             //         month: number,
@@ -33,56 +32,24 @@
         },
         mobileEdit: boolean,
         deleteMode: boolean,
-        categories: [{
+        categories: {
             id: number,
             name: string,
             shortname: string
-        }]
+        }[]
     } = $props();
 
     let edit = $state(false);
 
     const phonePattern = "(?:[+][0-9]{1,3} )?[0-9]{3}[\\- ]?[0-9]{3}[\\- ]?[0-9]{3,6}";
 
-    async function deleteCategoryFromUser(memberUuid: string, categoryId: number) {
-        const form = new FormData();
-        form.append("memberUuid", memberUuid);
-        form.append("categoryId", categoryId.toString());
-
-        const response = await fetch("?/deleteCategoryFromUser", {
-            method: "POST",
-            body: form
-        })
-
-        const result = await response.json();
-        await applyAction(result)
-        await invalidate("/api/member")
-    }
-
-
-    async function addCategoryToUser(memberUuid: string, categoryId: number) {
-        const form = new FormData();
-        form.append("memberUuid", memberUuid);
-        form.append("categoryId", categoryId.toString());
-
-        const response = await fetch("?/addCategoryToUser", {
-            method: "POST",
-            body: form
-        })
-
-        const result = await response.json();
-        await applyAction(result)
-        await invalidate("/api/member")
-    }
-
-    let selectedCategoryId = categories[0]?.id ?? -1;
 </script>
 
 {#if !edit}
     <div class="row desktop">
-        <span class="data">{member.name}</span>
-        <span class="data">{member.surname}</span>
-        <span class="data">{member.email}</span>
+        <span class="data">{member.name != "" ? member.name : "- -"}</span>
+        <span class="data">{member.surname != "" ? member.surname : "- -"}</span>
+        <span class="data">{member.email != "" ? member.email : "- -"}</span>
         <span class="data">{member.phoneNumber}</span>
         <span class="data">{member.location ? member.location.shortname : ""}</span>
         <span class="data">{member.monthlyFee}</span>
@@ -90,6 +57,9 @@
             {#each member.categories as category (category.id)}
                 <span class="category">{category.shortname}</span>
             {/each}
+            {#if member.categories.length == 0}
+                    - -
+                {/if}
         </span>
         <span class="data">
             <div class="textarea">
@@ -132,8 +102,18 @@
             <div class="horizontal"><span class="bold">Nr. tel</span><span>{member.phoneNumber}</span></div>
             <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member.location?.shortname}</span></div>
             <div class="horizontal"><span class="bold">Cena/mieś.</span><span>{member.monthlyFee}</span></div>
+            <div class="horizontal">
+                <span class="bold">Kategorie</span><span>{#each member.categories as category (category.id)}
+                {#if category != member.categories[member.categories.length - 1]}
+                    {category.name}, {" "}
+                    {:else}
+                    {category.name}
+                {/if}
+                    {/each}</span>
+            </div>
+
             <div class="horizontal"><span
-                    class="bold">Komentarz</span><span><textarea>{member.comment}</textarea></span></div>
+                    class="bold">Komentarz</span><span>{#if member.comment}<p>{member.comment}</p>{/if}</span></div>
             {#if deleteMode}
                 <div class="horizontal" style="flex-direction: row-reverse;">
                     <form action="?/delete" method="POST" use:enhance class="hidden" style="padding: 5px">
@@ -148,16 +128,28 @@
                 </div>
             {/if}
         {:else}
-            <form action="?/update" method="POST" use:enhance>
-                <div class="horizontal"><span class="bold">Imię</span><span><input type="text" bind:value={member.name}></span>
+            <form action="?/update" method="POST" use:enhance={() => {
+                return ({result}) => {
+                   member.categories = [];
+                   categories.forEach((category) => {
+                       if (result.data.categories.some(c => c == category.id)){
+                           member.categories.push(category);
+                       }
+                   })
+                }
+            }}>
+                <input type="hidden" value={member.uuid} name="memberUuid">
+                <div class="horizontal"><span class="bold">Imię</span><span><input type="text" bind:value={member.name} name="name"></span>
                 </div>
-                <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text"
+                <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text" name="surname"
                                                                                        bind:value={member.surname}></span>
                 </div>
                 <div class="horizontal"><span class="bold">Email</span><span><input type="email"
+                                                                                    name="email"
                                                                                     bind:value={member.email}></span>
                 </div>
                 <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text" required
+                                                                                     name="phoneNumber"
                                                                                      pattern={phonePattern}
                                                                                      bind:value={member.phoneNumber}></span>
                 </div>
@@ -166,11 +158,22 @@
                                                                                                    class="locationSelect"></LocationSelect></span>
                 </div>
                 <div class="horizontal"><span class="bold">Cena/mieś</span><span><input type="number" min="0"
+                                                                                        name="monthlyFee"
                                                                                         max="1000"
                                                                                         bind:value={member.monthlyFee}></span>
                 </div>
+                <div class="horizontal"><span class="bold">Kategorie</span><span>
+            <div class="categorySelect">
+                {#each categories as category (category.id)}
+                    <label class="categoryCheckbox">
+                        <input type="checkbox" name="categories" value={category.id} checked={member.categories.some(c => c.id == category.id)}>
+                        <span>{category.shortname}</span>
+                    </label>
+                {/each}
+            </div>
+        </span></div>
                 <div class="horizontal"><span
-                        class="bold">Komentarz</span><span><textarea>{member.comment}</textarea></span></div>
+                        class="bold">Komentarz</span><span><textarea name="comment">{member.comment}</textarea></span></div>
                 <div class="horizontal">
                     <span></span>
                     <button type="submit" class="save">Zapisz</button>
@@ -183,7 +186,14 @@
            return({ result }) => {
                if (result.type === "success") {
                    edit = false;
+                   member.categories = [];
+                   categories.forEach((category) => {
+                       if (result.data.categories.some(c => c == category.id)){
+                           member.categories.push(category);
+                       }
+                   })
            }
+
     }}}>
         <input type="hidden" name="memberUuid" bind:value={member.uuid}>
         <span class="data">
@@ -205,21 +215,13 @@
                 <input type="number" name="monthlyFee" bind:value={member.monthlyFee} min="0" max="1000">
         </span>
         <span class="data">
-            {#each member.categories as category (category.id)}
-               <span class="category no-padding">{category.shortname}
-                   <button onclick={() => deleteCategoryFromUser(member.uuid, category.id)} type="button">
-                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path
-                           d="M504.6 148.5C515.9 134.9 514.1 114.7 500.5 103.4C486.9 92.1 466.7 93.9 455.4 107.5L320 270L184.6 107.5C173.3 93.9 153.1 92.1 139.5 103.4C125.9 114.7 124.1 134.9 135.4 148.5L278.3 320L135.4 491.5C124.1 505.1 125.9 525.3 139.5 536.6C153.1 547.9 173.3 546.1 184.6 532.5L320 370L455.4 532.5C466.7 546.1 486.9 547.9 500.5 536.6C514.1 525.3 515.9 505.1 504.6 491.5L361.7 320L504.6 148.5z"/></svg>
-                </button></span>
+            {#each categories as category (category.id)}
+                <label for="category-{member.uuid}-{category.id}" class="category">
+                <input type="checkbox" name="categories" id="category-{member.uuid}-{category.id}" value="{category.id}"
+                       checked={member.categories.some(a => a.id === category.id)}/>
+                <span>{category.shortname}</span>
+                </label>
             {/each}
-            <span class="category no-">
-            <select name="category" id="category" bind:value={selectedCategoryId}>
-                {#each categories as category}
-                    <option value={category.id}>{category.shortname}</option>
-                {/each}
-            </select>
-            <button onclick={() => addCategoryToUser(member.uuid, selectedCategoryId)} type="button">+</button>
-            </span>
         </span>
         <span class="data">
             <textarea bind:value={member.comment} name="comment"></textarea>
@@ -240,6 +242,9 @@
 {/if}
 
 <style>
+    input[type="checkbox"] {
+        accent-color: var(--color-text-primary);
+    }
 
     .category {
         display: inline-block;
@@ -254,18 +259,29 @@
         vertical-align: middle;
         margin: 5px;
     }
-    .no-padding{
+
+    .no-padding {
         padding: 0 5px !important;
     }
 
-    .category button {
+    .category * {
+        padding: 0 !important;
+    }
+
+    .category select {
+        padding: 0;
+        background-color: transparent;
+    }
+
+    .category button,
+    .category select {
         height: min-content;
         width: min-content;
     }
 
     .category button svg,
     .category button path,
-    .category button{
+    .category button {
         width: 10px;
         height: 100%;
         vertical-align: middle;
@@ -373,6 +389,43 @@
         width: 100%;
     }
 
+    .categorySelect {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        max-width: 100%;
+        justify-content: space-evenly;
+    }
+
+    .categoryCheckbox {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background-color: var(--color-background-secondary);
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        user-select: none;
+        transition: background-color 0.2s;
+    }
+
+    .categoryCheckbox input[type="checkbox"] {
+        cursor: pointer;
+        margin: 0;
+        width: auto;
+        accent-color: var(--color-text-primary);
+    }
+
+    .categoryCheckbox span {
+        font-size: 0.85em;
+    }
+
+    .categoryCheckbox:has(input:checked) {
+        background-color: var(--color-border);
+    }
+
     @media screen and (width <= 1000px) {
         .desktop {
             display: none;
@@ -430,6 +483,7 @@
             justify-content: space-between;
             margin: 5px 0;
             height: fit-content;
+            position: relative;
         }
 
         .bold {
@@ -440,6 +494,10 @@
             height: fit-content;
         }
 
+        .horizontal span + span {
+            text-align: right;
+        }
+
         .save {
             background-color: var(--color-background-secondary) !important;
             border-radius: 15px;
@@ -447,6 +505,30 @@
             width: min-content;
             padding: 10px !important;
             height: auto !important;
+        }
+
+        .horizontal p {
+            max-width: 80%;
+            display: block;
+            text-align: right;
+            word-break: break-word;
+            margin-left: 20%;
+            background-color: var(--color-background-secondary);
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        form .horizontal:has(.categorySelect) {
+              flex-direction: column;
+              align-items: flex-start;
+          }
+
+        form .horizontal:has(.categorySelect) > span:last-child {
+            width: 100%;
+        }
+
+        .categorySelect {
+            width: 100%;
         }
     }
 </style>

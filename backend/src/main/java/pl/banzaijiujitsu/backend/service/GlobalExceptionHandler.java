@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import pl.banzaijiujitsu.backend.exception.*;
 
 @RestControllerAdvice
-    public class GlobalExceptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidEmailException.class)
     public ResponseEntity<String> handleInvalidEmailException(InvalidEmailException ex) {
@@ -18,7 +18,7 @@ import pl.banzaijiujitsu.backend.exception.*;
 
     @ExceptionHandler(InvalidLocationException.class)
     public ResponseEntity<String> handleInvalidLocationException(InvalidLocationException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage() != null ?  ex.getMessage() : "INVALID_LOCATION");
+        return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "INVALID_LOCATION");
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
@@ -84,5 +84,10 @@ import pl.banzaijiujitsu.backend.exception.*;
     @ExceptionHandler(MemberException.class)
     public ResponseEntity<String> handleMemberException(MemberException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "MEMBER_ERROR");
+    }
+
+    @ExceptionHandler(LocationException.class)
+    public ResponseEntity<String> handleLocationException(LocationException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "LOCATION_ERROR");
     }
 }

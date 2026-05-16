@@ -22,11 +22,11 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-    private SecretKey getSigningKey(){
+    private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateAccessToken(AppUser appUser){
+    public String generateAccessToken(AppUser appUser) {
         return Jwts.builder()
                 .setSubject(appUser.getUuid().toString())
                 .claim("email", appUser.getEmail())
@@ -37,7 +37,7 @@ public class JwtService {
                 .compact();
     }
 
-    public UUID extractUuid (String token) {
+    public UUID extractUuid(String token) {
         return UUID.fromString(
                 Jwts.parserBuilder()
                         .setSigningKey(getSigningKey())
@@ -47,7 +47,7 @@ public class JwtService {
                         .getSubject());
     }
 
-    public boolean isTokenValid(String token){
+    public boolean isTokenValid(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())

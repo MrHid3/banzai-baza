@@ -4,18 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.exception.InvalidPaymentException;
 import pl.banzaijiujitsu.backend.model.Location;
+import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
-import pl.banzaijiujitsu.backend.model.Member;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
@@ -32,10 +29,10 @@ public class PaymentService {
     }
 
     public List<Payment> findByPayerLocation(Location location) {
-        return  paymentRepository.findByPayerLocation(location);
+        return paymentRepository.findByPayerLocation(location);
     }
 
-    public List<Payment> findByPayerLocationIsIn(List<Location> locations){
+    public List<Payment> findByPayerLocationIsIn(List<Location> locations) {
         return paymentRepository.findByPayerLocationIsIn(locations);
     }
 
@@ -56,11 +53,11 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public List<Payment> findByTimeAndLocations(LocalDate date, List<Location> locations){
+    public List<Payment> findByTimeAndLocations(LocalDate date, List<Location> locations) {
         return paymentRepository.findByMonthAfterAndPayerLocationIsIn(date, locations);
     }
 
-    public void delete(Payment payment){
+    public void delete(Payment payment) {
         paymentRepository.delete(payment);
     }
 }

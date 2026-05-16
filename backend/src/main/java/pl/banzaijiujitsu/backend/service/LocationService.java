@@ -27,7 +27,7 @@ public class LocationService {
         return locationRepository.findByName(name);
     }
 
-    public List<Location> findAll(){
+    public List<Location> findAll() {
         return locationRepository.findAll();
     }
 
@@ -42,7 +42,7 @@ public class LocationService {
         location.setIsActive(false);
     }
 
-    public List<Location> findAllActive(){
+    public List<Location> findAllActive() {
         return locationRepository.findByIsActive(true);
     }
 

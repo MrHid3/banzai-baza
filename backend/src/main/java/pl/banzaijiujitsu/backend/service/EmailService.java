@@ -29,7 +29,7 @@ public class EmailService {
         return new Resend(apiKey);
     }
 
-    public void sendInviteLink(AppUser appUser, String token){
+    public void sendInviteLink(AppUser appUser, String token) {
 
         String link = frontendUrl + "/set-password?token=" + token;
 
@@ -51,7 +51,7 @@ public class EmailService {
         // Optionally log response.getId()
     }
 
-    public void sendResetLink(AppUser appUser, String token){
+    public void sendResetLink(AppUser appUser, String token) {
 
         String link = frontendUrl + "/reset-password?token=" + token;
 

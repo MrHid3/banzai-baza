@@ -171,8 +171,8 @@
     <div class="tbody">
         {#each filteredMembers as member (member.member.uuid)}
             <div class="tr">
-                <div class="td">{member.member.name}</div>
-                <div class="td">{member.member.surname}</div>
+                <div class="td">{member.member.name != "" ? member.member.name : "- -"}</div>
+                <div class="td">{member.member.surname != "" ? member.member.surname : "- -"}</div>
                 <div class="td">{member.member.location.shortname}</div>
                 <div class="td">{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</div>
                 {#if showEntryFee}

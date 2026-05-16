@@ -120,18 +120,23 @@
                         d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z"/>
             </svg>
         </button>
-        <button aria-label="Tryb usuwania" onclick={() => triggerDelete()} style="{mobileEdit ? 'pointer-events: none;' : ''}{deleteMode ? 'background-color: var(--color-border)' : ''}"
+        <button aria-label="Tryb usuwania" onclick={() => triggerDelete()}
+                style="{mobileEdit ? 'pointer-events: none;' : ''}{deleteMode ? 'background-color: var(--color-border)' : ''}"
                 type="button">
-            <svg class="bi bi-trash3-fill" height="30" style="fill: {!mobileEdit ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
+            <svg class="bi bi-trash3-fill" height="30"
+                 style="fill: {!mobileEdit ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
                  viewBox="0 0 16 16"
                  width="30"
                  xmlns="http://www.w3.org/2000/svg">
                 <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
             </svg>
         </button>
-        <button aria-label="Tryb edycji" onclick={() => triggerEdit()} style="{deleteMode ? 'pointer-events: none;' : ''}{mobileEdit ? 'background-color: var(--color-border)' : ''}"
+        <button aria-label="Tryb edycji" onclick={() => triggerEdit()}
+                style="{deleteMode ? 'pointer-events: none;' : ''}{mobileEdit ? 'background-color: var(--color-border)' : ''}"
                 type="button">
-            <svg class="bi bi-pencil-square" fill="currentColor" height="30" style="fill: {!deleteMode ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}" viewBox="0 0 16 16"
+            <svg class="bi bi-pencil-square" fill="currentColor" height="30"
+                 style="fill: {!deleteMode ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
+                 viewBox="0 0 16 16"
                  width="30"
                  xmlns="http://www.w3.org/2000/svg">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -142,16 +147,18 @@
     </form>
 </div>
 <div class="mobile flex">
-    <form action="?/add" method="POST" use:enhance class="addForm">
-        <div class="horizontal"><span class="bold">Imię</span><span><input type="text" name="name"></span>
+    <form action="?/add" class="addForm" method="POST" use:enhance>
+        <div class="horizontal"><span class="bold">Imię</span><span><input name="name" type="text"></span>
         </div>
-        <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text" name="surname"
+        <div class="horizontal"><span class="bold">Nazwisko</span><span><input name="surname" type="text"
         ></span>
         </div>
-        <div class="horizontal"><span class="bold">Email</span><span><input type="email" name="email"
+        <div class="horizontal"><span class="bold">Email</span><span><input name="email" type="email"
         ></span>
         </div>
-        <div class="horizontal"><span class="bold">Nr.tel</span><span><input type="text" name="phoneNumber" required pattern={phonePattern}
+        <div class="horizontal"><span class="bold">Nr.tel</span><span><input name="phoneNumber" pattern={phonePattern}
+                                                                             required
+                                                                             type="text"
         ></span>
         </div>
         <div class="horizontal"><span class="bold">Lokalizacja</span><span><LocationSelect all={false}
@@ -160,6 +167,16 @@
         <div class="horizontal"><span class="bold">Cena/mieś</span><span><input max="1000" min="0" name="monthlyFee"
                                                                                 type="number"></span>
         </div>
+        <div class="horizontal"><span class="bold">Kategorie</span><span>
+            <div class="categorySelect">
+                {#each categories as category (category.id)}
+                    <label class="categoryCheckbox">
+                        <input type="checkbox" name="categories" value={category.id}>
+                        <span>{category.shortname}</span>
+                    </label>
+                {/each}
+            </div>
+        </span></div>
         <div class="horizontal"><span
                 class="bold">Komentarz</span><span><textarea name="comment"></textarea></span></div>
         <div class="horizontal">
@@ -209,8 +226,17 @@
                 <LocationSelect class="locationSelect"></LocationSelect>
             </span>
             <span class="data short"><input type="number" name="monthlyFee" value="150"></span>
+            <span class="data">
+                <div class="categorySelect">
+                    {#each categories as category (category.id)}
+                        <label class="categoryCheckbox">
+                            <input type="checkbox" name="categories" value={category.id}>
+                            <span>{category.shortname}</span>
+                        </label>
+                    {/each}
+                </div>
+            </span>
             <span class="data"><textarea name="comment"></textarea></span>
-            <span class="data"></span>
             <span class="data"></span>
             <span class="data small">
                 <button type="submit" class="both" aria-label="Dodaj członka">
@@ -242,24 +268,61 @@
 {/if}
 
 <style>
-    .addForm{
+    .categorySelect {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        max-width: 100%;
+        justify-content: space-evenly;
+    }
+
+    .categoryCheckbox {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background-color: var(--color-background-secondary);
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        user-select: none;
+        transition: background-color 0.2s;
+    }
+
+    .categoryCheckbox input[type="checkbox"] {
+        cursor: pointer;
+        margin: 0;
+        width: auto;
+        accent-color: var(--color-text-primary);
+    }
+
+    .categoryCheckbox span {
+        font-size: 0.85em;
+    }
+
+    .categoryCheckbox:has(input:checked) {
+        background-color: var(--color-border);
+    }
+
+    .addForm {
         display: flex;
         flex-direction: column !important;
         gap: 5px;
         padding: 10px;
     }
 
-    .addForm > div span+span{
+    .addForm > div span + span {
         flex: 7;
     }
 
-    .addForm > div span+span input,
-    .addForm > div span+span :global(.locationSelect),
-    .addForm > div span+span textarea{
+    .addForm > div span + span input,
+    .addForm > div span + span :global(.locationSelect),
+    .addForm > div span + span textarea {
         width: 100%;
     }
 
-    .addForm > div span{
+    .addForm > div span {
         flex: 4;
     }
 
@@ -293,7 +356,7 @@
     }
 
 
-    button{
+    button {
         border: none;
     }
 
@@ -357,7 +420,7 @@
         width: 5%;
     }
 
-    .bold{
+    .bold {
         font-weight: bold;
     }
 
@@ -426,7 +489,7 @@
         text-align: center;
     }
 
-    svg{
+    svg {
         width: 100%;
         display: block;
         align-self: center;
@@ -449,7 +512,7 @@
             border-radius: 15px;
         }
 
-        .hover{
+        .hover {
             position: sticky;
             top: 10px;
         }
@@ -464,11 +527,11 @@
             height: fit-content;
         }
 
-        .flex form button{
+        .flex form button {
             transition: background-color 0.4s;
         }
 
-        .flex form button:last-child:not(.save){
+        .flex form button:last-child:not(.save) {
             border-radius: 0 15px 15px 0 !important;
         }
 
@@ -498,8 +561,21 @@
             display: block
         }
 
-        .save{
+        .save {
             border-radius: 15px !important;
+        }
+
+        .addForm .horizontal:has(.categorySelect) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .addForm .horizontal:has(.categorySelect) > span:last-child {
+            width: 100%;
+        }
+
+        .categorySelect {
+            width: 100%;
         }
     }
 </style>

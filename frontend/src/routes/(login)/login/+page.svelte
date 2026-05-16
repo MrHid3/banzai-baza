@@ -17,8 +17,6 @@
         }
     })
 
-    console.log(PUBLIC_BACKEND_2)
-
     //TODO: Fancy loading type shit
 </script>
 <svelte:head>
@@ -56,14 +54,14 @@
         gap: 10px;
     }
 
-    input:not([type=checkbox]), #send{
+    input:not([type=checkbox]), #send {
         width: 15vw;
         min-width: 200px;
         padding: 10px;
         border: 1px solid var(--color-border)
     }
 
-    input:invalid:not(:focus):not(:placeholder-shown){
+    input:invalid:not(:focus):not(:placeholder-shown) {
         border: 1px solid red;
     }
 
@@ -71,7 +69,7 @@
         opacity: 0.7;
     }
 
-    button{
+    button {
         cursor: pointer;
     }
 

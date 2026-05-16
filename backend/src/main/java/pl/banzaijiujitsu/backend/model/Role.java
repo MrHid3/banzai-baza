@@ -3,7 +3,6 @@ package pl.banzaijiujitsu.backend.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.Id;
 
 import java.util.Collection;
 
@@ -12,9 +11,12 @@ import java.util.Collection;
 @Setter
 public class Role {
 
-    public Role(){};
+    public Role() {
+    }
 
-    public Role(String name){
+    ;
+
+    public Role(String name) {
         this.name = name;
     }
 

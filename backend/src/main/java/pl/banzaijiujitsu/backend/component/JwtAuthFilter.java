@@ -69,7 +69,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("Account is disabled");
             return; // do not call filterChain.doFilter
-        }catch (InvalidUuidException e) {
+        } catch (InvalidUuidException e) {
             filterChain.doFilter(request, response);
             return;
         }

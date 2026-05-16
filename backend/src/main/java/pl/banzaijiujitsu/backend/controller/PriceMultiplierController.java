@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.InvalidLocationException;
 import pl.banzaijiujitsu.backend.exception.InvalidUuidException;
 import pl.banzaijiujitsu.backend.model.Location;
-import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.PriceMultiplier;
 import pl.banzaijiujitsu.backend.service.AppUserService;
 import pl.banzaijiujitsu.backend.service.LocationService;
@@ -20,7 +19,6 @@ import pl.banzaijiujitsu.backend.service.PriceMultiplierService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

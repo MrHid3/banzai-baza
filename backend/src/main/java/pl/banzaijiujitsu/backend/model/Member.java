@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 @Setter
 public class Member {
 
-    public Member(){}
+    public Member() {
+    }
 
     public Member(String email) {
         this.setEmail(email);
@@ -31,10 +32,10 @@ public class Member {
     }
 
     public void setEmail(String email) throws InvalidEmailException {
-        if(!(email == null || email.isEmpty())){
-            Pattern pattern  = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
+        if (!(email == null || email.isEmpty())) {
+            Pattern pattern = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
             Matcher matcher = pattern.matcher(email);
-            if(!matcher.find()){
+            if (!matcher.find()) {
                 throw new InvalidEmailException("Invalid email format");
             }
         }
