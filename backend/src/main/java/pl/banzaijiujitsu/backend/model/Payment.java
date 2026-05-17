@@ -44,5 +44,5 @@ public class Payment {
     @JoinColumn(nullable = false)
     private Location location;
 
-//    private String comment;
+    private String comment;
 }
