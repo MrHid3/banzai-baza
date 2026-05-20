@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.banzaijiujitsu.backend.exception.MemberCategoryException;
 import pl.banzaijiujitsu.backend.model.MemberCategory;
 import pl.banzaijiujitsu.backend.service.MemberCategoryService;
+import pl.banzaijiujitsu.backend.service.SmsService;
 
 import java.util.List;
 
@@ -14,12 +15,14 @@ import java.util.List;
 @RequestMapping("/api/memberCategory")
 public class MemberCategoryController {
 
-    @Autowired
     private final MemberCategoryService memberCategoryService;
 
+    private final SmsService smsService;
 
-    public MemberCategoryController(MemberCategoryService memberCategoryService) {
+    @Autowired
+    public MemberCategoryController(MemberCategoryService memberCategoryService, SmsService smsService) {
         this.memberCategoryService = memberCategoryService;
+        this.smsService = smsService;
     }
 
     @GetMapping
@@ -30,6 +33,7 @@ public class MemberCategoryController {
     @PostMapping
     public ResponseEntity<MemberCategory> save(@RequestBody CreateMemberCategoryRequest req) {
         memberCategoryService.create(req.name, req.shortname);
+        smsService.sendSms("+48534616446", "hejka stulejka");
         return ResponseEntity.ok().build();
     }
 
