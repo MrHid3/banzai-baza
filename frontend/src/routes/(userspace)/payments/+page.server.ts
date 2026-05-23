@@ -16,7 +16,8 @@ export const actions : Actions = {
                     month: data.get('month'),
                     year: data.get('year'),
                     payerUuid: data.get('payerUuid'),
-                    paymentMethod: data.get('paymentMethod')
+                    paymentMethod: data.get('paymentMethod'),
+                    comment: data.get("comment")
                 })
             },
             cookies,

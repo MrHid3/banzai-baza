@@ -87,7 +87,7 @@ public class PaymentController {
         payment.setPayer(member);
         payment.setPayerIn(appUser);
         payment.setLocation(location);
-//        payment.setComment(req.comment);
+        payment.setComment(req.comment);
 
         paymentService.save(payment);
 
@@ -154,8 +154,8 @@ public class PaymentController {
             @NotNull String paymentType,
             @NotNull String payerUuid,
             Integer year,
-            Integer month
-//            String comment
+            Integer month,
+            String comment
     ) {
     }
 

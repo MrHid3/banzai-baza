@@ -95,54 +95,93 @@
         ])
     );
 
+    console.log(data.payments);
+
 </script>
 
 
 {#snippet payment(payment, type, month, year, payerUuid, comment)}
     {#if payment}
         <div class="td payment ok">
-            <form action="?/deletePayment" method="POST" use:enhance>
-                {#if payment.paymentMethod == "CASH"}
-                    <i>💵</i>
-                {:else}
-                    <i>💳</i>
-                {/if}
-                <input type="hidden" name="paymentUuid" value={payment.uuid}>
-                <span>{payment.amount}</span>
-                <button type="submit" aria-label="Usuń">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                         class="bi bi-trash3-fill"
-                         viewBox="0 0 16 16">
-                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
-                    </svg>
-                </button>
-            </form>
+            {#if comment}
+                <abbr title={comment}>
+                    <form action="?/deletepayment" method="post" use:enhance>
+                        {#if payment.paymentmethod == "cash"}
+                            <i>💵</i>
+                        {:else}
+                            <i>💳</i>
+                        {/if}
+                        <input type="hidden" name="paymentuuid" value={payment.uuid}>
+                        <span>{payment.amount}</span>
+                        <button type="submit" aria-label="usuń">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentcolor"
+                                 class="bi bi-trash3-fill"
+                                 viewbox="0 0 16 16">
+                                <path d="m11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66a2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84l2.038 3.5h1.5a.5.5 0 0 1 0-1h5v-1a1.5 1.5 0 0 1 6.5 0h3a1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5m4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528m8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0v5a.5.5 0 0 0-.5-.5"/>
+                            </svg>
+                        </button>
+                    </form>
+                </abbr>
+            {:else}
+                <form action="?/deletepayment" method="post" use:enhance>
+                    {#if payment.paymentmethod == "cash"}
+                        <i>💵</i>
+                    {:else}
+                        <i>💳</i>
+                    {/if}
+                    <input type="hidden" name="paymentuuid" value={payment.uuid}>
+                    <span>{payment.amount}</span>
+                    <button type="submit" aria-label="usuń">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentcolor"
+                             class="bi bi-trash3-fill"
+                             viewbox="0 0 16 16">
+                            <path d="m11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66a2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84l2.038 3.5h1.5a.5.5 0 0 1 0-1h5v-1a1.5 1.5 0 0 1 6.5 0h3a1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5m4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528m8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0v5a.5.5 0 0 0-.5-.5"/>
+                        </svg>
+                    </button>
+                </form>
+            {/if}
         </div>
     {:else}
-        <div class="td payment bad">
-            <form action="?/addPayment" method="POST" use:enhance class="flex flex-col">
-                <div class="flex flex-row justify-between">
+        <div class="td payment bad flex-1!">
+            <form action="?/addPayment" method="POST" use:enhance
+                  class="flex flex-col justify-center bg-(--background-secondary) w-full">
+                <div class="flex flex-row justify-between w-full!">
                     <input type="hidden" name="paymentType" value={type}>
                     <input type="hidden" name="month" value={month}>
                     <input type="hidden" name="year" value={year}>
                     <input type="hidden" name="payerUuid" value={payerUuid}>
-                    <select name="paymentMethod">
+                    <select name="paymentMethod" class="bg-transparent!">
                         <option value="CASH">💵</option>
                         <option value="DEBIT">💳</option>
                     </select>
-                    <input type="number" name="amount" value={0} required min="0" max="1000">
-                    <input type="checkbox" id="show-comment-{payerUuid}-{month}-{year}" style="display: none !important" class="comment-show">
-                    <label for="show-comment-{payerUuid}-{month}-{year}">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                            <path d="M544 128C544 110.3 529.7 96 512 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128zM544 384C544 366.3 529.7 352 512 352L128 352C110.3 352 96 366.3 96 384C96 401.7 110.3 416 128 416L512 416C529.7 416 544 401.7 544 384zM96 256C96 273.7 110.3 288 128 288L512 288C529.7 288 544 273.7 544 256C544 238.3 529.7 224 512 224L128 224C110.3 224 96 238.3 96 256zM544 512C544 494.3 529.7 480 512 480L128 480C110.3 480 96 494.3 96 512C96 529.7 110.3 544 128 544L512 544C529.7 544 544 529.7 544 512z"/></svg>
+                    <input type="number" name="amount" value={0} required min="0" max="1000" class="bg-transparent!">
+                    <label for={`show-comment-${payerUuid}-${month}-${year}`} class="bg-transparent!">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30"
+                             class="cursor-pointer">
+                            <path d="M544 128C544 110.3 529.7 96 512 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128zM544 384C544 366.3 529.7 352 512 352L128 352C110.3 352 96 366.3 96 384C96 401.7 110.3 416 128 416L512 416C529.7 416 544 401.7 544 384zM96 256C96 273.7 110.3 288 128 288L512 288C529.7 288 544 273.7 544 256C544 238.3 529.7 224 512 224L128 224C110.3 224 96 238.3 96 256zM544 512C544 494.3 529.7 480 512 480L128 480C110.3 480 96 494.3 96 512C96 529.7 110.3 544 128 544L512 544C529.7 544 544 529.7 544 512z"/>
+                        </svg>
+                        <input type="checkbox" id={`show-comment-${payerUuid}-${month}-${year}`}
+                               class="comment-show hidden peer">
+                        <div
+                                class="fixed inset-0 bg-black/40 opacity-0 pointer-events-none
+           transition-opacity peer-checked:opacity-100
+           peer-checked:pointer-events-auto"
+                        >
+                            <div class="bg-(--color-background-primary) absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[-200%] flex flex-col gap-5 pb-2! w-1/4! rounded-md! h-fit border-(--color-border) border-2">
+                                <textarea name="comment"
+                                          class="bg-(--color-background-secondary) block rounded-md p-2! h-20!">{comment}</textarea>
+                                <label for={`show-comment-${payerUuid}-${month}-${year}`}
+                                       class="block text-gray-200 bg-(--background-special) rounded-sm text-2xl cursor-pointer p-1! hover:bg-neutral-800 duration-200">Zapisz</label>
+                            </div>
+                        </div>
                     </label>
-                    <button type="submit" aria-label="Zapisz">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30">
+                    <button type="submit" aria-label="Zapisz" class="bg-transparent!">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30"
+                             class="cursor-pointer">
                             <path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/>
                         </svg>
                     </button>
                 </div>
-                <textarea name="comment" class="comment">{comment}</textarea>
             </form>
         </div>
     {/if}
@@ -208,23 +247,30 @@
     </div>
 </div>
 {#each filteredMembers as member (member.member.uuid)}
-<div class="mobile" style="outline: 2px solid var(--color-border); padding: 20px; border-radius: 15px; margin: 15px 0">
-    <div class="horizontal"><span class="bold flex-1">Imię</span><span class="text-right flex-1 block">{member.member.name}</span></div>
-    <div class="horizontal"><span class="bold flex-1">Nazwisko</span><span class="text-right flex-1 block">{member.member.surname}</span></div>
-    {#if !selectedLocation}
-        <div class="horizontal"><span
-                class="bold flex-1">Lokalizacja</span><span class="text-right flex-1 block">{member.member.location.shortname}</span></div>
-    {/if}
-    <div class="horizontal"><span class="bold flex-1">Cena/mieś.</span><span class="text-right flex-1 block">{member.member.monthlyFee}</span></div>
-    <div class="horizontal"><span class="bold flex-1 flex items-center">Wpisowe</span><span class="flex-3">{@render payment(
-        startingFees.get(member.member.uuid),
-        "STARTING_FEE",
-        null,
-        null,
-        member.member.uuid
-    )}</span></div>
-    {#each [2, 1, 0] as i}
-        <div class="horizontal flex"><span class="bold flex-1 flex items-center">{monthNames[currentMonth - i - 1]}</span><span class="flex-3">
+    <div class="mobile"
+         style="outline: 2px solid var(--color-border); padding: 20px; border-radius: 15px; margin: 15px 0">
+        <div class="horizontal"><span class="bold flex-1">Imię</span><span
+                class="text-right flex-1 block">{member.member.name}</span></div>
+        <div class="horizontal"><span class="bold flex-1">Nazwisko</span><span
+                class="text-right flex-1 block">{member.member.surname}</span></div>
+        {#if !selectedLocation}
+            <div class="horizontal"><span
+                    class="bold flex-1">Lokalizacja</span><span
+                    class="text-right flex-1 block">{member.member.location.shortname}</span></div>
+        {/if}
+        <div class="horizontal"><span class="bold flex-1">Cena/mieś.</span><span
+                class="text-right flex-1 block">{member.member.monthlyFee}</span></div>
+        <div class="horizontal"><span class="bold flex-1 flex items-center">Wpisowe</span><span
+                class="flex-3">{@render payment(
+            startingFees.get(member.member.uuid),
+            "STARTING_FEE",
+            null,
+            null,
+            member.member.uuid
+        )}</span></div>
+        {#each [2, 1, 0] as i}
+            <div class="horizontal flex"><span
+                    class="bold flex-1 flex items-center">{monthNames[currentMonth - i - 1]}</span><span class="flex-3">
                 {@render payment(
                     paymentsByMonth.get(member.member.uuid)?.get(resolveMonthKey(i)),
                     "MONTHLY_FEE",
@@ -233,8 +279,8 @@
                     member.member.uuid
                 )}
                 </span></div>
-    {/each}
-</div>
+        {/each}
+    </div>
 {/each}
 <style>
 
@@ -280,7 +326,7 @@
         outline: none;
     }
 
-    .tbody{
+    .tbody {
         display: table-row-group;
         width: 100%;
     }
@@ -328,18 +374,9 @@
         display: table-cell;
     }
 
-    .td.payment input {
-        width: 100% !important;
-        display: block;
-    }
-
     .td.payment.ok span {
         text-align: center;
         color: green;
-    }
-
-    .td.payment.bad form * {
-        background-color: var(--color-background-primary);
     }
 
     .td.payment.bad form {
@@ -358,19 +395,11 @@
 
     .td.payment svg,
     .td.payment path,
-    .td.payment label{
+    .td.payment label {
         height: 100%;
         align-self: center;
         justify-content: center;
         vertical-align: middle;
-    }
-
-    .td.payment form div >  *,
-    .td.payment form > *{
-        width: fit-content;
-        height: 50px;
-        text-align: center;
-        border: none;
     }
 
     .td.payment form button,
@@ -408,7 +437,6 @@
         background-color: var(--color-background-secondary);
         border: none;
         color: var(--color-text-secondary);
-        display: inline-block !important;
         align-self: center;
         text-align: center;
         /*width: 50%;*/
@@ -420,14 +448,6 @@
 
     .mobile {
         display: none;
-    }
-
-    .payment textarea.comment{
-        display: none;
-    }
-
-    .payment:has(div input.comment-show:checked) textarea.comment{
-        display: block !important;
     }
 
     @media screen and (width <= 1000px) {
@@ -457,21 +477,21 @@
             width: 100%;
         }
 
-        .bold{
+        .bold {
             font-weight: bold;
         }
 
-        .horizontal{
+        .horizontal {
             display: flex;
             flex-direction: row;
         }
 
-        .horizontal span+span{
+        .horizontal span + span {
             text-align: right;
         }
 
         .mobile .td.payment,
-        .mobile .td.payment form{
+        .mobile .td.payment form {
             width: 100% !important;
             max-width: 100% !important;
         }
