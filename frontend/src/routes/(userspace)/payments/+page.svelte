@@ -66,24 +66,6 @@
         }
     }
 
-    const startingFees = $derived(new Map(
-        members.map(m => [
-            m.member.uuid,
-            m.payments.find(a => a.paymentType === "STARTING_FEE")
-        ])
-    ));
-
-    const paymentsByMonth = $derived(new Map(
-        members.map(m => [
-            m.member.uuid,
-            new Map(
-                m.payments
-                    .filter(a => a.paymentType === "MONTHLY_FEE")
-                    .map(a => [a.month, a])
-            )
-        ])
-    ));
-
     const multiplierMap = new Map(
         ($locations.data ?? []).map(loc => [
             loc.id,
@@ -95,57 +77,29 @@
         ])
     );
 
-    console.log(data.payments);
-
 </script>
 
 
-{#snippet payment(payment, type, month, year, payerUuid, comment)}
+{#snippet payment(payment, type, month, year, payerUuid)}
     {#if payment}
-        <div class="td payment ok">
-            {#if comment}
-                <abbr title={comment}>
-                    <form action="?/deletepayment" method="post" use:enhance>
-                        {#if payment.paymentmethod == "cash"}
-                            <i>💵</i>
-                        {:else}
-                            <i>💳</i>
-                        {/if}
-                        <input type="hidden" name="paymentuuid" value={payment.uuid}>
-                        <span>{payment.amount}</span>
-                        <button type="submit" aria-label="usuń">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentcolor"
-                                 class="bi bi-trash3-fill"
-                                 viewbox="0 0 16 16">
-                                <path d="m11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66a2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84l2.038 3.5h1.5a.5.5 0 0 1 0-1h5v-1a1.5 1.5 0 0 1 6.5 0h3a1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5m4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528m8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0v5a.5.5 0 0 0-.5-.5"/>
-                            </svg>
-                        </button>
-                    </form>
-                </abbr>
-            {:else}
-                <form action="?/deletepayment" method="post" use:enhance>
-                    {#if payment.paymentmethod == "cash"}
-                        <i>💵</i>
-                    {:else}
-                        <i>💳</i>
-                    {/if}
-                    <input type="hidden" name="paymentuuid" value={payment.uuid}>
-                    <span>{payment.amount}</span>
-                    <button type="submit" aria-label="usuń">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentcolor"
-                             class="bi bi-trash3-fill"
-                             viewbox="0 0 16 16">
-                            <path d="m11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66a2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84l2.038 3.5h1.5a.5.5 0 0 1 0-1h5v-1a1.5 1.5 0 0 1 6.5 0h3a1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5m4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528m8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0v5a.5.5 0 0 0-.5-.5"/>
-                        </svg>
-                    </button>
-                </form>
-            {/if}
-        </div>
+        <abbr class="td payment ok" title={payment.comment} style="font-style: unset; text-decoration: unset">
+            <form action="?/deletePayment" method="post" use:enhance>
+                {#if payment.paymentmethod == "cash"}
+                    <i>💵</i>
+                {:else}
+                    <i>💳</i>
+                {/if}
+                <input type="hidden" name="paymentUuid" value={payment.uuid}>
+                <span>{payment.amount}</span>
+                <button type="submit" aria-label="usuń"
+                        class="p-2! text-2xl! font-bold! text-neutral-700! hover:text-black! duration-200">
+                    X
+                </button>
+            </form>
+        </abbr>
     {:else}
-        <div class="td payment bad flex-1!">
-            <form action="?/addPayment" method="POST" use:enhance
-                  class="flex flex-col justify-center bg-(--background-secondary) w-full">
-                <div class="flex flex-row justify-between w-full!">
+        <div class="td payment bad">
+            <form action="?/addPayment" method="POST" use:enhance>
                     <input type="hidden" name="paymentType" value={type}>
                     <input type="hidden" name="month" value={month}>
                     <input type="hidden" name="year" value={year}>
@@ -169,7 +123,7 @@
                         >
                             <div class="bg-(--color-background-primary) absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[-200%] flex flex-col gap-5 pb-2! w-1/4! rounded-md! h-fit border-(--color-border) border-2">
                                 <textarea name="comment"
-                                          class="bg-(--color-background-secondary) block rounded-md p-2! h-20!">{comment}</textarea>
+                                          class="bg-(--color-background-secondary) block rounded-md p-2! h-20!">{payment?.comment}</textarea>
                                 <label for={`show-comment-${payerUuid}-${month}-${year}`}
                                        class="block text-gray-200 bg-(--background-special) rounded-sm text-2xl cursor-pointer p-1! hover:bg-neutral-800 duration-200">Zapisz</label>
                             </div>
@@ -181,7 +135,6 @@
                             <path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/>
                         </svg>
                     </button>
-                </div>
             </form>
         </div>
     {/if}
@@ -200,7 +153,7 @@
     {/if}
 </div>
 
-<div class="table desktop">
+<div class="tabletop desktop">
     <div class="thead">
         <div class="tr">
             <div class="td">Imię</div>
@@ -224,22 +177,20 @@
                 <div class="td">{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</div>
                 {#if showEntryFee}
                     {@render payment(
-                        startingFees.get(member.member.uuid),
+                        member.payments.find((a) => a.month == null),
                         "STARTING_FEE",
                         null,
                         null,
-                        member.member.uuid,
-                        ""
+                        member.member.uuid
                     )}
                 {/if}
                 {#each [2, 1, 0] as i}
                     {@render payment(
-                        paymentsByMonth.get(member.member.uuid)?.get(resolveMonthKey(i)),
+                        member.payments.find((a) => a.month == `${currentYear}-${monthString(currentMonth - i)}-01`),
                         "MONTHLY_FEE",
                         currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
                         currentMonth - i > 0 ? currentYear : currentYear - 1,
-                        member.member.uuid,
-                        ""
+                        member.member.uuid
                     )}
                 {/each}
             </div>
@@ -262,7 +213,7 @@
                 class="text-right flex-1 block">{member.member.monthlyFee}</span></div>
         <div class="horizontal"><span class="bold flex-1 flex items-center">Wpisowe</span><span
                 class="flex-3">{@render payment(
-            startingFees.get(member.member.uuid),
+            member.payments.find((a) => a.month == null),
             "STARTING_FEE",
             null,
             null,
@@ -272,7 +223,7 @@
             <div class="horizontal flex"><span
                     class="bold flex-1 flex items-center">{monthNames[currentMonth - i - 1]}</span><span class="flex-3">
                 {@render payment(
-                    paymentsByMonth.get(member.member.uuid)?.get(resolveMonthKey(i)),
+                    member.payments.find((a) => a.month == `${currentYear}-${monthString(currentMonth - i)}-01`),
                     "MONTHLY_FEE",
                     currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
                     currentMonth - i > 0 ? currentYear : currentYear - 1,
@@ -335,7 +286,7 @@
         border: none;
     }
 
-    .table {
+    .tabletop {
         display: table;
         border-spacing: 0;
         width: 100%;
@@ -358,7 +309,7 @@
     }
 
     .tr {
-        display: table-row;
+        display: table-row !important;
         align-items: center;
         margin-bottom: 10px;
     }
@@ -367,7 +318,7 @@
         text-align: center;
         padding: 5px;
         min-width: 0;
-        display: table-cell;
+        display: table-cell !important;
     }
 
     .td.payment {
@@ -428,8 +379,8 @@
         border-radius: 15px 0 0 15px;
     }
 
-    .td.payment form input,
-    .td.payment form span {
+    .td.payment form > input[type="number"],
+    .td.payment form > span {
         flex: 2 !important;
     }
 
