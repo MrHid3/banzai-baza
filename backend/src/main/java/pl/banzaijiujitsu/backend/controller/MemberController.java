@@ -19,6 +19,7 @@ import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.MemberCategory;
 import pl.banzaijiujitsu.backend.service.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +42,9 @@ public class MemberController {
     private LocationService locationService;
     @Autowired
     private MemberCategoryService memberCategoryService;
+
+    @Autowired
+    private SmsController smsController;
 
     @PostMapping
     public ResponseEntity<String> addMember(@RequestBody CreateMemberRequest memberRequest, HttpServletResponse response) {
@@ -72,6 +76,7 @@ public class MemberController {
             member.setMonthlyFee(memberRequest.monthlyFee());
             member.setPhoneNumber(memberRequest.phoneNumber());
             member.setCategories(memberCategories);
+            member.setCreatedAt(LocalDateTime.now());
 
             memberService.save(member);
         } catch (InvalidLocationException | InvalidEmailException e) {

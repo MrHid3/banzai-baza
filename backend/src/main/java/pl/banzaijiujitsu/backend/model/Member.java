@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -72,4 +73,7 @@ public class Member {
     @OneToMany(mappedBy = "payer")
     @JsonManagedReference
     private List<Payment> payments = new ArrayList<Payment>();
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 }

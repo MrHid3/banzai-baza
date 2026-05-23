@@ -48,6 +48,9 @@
             <li aria-current={page.url.pathname === '/breakdown' ? 'page' : undefined}>
                 <a href={resolve('/breakdown')}>Podsumowanie</a>
             </li>
+            <li aria-current={page.url.pathname === '/sms' ? 'page' : undefined}>
+                <a href={resolve('/sms')}>SMS</a>
+            </li>
             {#if user?.role === "ROLE_ADMIN"}
                 <li aria-current={page.url.pathname === '/users' ? 'page' : undefined}>
                     <a href={resolve('/users')}>Zarządzanie</a>

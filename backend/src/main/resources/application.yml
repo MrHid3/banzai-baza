@@ -31,6 +31,7 @@ app:
   frontend-url: ${ORIGIN}
   magic-link:
     expiry-hours: 24
+  reminder-content: ${REMINDER_CONTENT}
 
 logging:
   level:

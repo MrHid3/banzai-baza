@@ -12,6 +12,8 @@ import pl.banzaijiujitsu.backend.repository.MemberRepository;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,17 +58,6 @@ public class MemberService {
         return memberRepository.findAllByIsActiveTrue();
     }
 
-//    public List<MemberPayments> getLastThreeMonthsGroupedByMember(Collection<Location> locations) {
-//        LocalDate threeMonthsAgo = LocalDate.now().withDayOfMonth(1).minusMonths(3);
-//
-//        List<Member> members = memberRepository
-//                .findActiveMembersInLocationsWithRecentPayments(locations, threeMonthsAgo);
-//
-//        return members.stream()
-//                .map(m -> new MemberPayments(m, m.getPayments()))
-//                .toList();
-//    }
-
     public List<MemberPayments> getLastThreeMonthsGroupedByMember(Collection<Location> locations) {
         LocalDate threeMonthsAgo = LocalDate.now().withDayOfMonth(1).minusMonths(3);
 
@@ -100,6 +91,14 @@ public class MemberService {
         member.setMonthlyFee(MonthlyFee);
         member.setCategories(categories);
         return this.save(member);
+    }
+    public List<Member> findOverdue() {
+        LocalDate previousMonth = LocalDate.now().minusMonths(1);
+        return memberRepository.findActiveMembersWithoutPaymentForMonth(previousMonth.getYear(), previousMonth.getMonth().getValue(), LocalDateTime.now().withDayOfMonth(11));
+    }
+
+    public List<Member> findByUuidsIn(List<UUID> uuids) {
+        return memberRepository.findByUuidIn(uuids);
     }
 
     public record MemberPayments(Member member, List<Payment> payments) { }

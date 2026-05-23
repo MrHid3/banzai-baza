@@ -6,10 +6,12 @@ import pl.banzaijiujitsu.backend.exception.InvalidPaymentException;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
+import pl.banzaijiujitsu.backend.model.PaymentType;
 import pl.banzaijiujitsu.backend.repository.PaymentRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,4 +62,5 @@ public class PaymentService {
     public void delete(Payment payment) {
         paymentRepository.delete(payment);
     }
+
 }

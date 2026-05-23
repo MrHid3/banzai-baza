@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import pl.banzaijiujitsu.backend.model.Location;
 import pl.banzaijiujitsu.backend.model.Member;
 import pl.banzaijiujitsu.backend.model.Payment;
+import pl.banzaijiujitsu.backend.model.PaymentType;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -33,7 +33,6 @@ public class MemberCategoryController {
     @PostMapping
     public ResponseEntity<MemberCategory> save(@RequestBody CreateMemberCategoryRequest req) {
         memberCategoryService.create(req.name, req.shortname);
-        smsService.sendSms("+48534616446", "hejka stulejka");
         return ResponseEntity.ok().build();
     }
 
