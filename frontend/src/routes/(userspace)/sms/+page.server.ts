@@ -42,13 +42,17 @@ export const actions: Actions = {
 			});
 		}
 
+		console.log(data.get("scheduleDate"), data.get("scheduleTime"))
+
 		const res = await serverFetch(
 			'/api/sms/send',
 			{
 				method: 'POST',
 				body: JSON.stringify({
 					memberUuids: selectedMembers,
-					message: data.get("messageText")
+					message: data.get("messageText"),
+					scheduleDate: data.get("scheduleDate"),
+					scheduleTime: data.get("scheduleTime")
 				})
 			},
 			cookies,
@@ -65,7 +69,8 @@ export const actions: Actions = {
 		return {
 			success: true,
 			processedCount: selectedMembers.length,
-			selectedMembers
+			selectedMembers,
+			scheduled: data.get("scheduleDate") && data.get("scheduleTime")
 		};
 	}
 };

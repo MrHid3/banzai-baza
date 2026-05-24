@@ -35,13 +35,14 @@ public class SmsService {
 
     public void sendSms(String toPhoneNumber, String messageBody) {
         Twilio.init(accountSid, authToken);
-        Message message = Message.creator(
-                new PhoneNumber(toPhoneNumber),
-                new PhoneNumber(fromPhoneNumber),
-                messageBody
-        )
-                .create();
-
+        try{
+            Message message = Message.creator(
+                            new PhoneNumber(toPhoneNumber),
+                            new PhoneNumber(fromPhoneNumber),
+                            messageBody
+                    )
+                    .create();
+        }catch (Exception ignored){}
     }
 
     public void sendSmsToMany(List<Member> members, String messageBody){
@@ -51,12 +52,14 @@ public class SmsService {
                 .map(Member::getPhoneNumber)
                 .collect(Collectors.toSet());
         for(String number : phoneNumbers){
-            Message.creator(
-                            new PhoneNumber(number),
-                            new PhoneNumber(fromPhoneNumber),
-                            messageBody
-                    )
-                    .create();
+            try{
+                Message.creator(
+                                new PhoneNumber(number),
+                                new PhoneNumber(fromPhoneNumber),
+                                messageBody
+                        )
+                        .create();
+            }catch(Exception ignored){}
         }
     }
 

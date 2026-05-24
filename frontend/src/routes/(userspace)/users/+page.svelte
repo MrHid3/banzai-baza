@@ -30,7 +30,7 @@
 
 </script>
 
-<div class="container">
+<div class="container min-w-full">
     <div class="locations">
         <h2>Użytkownicy</h2>
         {#if form?.error && form?.type == "user"}
