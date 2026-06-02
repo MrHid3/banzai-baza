@@ -26,6 +26,7 @@
             })
         }
 
+
         const search = memberTextFilter;
         if (search.length >= 3) {
             result = result.filter((m) => {
@@ -46,6 +47,7 @@
 
     let memberTextFilter = $state("");
     let selectedLocation = $state(null);
+    let selectedCategory = $state(-1);
     let showEntryFee = $state(false);
 
     const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]
@@ -78,6 +80,9 @@
     );
 
 </script>
+<svelte:head>
+    <title>Baza - Płatności</title>
+</svelte:head>
 
 
 {#snippet payment(payment, type, month, year, payerUuid)}
@@ -100,41 +105,41 @@
     {:else}
         <div class="td payment bad">
             <form action="?/addPayment" method="POST" use:enhance>
-                    <input type="hidden" name="paymentType" value={type}>
-                    <input type="hidden" name="month" value={month}>
-                    <input type="hidden" name="year" value={year}>
-                    <input type="hidden" name="payerUuid" value={payerUuid}>
-                    <select name="paymentMethod" class="bg-transparent!">
-                        <option value="CASH">💵</option>
-                        <option value="DEBIT">💳</option>
-                    </select>
-                    <input type="number" name="amount" value={0} required min="0" max="1000" class="bg-transparent!">
-                    <label for={`show-comment-${payerUuid}-${month}-${year}`} class="bg-transparent!">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30"
-                             class="cursor-pointer">
-                            <path d="M544 128C544 110.3 529.7 96 512 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128zM544 384C544 366.3 529.7 352 512 352L128 352C110.3 352 96 366.3 96 384C96 401.7 110.3 416 128 416L512 416C529.7 416 544 401.7 544 384zM96 256C96 273.7 110.3 288 128 288L512 288C529.7 288 544 273.7 544 256C544 238.3 529.7 224 512 224L128 224C110.3 224 96 238.3 96 256zM544 512C544 494.3 529.7 480 512 480L128 480C110.3 480 96 494.3 96 512C96 529.7 110.3 544 128 544L512 544C529.7 544 544 529.7 544 512z"/>
-                        </svg>
-                        <input type="checkbox" id={`show-comment-${payerUuid}-${month}-${year}`}
-                               class="comment-show hidden peer">
-                        <div
-                                class="fixed inset-0 bg-black/40 opacity-0 pointer-events-none
+                <input type="hidden" name="paymentType" value={type}>
+                <input type="hidden" name="month" value={month}>
+                <input type="hidden" name="year" value={year}>
+                <input type="hidden" name="payerUuid" value={payerUuid}>
+                <select name="paymentMethod" class="bg-transparent!">
+                    <option value="CASH">💵</option>
+                    <option value="DEBIT">💳</option>
+                </select>
+                <input type="number" name="amount" value={0} required min="0" max="1000" class="bg-transparent!">
+                <label for={`show-comment-${payerUuid}-${month}-${year}`} class="bg-transparent!">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30"
+                         class="cursor-pointer">
+                        <path d="M544 128C544 110.3 529.7 96 512 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128zM544 384C544 366.3 529.7 352 512 352L128 352C110.3 352 96 366.3 96 384C96 401.7 110.3 416 128 416L512 416C529.7 416 544 401.7 544 384zM96 256C96 273.7 110.3 288 128 288L512 288C529.7 288 544 273.7 544 256C544 238.3 529.7 224 512 224L128 224C110.3 224 96 238.3 96 256zM544 512C544 494.3 529.7 480 512 480L128 480C110.3 480 96 494.3 96 512C96 529.7 110.3 544 128 544L512 544C529.7 544 544 529.7 544 512z"/>
+                    </svg>
+                    <input type="checkbox" id={`show-comment-${payerUuid}-${month}-${year}`}
+                           class="comment-show hidden peer">
+                    <div
+                            class="fixed inset-0 bg-black/40 opacity-0 pointer-events-none
            transition-opacity peer-checked:opacity-100
            peer-checked:pointer-events-auto"
-                        >
-                            <div class="bg-(--color-background-primary) absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[-200%] flex flex-col gap-5 pb-2! w-1/4! rounded-md! h-fit border-(--color-border) border-2">
+                    >
+                        <div class="bg-(--color-background-primary) absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[-200%] flex flex-col gap-5 pb-2! md:w-1/4!:w-full! rounded-md! h-fit border-(--color-border) border-2">
                                 <textarea name="comment"
                                           class="bg-(--color-background-secondary) block rounded-md p-2! h-20!">{payment?.comment}</textarea>
-                                <label for={`show-comment-${payerUuid}-${month}-${year}`}
-                                       class="block text-gray-200 bg-(--background-special) rounded-sm text-2xl cursor-pointer p-1! hover:bg-neutral-800 duration-200">Zapisz</label>
-                            </div>
+                            <label for={`show-comment-${payerUuid}-${month}-${year}`}
+                                   class="block text-gray-200 bg-(--background-special) rounded-sm text-2xl cursor-pointer p-1! hover:bg-neutral-800 duration-200">Zapisz</label>
                         </div>
-                    </label>
-                    <button type="submit" aria-label="Zapisz" class="bg-transparent!">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30"
-                             class="cursor-pointer">
-                            <path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/>
-                        </svg>
-                    </button>
+                    </div>
+                </label>
+                <button type="submit" aria-label="Zapisz" class="bg-transparent!">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" height="30" width="30"
+                         class="cursor-pointer">
+                        <path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/>
+                    </svg>
+                </button>
             </form>
         </div>
     {/if}
@@ -145,6 +150,12 @@
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
     <span>Filtruj po lokalizacji:</span>
     <LocationSelect all={true} bind:location={selectedLocation} short={false}></LocationSelect>
+    <select bind:value={selectedCategory} class="bg-neutral-300 rounded-lg text-neutral-600 px-5! py-1!">
+        <option value={-1}>Wszystkie</option>
+        {#each data.categories as category (category.id)}
+            <option value={category.id}>{category.shortname}</option>
+        {/each}
+    </select>
     <label class="desktop" for="showEntryFeeCheckbox">Pokaż wpisowe</label>
     <input bind:checked={showEntryFee} class="desktop" id="showEntryFeeCheckbox" type="checkbox">
 
@@ -170,30 +181,32 @@
     </div>
     <div class="tbody">
         {#each filteredMembers as member (member.member.uuid)}
-            <div class="tr">
-                <div class="td">{member.member.name != "" ? member.member.name : "- -"}</div>
-                <div class="td">{member.member.surname != "" ? member.member.surname : "- -"}</div>
-                <div class="td">{member.member.location.shortname}</div>
-                <div class="td">{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</div>
-                {#if showEntryFee}
-                    {@render payment(
-                        member.payments.find((a) => a.month == null),
-                        "STARTING_FEE",
-                        null,
-                        null,
-                        member.member.uuid
-                    )}
-                {/if}
-                {#each [2, 1, 0] as i}
-                    {@render payment(
-                        member.payments.find((a) => a.month == `${currentYear}-${monthString(currentMonth - i)}-01`),
-                        "MONTHLY_FEE",
-                        currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
-                        currentMonth - i > 0 ? currentYear : currentYear - 1,
-                        member.member.uuid
-                    )}
-                {/each}
-            </div>
+            {#if selectedCategory == null || selectedCategory == -1 || member.member.categories.some(a => a.id == selectedCategory)}
+                <div class="tr outline-2 outline-transparent hover:outline-neutral-400! duration-300! rounded-xl delay-150">
+                    <div class="td">{member.member.name != "" ? member.member.name : "- -"}</div>
+                    <div class="td">{member.member.surname != "" ? member.member.surname : "- -"}</div>
+                    <div class="td">{member.member.location.shortname}</div>
+                    <div class="td">{member.member.monthlyFee * Number(multiplierMap.get(member.member.location.id)?.get(currentMonth)?.multiplier ?? 1)}</div>
+                    {#if showEntryFee}
+                        {@render payment(
+                            member.payments.find((a) => a.month == null),
+                            "STARTING_FEE",
+                            null,
+                            null,
+                            member.member.uuid
+                        )}
+                    {/if}
+                    {#each [2, 1, 0] as i}
+                        {@render payment(
+                            member.payments.find((a) => a.month == `${currentYear}-${monthString(currentMonth - i)}-01`),
+                            "MONTHLY_FEE",
+                            currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
+                            currentMonth - i > 0 ? currentYear : currentYear - 1,
+                            member.member.uuid
+                        )}
+                    {/each}
+                </div>
+            {/if}
         {/each}
     </div>
 </div>
@@ -280,10 +293,6 @@
     .tbody {
         display: table-row-group;
         width: 100%;
-    }
-
-    input::selection {
-        border: none;
     }
 
     .tabletop {

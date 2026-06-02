@@ -94,7 +94,7 @@ public class MemberService {
     }
     public List<Member> findOverdue() {
         LocalDate previousMonth = LocalDate.now().minusMonths(1);
-        return memberRepository.findActiveMembersWithoutPaymentForMonth(previousMonth.getYear(), previousMonth.getMonth().getValue(), LocalDateTime.now().withDayOfMonth(11));
+        return memberRepository.findActiveMembersWithoutPaymentForMonth(previousMonth.getYear(), previousMonth.getMonth().getValue());
     }
 
     public List<Member> findByUuidsIn(List<UUID> uuids) {

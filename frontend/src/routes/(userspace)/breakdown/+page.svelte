@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageData } from './$types';
+    import type {PageData} from './$types';
 
     // ── Types ────────────────────────────────────────────────────────────────
 
@@ -40,10 +40,10 @@
      *
      * Rule: if day <= 11, step back one month.
      */
-    function timestampToMonthKey(ts: string): string {
+    function timestampToEntryMonthKey(ts: string): string {
         const d = new Date(ts);
-        if (d.getDate() <= 11) {
-            d.setMonth(d.getMonth() - 1);
+        if (d.getDate() > 11) {
+            d.setMonth(d.getMonth() + 1);
         }
         const y = d.getFullYear();
         const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -51,11 +51,11 @@
     }
 
     const METHOD_LABELS: Record<string, string> = {
-        CASH:     'Gotówka',
-        CARD:     'Karta',
+        CASH: 'Gotówka',
+        CARD: 'Karta',
         TRANSFER: 'Przelew',
-        BLIK:     'BLIK',
-        DEBIT:    'Przelew'
+        BLIK: 'BLIK',
+        DEBIT: 'Przelew'
     };
 
     function methodLabel(m: string): string {
@@ -64,7 +64,7 @@
 
     // ── Props ────────────────────────────────────────────────────────────────
 
-    let { data }: { data: PageData } = $props();
+    let {data}: { data: PageData } = $props();
 
     const payments: Payment[] = $derived(
         data.error || !data.payments ? [] : (data.payments as Payment[])
@@ -72,7 +72,10 @@
 
     // ── Breakdown structures ──────────────────────────────────────────────────
 
-    interface MethodBucket { count: number; total: number; }
+    interface MethodBucket {
+        count: number;
+        total: number;
+    }
 
     interface LocationRow {
         location: string;
@@ -104,30 +107,30 @@
     function formatMonth(iso: string): string {
         const [year, month] = iso.split('-');
         const d = new Date(Number(year), Number(month) - 1, 1);
-        return d.toLocaleString('pl-PL', { month: 'long', year: 'numeric' });
+        return d.toLocaleString('pl-PL', {month: 'long', year: 'numeric'});
     }
 
     function fmt(n: number): string {
-        return n.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' });
+        return n.toLocaleString('pl-PL', {style: 'currency', currency: 'PLN'});
     }
 
     function emptySection(): Section {
-        return { locations: new Map(), sectionTotal: 0, allMethods: new Set() };
+        return {locations: new Map(), sectionTotal: 0, allMethods: new Set()};
     }
 
     function addToSection(section: Section, p: Payment): void {
         const loc = locationOf(p);
         if (!section.locations.has(loc)) {
-            section.locations.set(loc, { location: loc, methods: new Map(), rowTotal: 0 });
+            section.locations.set(loc, {location: loc, methods: new Map(), rowTotal: 0});
         }
         const row = section.locations.get(loc)!;
         if (!row.methods.has(p.paymentMethod)) {
-            row.methods.set(p.paymentMethod, { count: 0, total: 0 });
+            row.methods.set(p.paymentMethod, {count: 0, total: 0});
         }
-        const bucket       = row.methods.get(p.paymentMethod)!;
-        bucket.count      += 1;
-        bucket.total      += p.amount;
-        row.rowTotal      += p.amount;
+        const bucket = row.methods.get(p.paymentMethod)!;
+        bucket.count += 1;
+        bucket.total += p.amount;
+        row.rowTotal += p.amount;
         section.sectionTotal += p.amount;
         section.allMethods.add(p.paymentMethod);
     }
@@ -158,7 +161,9 @@
     const filteredPayments = $derived(
         selectedYear === null
             ? payments
-            : payments.filter(p => {return (paymentYear(p) === selectedYear && p.amount > 0)})
+            : payments.filter(p => {
+                return (paymentYear(p) === selectedYear && p.amount > 0)
+            })
     );
 
     // ── Build breakdown ───────────────────────────────────────────────────────
@@ -167,15 +172,19 @@
         const map = new Map<string, MonthBlock>();
 
         for (const p of filteredPayments) {
-            const isEntry  = p.paymentType === ENTRY_FEE_TYPE;
-            const monthKey = timestampToMonthKey(p.timeStamp)
+            const isEntry = p.paymentType === ENTRY_FEE_TYPE;
+            const monthKey = isEntry
+                ? timestampToEntryMonthKey(p.timeStamp)
+                : !p.month
+                    ? timestampToMonthKey(p.timeStamp)
+                    : p.month.length === 7 ? `${p.month}-01` : p.month;
 
             if (!map.has(monthKey)) {
                 map.set(monthKey, {
                     monthKey,
                     label: formatMonth(monthKey),
                     monthly: emptySection(),
-                    entry:   emptySection(),
+                    entry: emptySection(),
                     blockTotal: 0,
                 });
             }
@@ -202,7 +211,12 @@
         next.has(key) ? next.delete(key) : next.add(key);
         collapsed = next;
     }
+
 </script>
+
+<svelte:head>
+    <title>Baza - Podsumowanie</title>
+</svelte:head>
 
 <div class="page">
 
@@ -279,7 +293,9 @@
                                 <thead>
                                 <tr>
                                     <td>Lokalizacja</td>
-                                    {#each methodList as m}<td class="desktop">{methodLabel(m)}</td>{/each}
+                                    {#each methodList as m}
+                                        <td class="desktop">{methodLabel(m)}</td>
+                                    {/each}
                                     <td>Suma</td>
                                 </tr>
                                 </thead>
@@ -335,7 +351,9 @@
                                 <thead>
                                 <tr>
                                     <td>Lokalizacja</td>
-                                    {#each methodList as m}<td class="desktop">{methodLabel(m)}</td>{/each}
+                                    {#each methodList as m}
+                                        <td class="desktop">{methodLabel(m)}</td>
+                                    {/each}
                                     <td>Suma</td>
                                 </tr>
                                 </thead>
@@ -435,7 +453,9 @@
         font-size: 0.95em;
     }
 
-    select:focus { outline: none; }
+    select:focus {
+        outline: none;
+    }
 
     .no-results {
         font-size: 2em;
@@ -531,7 +551,10 @@
         transition: transform 0.2s;
         flex-shrink: 0;
     }
-    .chevron.rotated { transform: rotate(180deg); }
+
+    .chevron.rotated {
+        transform: rotate(180deg);
+    }
 
     /* ── Section headers (Składki / Wpisowe) ── */
     .section-header {
@@ -646,7 +669,10 @@
     }
 
     @media (max-width: 560px) {
-        .summary-bar { flex-direction: column; }
+        .summary-bar {
+            flex-direction: column;
+        }
+
         .summary-item + .summary-item {
             border-left: none;
             border-top: 2px solid var(--color-border);

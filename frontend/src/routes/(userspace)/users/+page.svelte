@@ -29,6 +29,9 @@
     let inviting = $state(false);
 
 </script>
+<svelte:head>
+    <title>Baza - Zarządzanie</title>
+</svelte:head>
 
 <div class="container min-w-full">
     <div class="locations">

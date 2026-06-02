@@ -109,7 +109,7 @@
     });
 </script>
 <svelte:head>
-    <title>SMS</title>
+    <title>Baza - SMS</title>
 </svelte:head>
 
 <div class="h-full bg-(--color-background-primary) px-4 py-8 md:px-8 md:py-12 mx-auto!">
@@ -349,6 +349,7 @@
                                             name="scheduleTime"
                                             bind:value={scheduleTime}
                                             required
+                                            step="3600"
                                             class="bg-(--color-background-secondary) border-none rounded-2xl px-5 py-3 text-(--color-text-secondary) focus:outline-2 focus:outline-(--color-text-primary) transition"
                                     />
                                 </div>
@@ -376,7 +377,7 @@
                     </form>
 
                     {#if form?.success}
-                        <div class="mt-8 bg-green-950/50 border border-green-700 text-green-200 px-6 py-4 rounded-2xl text-center">
+                        <div class="mt-3! bg-green-950/50 border border-green-700 text-green-200 px-6 py-4 rounded-2xl text-center">
                             Wiadomość {!form.scheduled ? 'wysłana' : 'zaplanowana'} do {form.processedCount} odbiorców
                         </div>
                     {/if}

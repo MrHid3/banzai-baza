@@ -76,6 +76,7 @@
             <a href={resolve('/db')} onclick={closeMenu}>Baza</a>
             <a href={resolve('/multipliers')} onclick={closeMenu}>Mnożniki</a>
             <a href={resolve('/breakdown')} onclick={closeMenu}>Podsumowanie</a>
+            <a href={resolve('/sms')} onclick={closeMenu}>SMS</a>
             {#if user?.role === "ROLE_ADMIN"}
                 <a href={resolve('/users')} onclick={closeMenu}>Zarządzanie</a>
             {/if}

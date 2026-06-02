@@ -47,9 +47,32 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     @Query("SELECT m FROM Member m WHERE m.isActive = true AND m.location IN :locations ORDER BY m.uuid")
     List<Member> findActiveByLocations(@Param("locations") Collection<Location> locations);
 
+//    @Query("""
+//    SELECT DISTINCT m FROM Member m
+//    WHERE m.isActive = true
+//    AND NOT EXISTS (
+//        SELECT 1 FROM Payment p
+//        WHERE p.payer = m
+//        AND p.paymentType = pl.banzaijiujitsu.backend.model.PaymentType.MONTHLY_FEE
+//        AND YEAR(p.month) = :year
+//        AND MONTH(p.month) = :month
+//    )
+//    """)
+//    List<Member> findActiveMembersWithoutPaymentForMonth(
+//            @Param("year") int year,
+//            @Param("month") int month,
+//            @Param("firstDayOfCurrentMonth") LocalDateTime firstDayOfCurrentMonth);
+
     @Query("""
     SELECT DISTINCT m FROM Member m
     WHERE m.isActive = true
+    AND NOT EXISTS (
+        SELECT 1 FROM PriceMultiplier pm
+        WHERE pm.location = m.location
+        AND YEAR(pm.month) = :year
+        AND MONTH(pm.month) = :month
+        AND pm.multiplier = 0
+    )
     AND NOT EXISTS (
         SELECT 1 FROM Payment p
         WHERE p.payer = m
@@ -60,6 +83,5 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     """)
     List<Member> findActiveMembersWithoutPaymentForMonth(
             @Param("year") int year,
-            @Param("month") int month,
-            @Param("firstDayOfCurrentMonth") LocalDateTime firstDayOfCurrentMonth);
+            @Param("month") int month);
 }

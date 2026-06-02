@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 @Entity
 @Getter
 @Setter
+@ToString
 public class Member {
 
     public Member() {
@@ -75,5 +77,5 @@ public class Member {
     private List<Payment> payments = new ArrayList<Payment>();
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

@@ -40,6 +40,9 @@
         openLocations = next;
     }
 </script>
+<svelte:head>
+    <title>Baza - Mnożniki</title>
+</svelte:head>
 
 {#snippet multiplierCell(locationId: number, monthIndex: number)}
     {@const mult = multiplierMap.get(locationId)?.get(monthIndex)}

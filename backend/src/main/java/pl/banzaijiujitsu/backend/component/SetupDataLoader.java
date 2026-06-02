@@ -16,6 +16,7 @@ import pl.banzaijiujitsu.backend.service.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -121,13 +122,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Transactional
     Location createLocationIfNotFound(String name, String shortname) {
         Location location;
-        Optional<Location> optionalLocaltion = locationService.findByName(name);
+        List<Location> optionalLocaltion = locationService.findByName(name);
 
         if (optionalLocaltion.isEmpty()) {
             location = new Location(name, shortname);
             locationService.save(location);
         } else {
-            location = optionalLocaltion.get();
+            location = optionalLocaltion.get(0);
         }
 
         return location;

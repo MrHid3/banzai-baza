@@ -47,23 +47,23 @@
 
 {#if !edit}
     <div class="row desktop">
-        <span class="data">{member.name != "" ? member.name : "- -"}</span>
-        <span class="data">{member.surname != "" ? member.surname : "- -"}</span>
-        <span class="data">{member.email != "" ? member.email : "- -"}</span>
-        <span class="data">{member.phoneNumber}</span>
-        <span class="data">{member.location ? member.location.shortname : ""}</span>
-        <span class="data">{member.monthlyFee}</span>
+        <span class="data">{member?.name != "" ? member?.name : "- -"}</span>
+        <span class="data">{member?.surname != "" ? member?.surname : "- -"}</span>
+        <span class="data">{member?.email != "" ? member?.email : "- -"}</span>
+        <span class="data">{member?.phoneNumber}</span>
+        <span class="data">{member?.location ? member?.location.shortname : ""}</span>
+        <span class="data">{member?.monthlyFee}</span>
         <span class="data">
-            {#each member.categories as category (category.id)}
+            {#each member?.categories as category (category.id)}
                 <span class="category">{category.shortname}</span>
             {/each}
-            {#if member.categories.length == 0}
+            {#if member?.categories.length == 0}
                     - -
                 {/if}
         </span>
         <span class="data">
             <div class="textarea">
-                <textarea readonly>{member.comment}
+                <textarea readonly>{member?.comment}
                 </textarea>
             </div>
         </span>
@@ -92,19 +92,19 @@
     <div class="mobile">
         {#if !mobileEdit}
             <!--        <div class="horizontal">-->
-            <!--            <span>{member.name}</span>-->
-            <!--            <span>{member.surname}</span>-->
+            <!--            <span>{member?.name}</span>-->
+            <!--            <span>{member?.surname}</span>-->
             <!--            <span><button>Rozwiń</button></span>-->
             <!--        </div>-->
-            <div class="horizontal"><span class="bold">Imię</span><span>{member.name}</span></div>
-            <div class="horizontal"><span class="bold">Nazwisko</span><span>{member.surname}</span></div>
-            <div class="horizontal"><span class="bold">Email</span><span>{member.email}</span></div>
-            <div class="horizontal"><span class="bold">Nr. tel</span><span>{member.phoneNumber}</span></div>
-            <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member.location?.shortname}</span></div>
-            <div class="horizontal"><span class="bold">Cena/mieś.</span><span>{member.monthlyFee}</span></div>
+            <div class="horizontal"><span class="bold">Imię</span><span>{member?.name}</span></div>
+            <div class="horizontal"><span class="bold">Nazwisko</span><span>{member?.surname}</span></div>
+            <div class="horizontal"><span class="bold">Email</span><span>{member?.email}</span></div>
+            <div class="horizontal"><span class="bold">Nr. tel</span><span>{member?.phoneNumber}</span></div>
+            <div class="horizontal"><span class="bold">Lokalizacja</span><span>{member?.location?.shortname}</span></div>
+            <div class="horizontal"><span class="bold">Cena/mieś.</span><span>{member?.monthlyFee}</span></div>
             <div class="horizontal">
-                <span class="bold">Kategorie</span><span>{#each member.categories as category (category.id)}
-                {#if category != member.categories[member.categories.length - 1]}
+                <span class="bold">Kategorie</span><span>{#each member?.categories as category (category.id)}
+                {#if category != member?.categories[member?.categories.length - 1]}
                     {category.name}, {" "}
                     {:else}
                     {category.name}
@@ -113,7 +113,7 @@
             </div>
 
             <div class="horizontal"><span
-                    class="bold">Komentarz</span><span>{#if member.comment}<p>{member.comment}</p>{/if}</span></div>
+                    class="bold">Komentarz</span><span>{#if member?.comment}<p>{member?.comment}</p>{/if}</span></div>
             {#if deleteMode}
                 <div class="horizontal" style="flex-direction: row-reverse;">
                     <form action="?/delete" method="POST" use:enhance class="hidden" style="padding: 5px">
@@ -133,12 +133,12 @@
                    member.categories = [];
                    categories.forEach((category) => {
                        if (result.data.categories.some(c => c == category.id)){
-                           member.categories.push(category);
+                           member?.categories.push(category);
                        }
                    })
                 }
             }}>
-                <input type="hidden" value={member.uuid} name="memberUuid">
+                <input type="hidden" value={member?.uuid} name="memberUuid">
                 <div class="horizontal"><span class="bold">Imię</span><span><input type="text" bind:value={member.name} name="name"></span>
                 </div>
                 <div class="horizontal"><span class="bold">Nazwisko</span><span><input type="text" name="surname"
@@ -173,7 +173,7 @@
             </div>
         </span></div>
                 <div class="horizontal"><span
-                        class="bold">Komentarz</span><span><textarea name="comment">{member.comment}</textarea></span></div>
+                        class="bold">Komentarz</span><span><textarea name="comment">{member?.comment}</textarea></span></div>
                 <div class="horizontal">
                     <span></span>
                     <button type="submit" class="save">Zapisz</button>
@@ -189,7 +189,7 @@
                    member.categories = [];
                    categories.forEach((category) => {
                        if (result.data.categories.some(c => c == category.id)){
-                           member.categories.push(category);
+                           member?.categories.push(category);
                        }
                    })
            }
@@ -216,9 +216,9 @@
         </span>
         <span class="data">
             {#each categories as category (category.id)}
-                <label for="category-{member.uuid}-{category.id}" class="category">
-                <input type="checkbox" name="categories" id="category-{member.uuid}-{category.id}" value="{category.id}"
-                       checked={member.categories.some(a => a.id === category.id)}/>
+                <label for="category-{member?.uuid}-{category.id}" class="category">
+                <input type="checkbox" name="categories" id="category-{member?.uuid}-{category.id}" value="{category.id}"
+                       checked={member?.categories.some(a => a.id === category.id)}/>
                 <span>{category.shortname}</span>
                 </label>
             {/each}

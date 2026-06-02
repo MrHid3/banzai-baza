@@ -23,8 +23,8 @@ public class LocationService {
         return locationRepository.findById(id);
     }
 
-    public Optional<Location> findByName(String name) {
-        return locationRepository.findByName(name);
+    public List<Location> findByName(String name) {
+        return locationRepository.findAllByName(name);
     }
 
     public List<Location> findAll() {

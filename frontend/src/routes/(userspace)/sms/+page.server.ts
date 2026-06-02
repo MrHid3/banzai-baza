@@ -42,8 +42,6 @@ export const actions: Actions = {
 			});
 		}
 
-		console.log(data.get("scheduleDate"), data.get("scheduleTime"))
-
 		const res = await serverFetch(
 			'/api/sms/send',
 			{
