@@ -1,6 +1,4 @@
 <script lang="ts">
-    import "./normalize.css";
-
     let {children} = $props();
 
 </script>
@@ -41,8 +39,6 @@
 
     :global(*) {
         box-sizing: border-box;
-        margin: 0;
-        padding: 0;
         font-family: 'Ubuntu', sans-serif;
     }
 

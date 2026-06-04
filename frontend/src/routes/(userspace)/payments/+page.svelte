@@ -3,6 +3,7 @@
     import {enhance} from "$app/forms"
     import {locations} from "$lib/stores/locations.svelte";
     import {onMount, untrack} from "svelte";
+    import { resolve } from "$app/paths"
 
     const {data, form} = $props();
 
@@ -87,8 +88,8 @@
 
 {#snippet payment(payment, type, month, year, payerUuid)}
     {#if payment}
-        <abbr class="td payment ok" title={payment.comment} style="font-style: unset; text-decoration: unset">
-            <form action="?/deletePayment" method="post" use:enhance>
+        <abbr class="td payment ok w-full! block! flex-1" title={payment.comment} style="font-style: unset; text-decoration: unset">
+            <form action="?/deletePayment" class="flex-1" method="post" use:enhance>
                 {#if payment.paymentmethod == "cash"}
                     <i>💵</i>
                 {:else}
@@ -103,7 +104,7 @@
             </form>
         </abbr>
     {:else}
-        <div class="td payment bad">
+        <div class="td payment bad block! w-full">
             <form action="?/addPayment" method="POST" use:enhance>
                 <input type="hidden" name="paymentType" value={type}>
                 <input type="hidden" name="month" value={month}>
@@ -145,6 +146,7 @@
     {/if}
 {/snippet}
 
+<a href={resolve('/paymentHistory')} class="absolute top-10 left-4 p-3 rounded-xl bg-neutral-200 border-2 border-neutral-400 text-neutral-400 hover:text-neutral-600 hover:text-shadow-2 hover:text-shadow-black/20 duration-200 desktop">Szczegóły</a>
 <div id="filterHolder">
     <span>Znajdź:</span>
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
@@ -448,12 +450,6 @@
 
         .horizontal span + span {
             text-align: right;
-        }
-
-        .mobile .td.payment,
-        .mobile .td.payment form {
-            width: 100% !important;
-            max-width: 100% !important;
         }
     }
 </style>
