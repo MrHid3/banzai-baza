@@ -63,7 +63,7 @@
         </span>
         <span class="data">
             <div class="textarea">
-                <textarea readonly>{member?.comment}
+                <textarea readonly>{member.comment}
                 </textarea>
             </div>
         </span>
@@ -113,7 +113,7 @@
             </div>
 
             <div class="horizontal"><span
-                    class="bold">Komentarz</span><span>{#if member?.comment}<p>{member?.comment}</p>{/if}</span></div>
+                    class="bold">Komentarz</span><span>{#if member?.comment}<p>{member.comment}</p>{/if}</span></div>
             {#if deleteMode}
                 <div class="horizontal" style="flex-direction: row-reverse;">
                     <form action="?/delete" method="POST" use:enhance class="hidden" style="padding: 5px">
@@ -173,7 +173,7 @@
             </div>
         </span></div>
                 <div class="horizontal"><span
-                        class="bold">Komentarz</span><span><textarea name="comment">{member?.comment}</textarea></span></div>
+                        class="bold">Komentarz</span><span><textarea name="comment">{member.comment}</textarea></span></div>
                 <div class="horizontal">
                     <span></span>
                     <button type="submit" class="save">Zapisz</button>

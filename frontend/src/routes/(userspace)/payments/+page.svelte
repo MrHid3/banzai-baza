@@ -104,7 +104,7 @@
             </form>
         </abbr>
     {:else}
-        <div class="td payment bad block! w-full">
+        <div class="td payment bad">
             <form action="?/addPayment" method="POST" use:enhance>
                 <input type="hidden" name="paymentType" value={type}>
                 <input type="hidden" name="month" value={month}>
@@ -146,7 +146,7 @@
     {/if}
 {/snippet}
 
-<a href={resolve('/paymentHistory')} class="absolute top-10 left-4 p-3 rounded-xl bg-neutral-200 border-2 border-neutral-400 text-neutral-400 hover:text-neutral-600 hover:text-shadow-2 hover:text-shadow-black/20 duration-200 desktop">Szczegóły</a>
+<a href={resolve('/paymentHistory')} class="absolute top-16 left-4 p-3 rounded-xl bg-neutral-200 border-2 border-neutral-400 text-neutral-400 hover:text-neutral-600 hover:text-shadow-2 hover:text-shadow-black/20 duration-200 desktop">Szczegóły</a>
 <div id="filterHolder">
     <span>Znajdź:</span>
     <input bind:value={memberTextFilter} id="textFilterInput" type="text"/>
@@ -450,6 +450,10 @@
 
         .horizontal span + span {
             text-align: right;
+        }
+
+        .payment{
+            display: block !important;
         }
     }
 </style>

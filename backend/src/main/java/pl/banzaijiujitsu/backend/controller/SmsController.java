@@ -48,7 +48,7 @@ public class SmsController {
         } else {
             System.out.println("scheduled");
             scheduler.schedule(() -> {smsService.sendSmsToMany(memberService.findByUuidsIn(uuids), req.message);},
-                    Instant.from(LocalDateTime.of(LocalDate.parse(req.scheduleDate), LocalTime.parse(req.scheduleTime)).atZone(ZoneId.systemDefault())));
+                    Instant.from(LocalDateTime.of(LocalDate.parse(req.scheduleDate), LocalTime.parse(req.scheduleTime)).atZone(ZoneId.of("Europe/Warsaw"))));
         }
         return ResponseEntity.ok().build();
     }

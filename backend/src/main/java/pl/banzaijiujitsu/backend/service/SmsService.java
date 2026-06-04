@@ -42,7 +42,7 @@ public class SmsService {
     public void sendSms(String toPhoneNumber, String messageBody) {
         try{
             Message message = Message.creator(
-                            new PhoneNumber(toPhoneNumber),
+                            new PhoneNumber(convertToPolish(toPhoneNumber)),
                             new PhoneNumber("KLUB BANZAI"),
                             messageBody
                     )
@@ -57,13 +57,18 @@ public class SmsService {
         for(String number : phoneNumbers){
             try{
                 Message.creator(
-                                new PhoneNumber(number),
+                                new PhoneNumber(convertToPolish(number)),
                                 new PhoneNumber("KLUB BANZAI"),
                                 messageBody
                         )
                         .create();
             }catch(Exception ignored){}
         }
+    }
+
+    private String convertToPolish(String phone){
+        if (phone == null || phone.isBlank()) return phone;
+        return phone.startsWith("+") ? phone : "+48" + phone;
     }
 
     @Scheduled(cron = "0 30 16 15 * *")

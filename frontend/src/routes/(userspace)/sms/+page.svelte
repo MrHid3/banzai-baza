@@ -349,7 +349,7 @@
                                             name="scheduleTime"
                                             bind:value={scheduleTime}
                                             required
-                                            step="3600"
+                                            step="60"
                                             class="bg-(--color-background-secondary) border-none rounded-2xl px-5 py-3 text-(--color-text-secondary) focus:outline-2 focus:outline-(--color-text-primary) transition"
                                     />
                                 </div>
