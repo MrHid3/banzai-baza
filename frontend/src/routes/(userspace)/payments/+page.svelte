@@ -88,9 +88,9 @@
 
 {#snippet payment(payment, type, month, year, payerUuid)}
     {#if payment}
-        <abbr class="td payment ok w-full! block! flex-1" title={payment.comment} style="font-style: unset; text-decoration: unset">
+        <abbr class="td payment ok  flex-1" title={payment.comment} style="font-style: unset; text-decoration: unset">
             <form action="?/deletePayment" class="flex-1" method="post" use:enhance>
-                {#if payment.paymentmethod == "cash"}
+                {#if payment.paymentMethod == "CASH"}
                     <i>💵</i>
                 {:else}
                     <i>💳</i>
@@ -127,7 +127,7 @@
            transition-opacity peer-checked:opacity-100
            peer-checked:pointer-events-auto"
                     >
-                        <div class="bg-(--color-background-primary) absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[-200%] flex flex-col gap-5 pb-2! md:w-1/4!:w-full! rounded-md! h-fit border-(--color-border) border-2">
+                        <div class="xbg-(--color-background-primary) absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[-200%] flex flex-col gap-5 pb-2! md:w-1/4!:w-full! rounded-md! h-fit border-(--color-border) border-2">
                                 <textarea name="comment"
                                           class="bg-(--color-background-secondary) block rounded-md p-2! h-20!">{payment?.comment}</textarea>
                             <label for={`show-comment-${payerUuid}-${month}-${year}`}
