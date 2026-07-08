@@ -187,6 +187,7 @@
 </div>
 <div class="membersTable desktop">
     <div class="header desktop">
+        <span class="data">#</span>
         <span class="data">Imię</span>
         <span class="data">Nazwisko</span>
         <span class="data">Email</span>
@@ -250,7 +251,7 @@
     {/if}
     {#each filteredMembers as member (member.uuid)}
         <Member bind:member={members[members.findIndex(m => m.uuid === member.uuid)]} mobileEdit={mobileEdit}
-                deleteMode={deleteMode} categories={categories}></Member>
+                deleteMode={deleteMode} categories={categories} num={members.findIndex(m => m.uuid == member.uuid) + 1}></Member>
         <!--        <Member bind:member={member}></Member>-->
     {/each}
 </div>

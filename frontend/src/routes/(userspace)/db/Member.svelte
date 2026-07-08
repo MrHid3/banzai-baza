@@ -2,7 +2,7 @@
     import {enhance} from "$app/forms";
     import LocationSelect from "$lib/LocationSelect.svelte";
 
-    let {member = $bindable(), mobileEdit, deleteMode, categories}: {
+    let {member = $bindable(), mobileEdit, deleteMode, categories, num}: {
         member: {
             uuid: string,
             name: string,
@@ -36,7 +36,8 @@
             id: number,
             name: string,
             shortname: string
-        }[]
+        }[],
+        num: number
     } = $props();
 
     let edit = $state(false);
@@ -47,6 +48,7 @@
 
 {#if !edit}
     <div class="row desktop">
+        <span class="data">{num}</span>
         <span class="data">{member?.name != "" ? member?.name : "- -"}</span>
         <span class="data">{member?.surname != "" ? member?.surname : "- -"}</span>
         <span class="data">{member?.email != "" ? member?.email : "- -"}</span>
@@ -96,6 +98,7 @@
             <!--            <span>{member?.surname}</span>-->
             <!--            <span><button>Rozwiń</button></span>-->
             <!--        </div>-->
+            <div>{num}</div>
             <div class="horizontal"><span class="bold">Imię</span><span>{member?.name}</span></div>
             <div class="horizontal"><span class="bold">Nazwisko</span><span>{member?.surname}</span></div>
             <div class="horizontal"><span class="bold">Email</span><span>{member?.email}</span></div>
@@ -299,7 +302,7 @@
     }
 
     .row:hover {
-        outline: 2px solid transparent;
+        outline: 2px solid #dd5555;
     }
 
     .row > * {

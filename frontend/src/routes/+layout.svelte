@@ -22,7 +22,6 @@
         /*--color-border: #444444;*/
         /*--accent: #888888;*/
         /*--background-special: #b3b3b3;*/
-        /*font-family: var(--font-body);*/
         /*color: var(--color-text-primary);*/
         /*background-color: var(--color-background-primary);*/
         --color-background-primary: #ededed;
@@ -32,7 +31,6 @@
         --color-border: #bbbbbb;
         --accent: #777777;
         --background-special: #4c4c4c;
-        /*font-family: var(--font-body);*/
         color: var(--color-text-primary);
         background-color: var(--color-background-primary);
     }

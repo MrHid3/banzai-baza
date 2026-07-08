@@ -80,6 +80,8 @@
         ])
     );
 
+    console.log(filteredMembers)
+
 </script>
 <svelte:head>
     <title>Baza - Płatności</title>
@@ -169,6 +171,7 @@
 <div class="tabletop desktop">
     <div class="thead">
         <div class="tr">
+            <div class="td">#</div>
             <div class="td">Imię</div>
             <div class="td">Nazwisko</div>
             <div class="td">Lokalizacja</div>
@@ -176,15 +179,40 @@
             {#if showEntryFee}
                 <div class="td">Wpisowe</div>
             {/if}
-            <div class="td">{monthNames[currentMonth - 3]}</div>
-            <div class="td">{monthNames[currentMonth - 2]}</div>
-            <div class="td">{monthNames[currentMonth - 1]}</div>
+            <div class="td flex-col flex">
+                <div>
+                {monthNames[currentMonth - 3]}
+                </div>
+                <div class="flex flex-row gap-2 justify-center">
+                    (<span class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(2) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
+                    <span class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(2) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
+                </div>
+            </div>
+            <div class="td">
+                <div>
+                    {monthNames[currentMonth - 2]}
+                </div>
+                <div class="flex flex-row gap-2 justify-center">
+                    (<span class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(1) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
+                    <span class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(1) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
+                </div>
+            </div>
+            <div class="td">
+                <div>
+                    {monthNames[currentMonth - 1]}
+                </div>
+                <div class="flex flex-row gap-2 justify-center">
+                    (<span class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(0) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
+                    <span class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(0) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
+                </div>
+            </div>
         </div>
     </div>
     <div class="tbody">
         {#each filteredMembers as member (member.member.uuid)}
             {#if selectedCategory == null || selectedCategory == -1 || member.member.categories.some(a => a.id == selectedCategory)}
                 <div class="tr outline-2 outline-transparent hover:outline-neutral-400! duration-300! rounded-xl delay-150">
+                    <div class="td">{ filteredMembers.findIndex(m => member.member.uuid == m.member.uuid) + 1}</div>
                     <div class="td">{member.member.name != "" ? member.member.name : "- -"}</div>
                     <div class="td">{member.member.surname != "" ? member.member.surname : "- -"}</div>
                     <div class="td">{member.member.location.shortname}</div>
