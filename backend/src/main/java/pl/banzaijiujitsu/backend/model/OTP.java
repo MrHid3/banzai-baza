@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
 
@@ -14,11 +15,13 @@ public class OTP {
 
     public OTP() {
         this.code = this.generateCode();
+        this.expiresAt = LocalDateTime.now().plusMinutes(15);
     }
 
     public OTP(String phoneNumber){
         this.phoneNumber = phoneNumber;
         this.code = this.generateCode();
+        this.expiresAt = LocalDateTime.now().plusMinutes(15);
     }
 
     public String generateCode() {
@@ -39,4 +42,7 @@ public class OTP {
 
     @Column(nullable = false, unique = true)
     private String code;
+
+    @Column(nullable = false)
+    private LocalDateTime expiresAt;
 }

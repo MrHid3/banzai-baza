@@ -90,4 +90,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleLocationException(LocationException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "LOCATION_ERROR");
     }
+
+    @ExceptionHandler(OTPException.class)
+    public ResponseEntity<String> handleOTPEXception(OTPException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage() != null ? ex.getMessage() : "OTP_ERROR");
+    }
 }

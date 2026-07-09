@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.model.OTP;
 import pl.banzaijiujitsu.backend.repository.OTPRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -35,5 +36,18 @@ public class OTPService {
             otp.setCode(otp.generateCode());
         }
         return OTPRepository.save(otp);
+    }
+
+    public OTP create(String phoneNumber) {
+        return this.save(new OTP(phoneNumber));
+    }
+
+    public boolean verifyCode(String phoneNumber, String code) {
+        Optional<OTP> optionalOTP = OTPRepository.findByCode(code);
+        if (optionalOTP.isEmpty()) {
+            return false;
+        }
+        OTP otp = optionalOTP.get();
+        return otp.getCode().equals(phoneNumber) && LocalDateTime.now().isBefore(otp.getExpiresAt());
     }
 }
