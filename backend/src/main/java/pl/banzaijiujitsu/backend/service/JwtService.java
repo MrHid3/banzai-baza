@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.model.AppUser;
 
 import javax.crypto.SecretKey;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,6 +33,16 @@ public class JwtService {
                 .setSubject(appUser.getUuid().toString())
                 .claim("email", appUser.getEmail())
                 .claim("role", appUser.getRole().getName())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateMobileAccessToken(String phoneNumber){
+        return Jwts.builder()
+                .setSubject(phoneNumber)
+                .claim("phoneNumbers", List.of(phoneNumber))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())
