@@ -92,5 +92,5 @@ public class MobileLoginController {
     public record verifyOTPRequest(
             @NotNull String phoneNumber,
             @NotNull String code
-    )
+    ){}
 }
