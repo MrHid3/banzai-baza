@@ -1,5 +1,7 @@
 package pl.banzaijiujitsu.backend.service;
 
+import jakarta.transaction.Transactional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.model.OTP;
@@ -30,7 +32,7 @@ public class OTPService {
         OTPRepository.deleteByPhoneNumber(phoneNumber);
     }
 
-    public OTP save(OTP otp) {
+    public OTP save(@NonNull OTP otp) {
         this.deleteByPhoneNumber(otp.getPhoneNumber());
         while (this.OTPRepository.findByCode(otp.getCode()).isPresent()) {
             otp.setCode(otp.generateCode());
@@ -38,6 +40,7 @@ public class OTPService {
         return OTPRepository.save(otp);
     }
 
+    @Transactional
     public OTP create(String phoneNumber) {
         return this.save(new OTP(phoneNumber));
     }
@@ -48,6 +51,6 @@ public class OTPService {
             return false;
         }
         OTP otp = optionalOTP.get();
-        return otp.getCode().equals(phoneNumber) && LocalDateTime.now().isBefore(otp.getExpiresAt());
+        return otp.getPhoneNumber().equals(phoneNumber) && LocalDateTime.now().isBefore(otp.getExpiresAt());
     }
 }
