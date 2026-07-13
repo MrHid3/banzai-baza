@@ -14,10 +14,7 @@ import pl.banzaijiujitsu.backend.model.Privilege;
 import pl.banzaijiujitsu.backend.model.Role;
 import pl.banzaijiujitsu.backend.service.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -57,7 +54,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Privilege manageUsers = createPrivilegeIfNotFound("MANAGE_USERS");
 
         Role adminRole = createRoleIfNotFound("ROLE_ADMIN", Arrays.asList(manageAllMembers, manageUsers));
-        createRoleIfNotFound("ROLE_COACH", Arrays.asList(manageOwnMembers));
+        createRoleIfNotFound("ROLE_COACH", Collections.singletonList(manageOwnMembers));
+        createRoleIfNotFound("ROLE_MOBILE", List.of());
 
         try {
             createAppUserIfNotFound(adminEmail, adminPassword, adminRole);

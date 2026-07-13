@@ -51,6 +51,10 @@ public class OTPService {
             return false;
         }
         OTP otp = optionalOTP.get();
-        return otp.getPhoneNumber().equals(phoneNumber) && LocalDateTime.now().isBefore(otp.getExpiresAt());
+        boolean verify = otp.getPhoneNumber().equals(phoneNumber) && LocalDateTime.now().isBefore(otp.getExpiresAt());
+        if (verify) {
+            OTPRepository.delete(otp);
+        }
+        return verify;
     }
 }

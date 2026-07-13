@@ -43,6 +43,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(phoneNumber)
                 .claim("phoneNumbers", List.of(phoneNumber))
+                .claim("role", "ROLE_MOBILE")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())
