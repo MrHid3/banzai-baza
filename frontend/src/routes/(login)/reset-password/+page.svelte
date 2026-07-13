@@ -70,7 +70,7 @@
     }
 
     a{
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         text-decoration: underline;
     }
 </style>

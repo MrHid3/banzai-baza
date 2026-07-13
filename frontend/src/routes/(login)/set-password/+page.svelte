@@ -72,8 +72,8 @@
     }
 
     input {
-        background-color: var(--color-background-secondary);
-        color: var(--color-text-primary);
+        background-color: var(--background-secondary);
+        color: var(--text-primary);
         border-radius: 10px;
         border: none;
         padding: 10px;
@@ -81,8 +81,8 @@
     }
 
     button {
-        background-color: var(--color-background-secondary);
-        color: var(--color-text-primary);
+        background-color: var(--background-secondary);
+        color: var(--text-primary);
         border-radius: 15px;
         border: none;
         padding: 10px;

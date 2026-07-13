@@ -283,7 +283,7 @@
         align-items: center;
         gap: 4px;
         padding: 4px 8px;
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border-radius: 8px;
         cursor: pointer;
         white-space: nowrap;
@@ -295,7 +295,7 @@
         cursor: pointer;
         margin: 0;
         width: auto;
-        accent-color: var(--color-text-primary);
+        accent-color: var(--text-primary);
     }
 
     .categoryCheckbox span {
@@ -303,7 +303,7 @@
     }
 
     .categoryCheckbox:has(input:checked) {
-        background-color: var(--color-border);
+        background-color: var(--border);
     }
 
     .addForm {
@@ -378,14 +378,14 @@
         position: sticky;
         top: 10px;
         left: 0;
-        background-color: var(--color-background-primary);
+        background-color: var(--background-primary);
         z-index: 2137;
     }
 
     .header,
     .filterHolder,
     .addFragment {
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 15px;
         display: table-row;
         width: 100%;
@@ -405,7 +405,7 @@
     }
 
     .addFragment input {
-        color: var(--color-text-primary);
+        color: var(--text-primary);
         /*font-size: 1.2em;*/
         max-width: 100%;
         width: 95%;
@@ -428,7 +428,7 @@
     .header button,
     .addFragment button {
         border: none;
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         width: 100%;
         padding: 10px;
         height: 100%;
@@ -446,14 +446,14 @@
     svg {
         width: 20px;
         height: 20px;
-        fill: var(--color-text-secondary);
+        fill: var(--text-secondary);
         cursor: pointer;
         transition: fill 0.6s;
     }
 
     button:hover svg,
     svg:hover {
-        fill: var(--color-text-primary);
+        fill: var(--text-primary);
     }
 
     button {
@@ -462,7 +462,7 @@
 
     input,
     :global(.locationSelect) {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         border-radius: 15px !important;
     }
@@ -476,17 +476,17 @@
     }
 
     textarea {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         border-radius: 10px;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
         padding: 0 5px;
         resize: vertical;
         width: 80%;
     }
 
     input {
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         text-align: center;
     }
 
@@ -508,7 +508,7 @@
         }
 
         .flex {
-            outline: 2px solid var(--color-border);
+            outline: 2px solid var(--border);
             margin: 10px 0;
             border-radius: 15px;
         }
@@ -538,7 +538,7 @@
 
         .flex button {
             padding: 10px;
-            background-color: var(--color-background-secondary);
+            background-color: var(--background-secondary);
             width: 100%;
         }
 

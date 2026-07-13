@@ -111,10 +111,10 @@
     }
 
     .card {
-        border: 0.5px solid var(--color-border);
+        border: 0.5px solid var(--border);
         border-radius: 12px;
         overflow: hidden;
-        background-color: var(--color-background-primary);
+        background-color: var(--background-primary);
     }
 
     .card-header {
@@ -123,10 +123,10 @@
         align-items: center;
         justify-content: space-between;
         padding: 0.875rem 1rem;
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         cursor: pointer;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     .card-header:hover {
@@ -140,7 +140,7 @@
     }
 
     .chevron {
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         transition: transform 0.2s ease;
         flex-shrink: 0;
     }
@@ -155,7 +155,7 @@
         border-collapse: collapse;
         grid-template-rows: 1fr 1fr 1fr 1fr;
         grid-template-columns: repeat(3, 1fr);
-        border-top: 0.5px solid var(--color-border);
+        border-top: 0.5px solid var(--border);
         width: 100%;
     }
 
@@ -164,8 +164,8 @@
         flex-direction: column;
         align-items: stretch;
         padding: 0.625rem 0.5rem;
-        border-right: 0.5px solid var(--color-border);
-        border-bottom: 0.5px solid var(--color-border);
+        border-right: 0.5px solid var(--border);
+        border-bottom: 0.5px solid var(--border);
         gap: 0.375rem;
         flex: 1;
         max-width: 33%;
@@ -183,7 +183,7 @@
 
     .month-label {
         font-size: 0.7rem;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         text-align: center;
         font-family: 'Ubuntu', sans-serif;
     }
@@ -191,7 +191,7 @@
     .cell-form {
         display: flex;
         flex-direction: row;
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 10px;
         overflow: hidden;
     }
@@ -199,8 +199,8 @@
     .cell-form > * {
         height: 36px;
         border: none;
-        background-color: var(--color-background-secondary);
-        color: var(--color-text-primary);
+        background-color: var(--background-secondary);
+        color: var(--text-primary);
     }
 
     .cell-form input[type="number"] {
@@ -208,8 +208,8 @@
         min-width: 0;
         text-align: center;
         padding: 0 0.25em;
-        background-color: var(--color-background-primary);
-        color: var(--color-text-secondary);
+        background-color: var(--background-primary);
+        color: var(--text-secondary);
         font-family: 'Ubuntu', sans-serif;
     }
 
@@ -225,15 +225,15 @@
         padding: 0 6px;
         border-radius: 0 10px 10px 0;
         cursor: pointer;
-        background-color: var(--color-background-primary);
-        color: var(--color-text-primary);
+        background-color: var(--background-primary);
+        color: var(--text-primary);
     }
 
     .cell-form button svg {
-        fill: var(--color-text-secondary);
+        fill: var(--text-secondary);
     }
 
     .cell-form button:hover svg {
-        fill: var(--color-text-primary);
+        fill: var(--text-primary);
     }
 </style>

@@ -42,9 +42,9 @@
 
 <style>
     select, option {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         display: inline-block !important;
         align-self: center;
         text-align: center;

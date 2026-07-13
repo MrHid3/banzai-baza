@@ -242,7 +242,7 @@
 </div>
 {#each filteredMembers as member (member.member.uuid)}
     <div class="mobile"
-         style="outline: 2px solid var(--color-border); padding: 20px; border-radius: 15px; margin: 15px 0">
+         style="outline: 2px solid var(--border); padding: 20px; border-radius: 15px; margin: 15px 0">
         <div class="horizontal"><span class="bold flex-1">Imię</span><span
                 class="text-right flex-1 block">{member.member.name}</span></div>
         <div class="horizontal"><span class="bold flex-1">Nazwisko</span><span
@@ -288,7 +288,7 @@
     }
 
     #filterHolder {
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 15px;
         width: 100%;
         padding: 10px;
@@ -296,18 +296,18 @@
     }
 
     input {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         border-radius: 15px !important;
     }
 
     svg {
-        fill: var(--color-text-secondary);
+        fill: var(--text-secondary);
     }
 
     button:hover svg,
     svg:hover {
-        fill: var(--color-text-primary);
+        fill: var(--text-primary);
     }
 
     option,
@@ -332,13 +332,13 @@
     }
 
     .thead {
-        outline: var(--color-border) solid 2px;
+        outline: var(--border) solid 2px;
         border-radius: 15px;
         /*height: 45px;*/
         display: table-header-group;
         position: sticky;
         top: 0;
-        background-color: var(--color-background-primary);
+        background-color: var(--background-primary);
     }
 
     .thead .td {
@@ -370,7 +370,7 @@
     }
 
     .td.payment.bad form {
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 15px;
     }
 
@@ -398,8 +398,8 @@
     .td.payment span,
     .td.payment i {
         font-style: normal;
-        color: var(--color-text-primary);
-        background-color: var(--color-background-secondary);
+        color: var(--text-primary);
+        background-color: var(--background-secondary);
     }
 
     .td.payment form select,
@@ -424,9 +424,9 @@
     }
 
     input {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         align-self: center;
         text-align: center;
         /*width: 50%;*/

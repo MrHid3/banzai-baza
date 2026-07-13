@@ -110,7 +110,7 @@
 
     #logout {
         background-color: #b3b3b3;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         border: none;
         padding: 0 10px;
         text-align: center;
@@ -123,7 +123,7 @@
     }
 
     #logout:hover{
-        color: var(--color-text-primary)
+        color: var(--text-primary)
     }
 
     .corner svg {
@@ -195,15 +195,15 @@
     }
 
     a{
-        color: var(--color-background-primary);
+        color: var(--background-primary);
     }
 
     a:hover{
-        color: var(--color-background-secondary)
+        color: var(--background-secondary)
     }
 
     li[aria-current='page'] a {
-        color: var(--color-text-primary) !important;
+        color: var(--text-primary) !important;
     }
 
     nav a {
@@ -251,7 +251,7 @@
             display: block;
             width: 22px;
             height: 2px;
-            background: var(--color-background-primary);
+            background: var(--background-primary);
             border-radius: 1px;
             transition: transform 0.25s, opacity 0.25s;
         }
@@ -282,7 +282,7 @@
 
         .mobile-menu a,
         .mobile-logout {
-            color: var(--color-background-primary);
+            color: var(--background-primary);
             font-weight: 700;
             font-size: 0.85rem;
             text-transform: uppercase;
@@ -305,7 +305,7 @@
         }
 
         .mobile-title {
-            color: var(--color-background-primary);
+            color: var(--background-primary);
             font-weight: 800;
             font-size: 0.85rem;
             letter-spacing: 0.05em;

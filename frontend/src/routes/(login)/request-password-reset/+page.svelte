@@ -38,7 +38,7 @@
     }
 
     a{
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         text-decoration: underline;
     }
 
@@ -47,8 +47,8 @@
         border: none;
         border-radius: 10px;
         padding: 5px;
-        background-color: var(--color-background-secondary);
-        color: var(--color-text-primary);
+        background-color: var(--background-secondary);
+        color: var(--text-primary);
     }
 
     button{

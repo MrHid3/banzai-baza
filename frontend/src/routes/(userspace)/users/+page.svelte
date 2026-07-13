@@ -77,7 +77,7 @@
                                             class="deleteAccount">{user.status === "ACTIVE" ? "WYŁĄCZ KONTO" : "WŁĄCZ KONTO"}</button>
                                 </form>
                             {/if}
-                            {#each user.locations as location}
+                            {#each user.locations as location (location.id)}
                                 <form action="?/deleteLocationFromUser" method="POST" use:enhance>
                                     <span>{location.name}</span>
                                     <input type="hidden" name="locationId" value={location.id}>
@@ -115,18 +115,9 @@
         </div>
 
         <ul>
-            {#each $locations.data as location, index (index)}
+            {#each $locations.data as location (location.id)}
                 <li>
-                    <form action="?/deleteLocation" method="POST" use:enhance={(update) => {
-                    return async ({update}) => {
-                        await update();
-                        await locations.load(true);
-                    }
-                }}>
-                        <span>{location.name} ({location.shortname})</span>
-                        <input type="hidden" name="locationId" value={location.id}>
-                        <button type="submit">Usuń</button>
-                    </form>
+                    <a class="text-black bg-(--background-secondary) p-1 rounded-lg hover:text- duration-150" href={`/location/${location.id}`}>{location.name}</a>
                 </li>
             {/each}
         </ul>
@@ -161,6 +152,8 @@
 </div>
 
 <style>
+    @import "tailwindcss";
+
     input, select{
         width: 100% !important;
     }
@@ -258,9 +251,9 @@
     select,
     option,
     label {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         display: inline-block !important;
         align-self: center;
         text-align: center;

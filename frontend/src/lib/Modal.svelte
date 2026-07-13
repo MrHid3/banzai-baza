@@ -39,8 +39,8 @@
         top: 40%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: var(--color-background-primary);
-        outline: 2px solid var(--color-border);
+        background-color: var(--background-primary);
+        outline: 2px solid var(--border);
         width: fit-content;
         height: fit-content;
         color: var(--color-text);

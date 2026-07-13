@@ -108,7 +108,7 @@
     <title>Baza - Szczegoły Płatności</title>
 </svelte:head>
 
-<div class="min-h-screen" style="background: var(--color-background-primary); color: var(--color-text-primary)">
+<div class="min-h-screen" style="background: var(--background-primary); color: var(--text-primary)">
     <div class="max-w-7xl mx-auto">
 
         <!-- Filters -->
@@ -116,33 +116,33 @@
                 class="grid gap-3 mb-5 p-4! rounded-xl border"
                 style="
         grid-template-columns: 2fr 1fr 1fr 1fr;
-        background: var(--color-background-secondary);
-        border-color: var(--color-border);
+        background: var(--background-secondary);
+        border-color: var(--border);
       "
         >
             <div>
-                <div class="text-xs mb-1" style="color: var(--color-text-secondary)">Szukaj</div>
+                <div class="text-xs mb-1" style="color: var(--text-secondary)">Szukaj</div>
                 <input
                         type="text"
                         bind:value={filterText}
                         placeholder="Imię, nazwisko, email…"
                         class="w-full px-3! py-2! text-sm rounded-lg border outline-none"
                         style="
-            background: var(--color-background-primary);
-            border-color: var(--color-border);
-            color: var(--color-text-primary);
+            background: var(--background-primary);
+            border-color: var(--border);
+            color: var(--text-primary);
           "
                 />
             </div>
             <div>
-                <div class="text-xs mb-1" style="color: var(--color-text-secondary)">Lokalizacja</div>
+                <div class="text-xs mb-1" style="color: var(--text-secondary)">Lokalizacja</div>
                 <select
                         bind:value={filterLocation}
                         class="w-full px-3! py-2! text-sm rounded-lg border outline-none"
                         style="
-            background: var(--color-background-primary);
-            border-color: var(--color-border);
-            color: var(--color-text-primary);
+            background: var(--background-primary);
+            border-color: var(--border);
+            color: var(--text-primary);
           "
                 >
                     <option value="">Wszystkie</option>
@@ -152,14 +152,14 @@
                 </select>
             </div>
             <div>
-                <div class="text-xs mb-1" style="color: var(--color-text-secondary)">Metoda</div>
+                <div class="text-xs mb-1" style="color: var(--text-secondary)">Metoda</div>
                 <select
                         bind:value={filterType}
                         class="w-full px-3! py-2! text-sm rounded-lg border outline-none"
                         style="
-            background: var(--color-background-primary);
-            border-color: var(--color-border);
-            color: var(--color-text-primary);
+            background: var(--background-primary);
+            border-color: var(--border);
+            color: var(--text-primary);
           "
                 >
                     <option value="">Wszystkie</option>
@@ -168,14 +168,14 @@
                 </select>
             </div>
             <div>
-                <div class="text-xs mb-1" style="color: var(--color-text-secondary)">Okres</div>
+                <div class="text-xs mb-1" style="color: var(--text-secondary)">Okres</div>
                 <select
                         bind:value={filterPeriod}
                         class="w-full px-3! py-2! text-sm rounded-lg border outline-none"
                         style="
-            background: var(--color-background-primary);
-            border-color: var(--color-border);
-            color: var(--color-text-primary);
+            background: var(--background-primary);
+            border-color: var(--border);
+            color: var(--text-primary);
           "
                 >
                     <option value="">Wszystkie</option>
@@ -187,12 +187,12 @@
             </div>
         </div>
 
-        <p class="text-sm mb-3" style="color: var(--color-text-secondary)">
+        <p class="text-sm mb-3" style="color: var(--text-secondary)">
             Znaleziono: {filtered.length} płatności
         </p>
 
         <!-- Table -->
-        <div class="rounded-xl overflow-hidden border" style="border-color: var(--color-border)">
+        <div class="rounded-xl overflow-hidden border" style="border-color: var(--border)">
             <table class="w-full text-sm border-collapse" style="table-layout: fixed">
                 <colgroup>
                     <col style="width: 14%">
@@ -206,7 +206,7 @@
                     <col style="width: 5%">
                 </colgroup>
                 <thead>
-                <tr style="background: var(--background-special); color: var(--color-background-primary)">
+                <tr style="background: var(--background-special); color: var(--background-primary)">
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Członek</th>
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Lokalizacja</th>
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Wprowadzający</th>
@@ -226,8 +226,8 @@
                                 colspan="9"
                                 class="text-center py-8! text-sm"
                                 style="
-                  color: var(--color-text-secondary);
-                  background: var(--color-background-secondary);
+                  color: var(--text-secondary);
+                  background: var(--background-secondary);
                 "
                         >
                             Brak wyników dla podanych filtrów.
@@ -311,8 +311,8 @@
                                         class="px-2 py-1 text-xs rounded border cursor-pointer transition-colors"
                                         style="
                       background: transparent;
-                      border-color: var(--color-border);
-                      color: var(--color-text-secondary);
+                      border-color: var(--border);
+                      color: var(--text-secondary);
                     "
                                         onmouseenter={(e) => {
                       (e.currentTarget as HTMLButtonElement).style.background = 'var(--background-special)';

@@ -246,12 +246,12 @@
 
 <style>
     input[type="checkbox"] {
-        accent-color: var(--color-text-primary);
+        accent-color: var(--text-primary);
     }
 
     .category {
         display: inline-block;
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         font-size: 0.7rem;
         line-height: 15px;
         height: fit-content;
@@ -295,7 +295,7 @@
         display: table-row;
         width: 100%;
         /*border: 2px solid var(--color-border);*/
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 15px;
         z-index: 1;
         transition: outline 0.4s;
@@ -333,15 +333,15 @@
     }
 
     textarea {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         border-radius: 10px;
         width: 80%;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
     }
 
     button {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         width: 100%;
         height: 100%;
@@ -360,7 +360,7 @@
     }
 
     svg {
-        fill: var(--color-text-secondary);
+        fill: var(--text-secondary);
         height: 25px;
         width: 25px;
         transition: fill 0.6s;
@@ -368,7 +368,7 @@
 
     button:hover svg,
     svg:hover {
-        fill: var(--color-text-primary);
+        fill: var(--text-primary);
     }
 
     form button {
@@ -376,10 +376,10 @@
     }
 
     input {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         border-radius: 10px;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
         text-align: center;
         max-width: 100%;
     }
@@ -406,7 +406,7 @@
         align-items: center;
         gap: 4px;
         padding: 4px 8px;
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border-radius: 8px;
         cursor: pointer;
         white-space: nowrap;
@@ -418,7 +418,7 @@
         cursor: pointer;
         margin: 0;
         width: auto;
-        accent-color: var(--color-text-primary);
+        accent-color: var(--text-primary);
     }
 
     .categoryCheckbox span {
@@ -426,7 +426,7 @@
     }
 
     .categoryCheckbox:has(input:checked) {
-        background-color: var(--color-border);
+        background-color: var(--border);
     }
 
     @media screen and (width <= 1000px) {
@@ -436,7 +436,7 @@
 
         .mobile {
             display: block;
-            outline: 2px solid var(--color-border);
+            outline: 2px solid var(--border);
             height: fit-content;
             border-radius: 15px;
             padding: 10px;
@@ -502,7 +502,7 @@
         }
 
         .save {
-            background-color: var(--color-background-secondary) !important;
+            background-color: var(--background-secondary) !important;
             border-radius: 15px;
             display: block;
             width: min-content;
@@ -516,7 +516,7 @@
             text-align: right;
             word-break: break-word;
             margin-left: 20%;
-            background-color: var(--color-background-secondary);
+            background-color: var(--background-secondary);
             padding: 5px;
             border-radius: 10px;
         }

@@ -422,11 +422,11 @@
     h1 {
         font-size: 1.6em;
         font-weight: 500;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     #filterHolder {
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 15px;
         padding: 10px 16px;
         display: flex;
@@ -437,16 +437,16 @@
     }
 
     #filterHolder label {
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         font-size: 0.95em;
         user-select: none;
     }
 
     select {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         border-radius: 15px;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
         padding: 6px 14px;
         cursor: pointer;
         font-family: 'Ubuntu', sans-serif;
@@ -460,14 +460,14 @@
     .no-results {
         font-size: 2em;
         text-align: center;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
     }
 
     /* ── Summary bar ── */
     .summary-bar {
         display: flex;
         flex-direction: row;
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 15px;
         overflow: hidden;
     }
@@ -480,29 +480,29 @@
         justify-content: center;
         padding: 14px 10px;
         gap: 3px;
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
     }
 
     .summary-item + .summary-item {
-        border-left: 2px solid var(--color-border);
+        border-left: 2px solid var(--border);
     }
 
     .summary-value {
         font-size: 1.3em;
         font-weight: 500;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     .summary-label {
         font-size: 0.75em;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
 
     /* ── Month block ── */
     .block {
-        outline: 2px solid var(--color-border);
+        outline: 2px solid var(--border);
         border-radius: 15px;
         overflow: hidden;
     }
@@ -514,22 +514,22 @@
         justify-content: space-between;
         width: 100%;
         padding: 12px 16px;
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         border: none;
         cursor: pointer;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
         text-align: left;
         gap: 10px;
     }
 
     .block-header:hover {
-        background-color: var(--color-background-primary);
+        background-color: var(--background-primary);
     }
 
     .block-label {
         font-size: 1.05em;
         font-weight: 500;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     .block-right {
@@ -541,13 +541,13 @@
 
     .block-total {
         font-weight: 500;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     .chevron {
         width: 18px;
         height: 18px;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         transition: transform 0.2s;
         flex-shrink: 0;
     }
@@ -563,8 +563,8 @@
         align-items: center;
         justify-content: space-between;
         padding: 8px 16px;
-        border-top: 2px solid var(--color-border);
-        background-color: var(--color-background-primary);
+        border-top: 2px solid var(--border);
+        background-color: var(--background-primary);
     }
 
     .section-label {
@@ -572,13 +572,13 @@
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.07em;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
     }
 
     .section-total {
         font-size: 0.9em;
         font-weight: 500;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     /* ── Table ── */
@@ -593,7 +593,7 @@
     }
 
     thead {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         height: 45px;
     }
 
@@ -601,7 +601,7 @@
         font-weight: bold;
         padding: 10px;
         text-align: center;
-        border-bottom: 2px solid var(--color-border);
+        border-bottom: 2px solid var(--border);
     }
 
     thead td:first-child {
@@ -610,18 +610,18 @@
     }
 
     tbody tr:nth-child {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
     }
 
     tbody tr:hover {
-        background-color: var(--color-background-secondary);
+        background-color: var(--background-secondary);
         opacity: 0.85;
     }
 
     td {
         text-align: center;
         padding: 8px 5px;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     td:first-child {
@@ -631,33 +631,33 @@
 
     .loc-cell {
         font-weight: 500;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     .cell-amount {
         font-weight: 500;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     .cell-count {
         font-size: 0.78em;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         margin-top: 2px;
     }
 
     .cell-empty {
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         opacity: 0.4;
     }
 
     .total-cell {
         font-weight: 700;
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     tfoot tr {
-        background-color: var(--color-background-secondary);
-        border-top: 2px solid var(--color-border);
+        background-color: var(--background-secondary);
+        border-top: 2px solid var(--border);
     }
 
     tfoot .loc-cell {
@@ -665,7 +665,7 @@
         font-size: 0.85em;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
     }
 
     @media (max-width: 560px) {
@@ -675,7 +675,7 @@
 
         .summary-item + .summary-item {
             border-left: none;
-            border-top: 2px solid var(--color-border);
+            border-top: 2px solid var(--border);
         }
     }
 

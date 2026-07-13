@@ -40,8 +40,8 @@
 
 <style>
     * {
-        background-color: var(--color-background-primary);
-        color: var(--color-text-primary);
+        background-color: var(--background-primary);
+        color: var(--text-primary);
     }
 
     form {
@@ -58,7 +58,7 @@
         width: 15vw;
         min-width: 200px;
         padding: 10px;
-        border: 1px solid var(--color-border)
+        border: 1px solid var(--border)
     }
 
     input:invalid:not(:focus):not(:placeholder-shown) {

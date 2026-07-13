@@ -24,15 +24,22 @@
         /*--background-special: #b3b3b3;*/
         /*color: var(--color-text-primary);*/
         /*background-color: var(--color-background-primary);*/
-        --color-background-primary: #ededed;
-        --color-background-secondary: #dadada;
-        --color-text-primary: #141414;
-        --color-text-secondary: #4f4f4f;
-        --color-border: #bbbbbb;
+        /*--background-primary: var(--color-slate-300);*/
+        /*--background-secondary: var(--color-slate-400);*/
+        /*--text-primary: var(--color-zinc-900);*/
+        /*--text-secondary: var(--color-gray-700);*/
+        /*--border: var(--color-slate-700);*/
+        /*--accent: var(--color-gray-600);*/
+        /*--background-special: var(--color-zinc-800);*/
+        --background-primary: #ededed;
+        --background-secondary: #dadada;
+        --text-primary: #141414;
+        --text-secondary: #4f4f4f;
+        --border: #bbbbbb;
         --accent: #777777;
         --background-special: #4c4c4c;
-        color: var(--color-text-primary);
-        background-color: var(--color-background-primary);
+        color: var(--text-primary);
+        background-color: var(--background-primary);
     }
 
     :global(*) {
@@ -42,7 +49,7 @@
 
     main {
         background-color: var(--background-color);
-        color: var(--color-text-primary);
+        color: var(--text-primary);
     }
 
     :global(input::-webkit-outer-spin-button),
