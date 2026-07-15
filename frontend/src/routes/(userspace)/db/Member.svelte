@@ -47,8 +47,8 @@
 </script>
 
 {#if !edit}
-    <div class="row desktop">
-        <span class="data">{num}</span>
+    <div class="row desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-50/60 hover:-translate-y-1/12 delay-75">
+        <span class="data rounded-l-2xl">{num}</span>
         <span class="data">{member?.name != "" ? member?.name : "- -"}</span>
         <span class="data">{member?.surname != "" ? member?.surname : "- -"}</span>
         <span class="data">{member?.email != "" ? member?.email : "- -"}</span>
@@ -71,7 +71,7 @@
         </span>
         <span class="data">
             <button onclick={() => edit = true} class="left" aria-label="Edytuj">
-                <svg fill="currentColor" viewBox="0 0 16 16"
+                <svg viewBox="0 0 16 16"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                     <path d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
@@ -79,13 +79,13 @@
                 </svg>
             </button>
         </span>
-        <div class="data">
-            <form action="?/delete" method="POST" use:enhance>
+        <div class="data rounded-r-2xl!">
+            <form class="bg-transparent! rounded-lg!" action="?/delete" method="POST" use:enhance>
                 <input type="hidden" name="memberUuid" value={member.uuid}>
-                <button type="submit" title="delete" class="right" aria-label="Usuń">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 16 16">
-                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                <button type="submit" title="delete" class="bg-transparent! rounded-lg!" aria-label="Usuń">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 16 16" class="bg-transparent! rounded-lg!">
+                        <path class="bg-transparent! rounded-lg!" d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                     </svg>
                 </button>
             </form>
@@ -122,7 +122,7 @@
                     <form action="?/delete" method="POST" use:enhance class="hidden" style="padding: 5px">
                         <input type="hidden" name="memberUuid" value={member.uuid}>
                         <button type="submit" title="delete" class="right" aria-label="Usuń">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg"
                                  viewBox="0 0 16 16">
                                 <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                             </svg>
@@ -185,7 +185,7 @@
         {/if}
     </div>
 {:else}
-    <form action="?/update" method="POST" class="row desktop" use:enhance={() => {
+    <form action="?/update" method="POST" class="row desktop desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-50/60 hover:-translate-y-1/12 delay-75" use:enhance={() => {
            return({ result }) => {
                if (result.type === "success") {
                    edit = false;
@@ -199,14 +199,15 @@
 
     }}}>
         <input type="hidden" name="memberUuid" bind:value={member.uuid}>
+        <span class="data rounded-l-2xl!">{num}</span>
         <span class="data">
-                <input type="text" name="name" bind:value={member.name}>
+                <input type="text" name="name" class="input" bind:value={member.name}>
         </span>
         <span class="data">
-                <input type="text" name="surname" bind:value={member.surname}>
+                <input type="text" name="surname" class="input" bind:value={member.surname}>
         </span>
         <span class="data">
-                <input type="text" name="email" bind:value={member.email}>
+                <input type="text" name="email" class="input" bind:value={member.email}>
         </span>
         <span class="data">
                 <input type="text" name="phoneNumber" bind:value={member.phoneNumber} pattern={phonePattern} required>
@@ -235,7 +236,7 @@
                         d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/></svg>
             </button>
         </span>
-        <span class="data">
+        <span class="data rounded-r-2xl!">
         <button onclick={() => edit = false} class="right" aria-label="Anuluj zmiany">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path
                     d="M504.6 148.5C515.9 134.9 514.1 114.7 500.5 103.4C486.9 92.1 466.7 93.9 455.4 107.5L320 270L184.6 107.5C173.3 93.9 153.1 92.1 139.5 103.4C125.9 114.7 124.1 134.9 135.4 148.5L278.3 320L135.4 491.5C124.1 505.1 125.9 525.3 139.5 536.6C153.1 547.9 173.3 546.1 184.6 532.5L320 370L455.4 532.5C466.7 546.1 486.9 547.9 500.5 536.6C514.1 525.3 515.9 505.1 504.6 491.5L361.7 320L504.6 148.5z"/></svg>
@@ -245,13 +246,30 @@
 {/if}
 
 <style>
+    @import "tailwindcss";
+
+    span.data:has(input){
+        @apply
+        p-1
+        ;
+    }
+
+    input{
+        @apply
+            bg-(--input)
+            text-center
+            max-w-full
+            p-1
+            rounded-lg
+        ;
+    }
+
     input[type="checkbox"] {
         accent-color: var(--text-primary);
     }
 
     .category {
         display: inline-block;
-        background-color: var(--background-secondary);
         font-size: 0.7rem;
         line-height: 15px;
         height: fit-content;
@@ -273,7 +291,6 @@
 
     .category select {
         padding: 0;
-        background-color: transparent;
     }
 
     .category button,
@@ -294,15 +311,8 @@
         margin: 10px 0;
         display: table-row;
         width: 100%;
-        /*border: 2px solid var(--color-border);*/
-        outline: 2px solid var(--border);
         border-radius: 15px;
         z-index: 1;
-        transition: outline 0.4s;
-    }
-
-    .row:hover {
-        outline: 2px solid #dd5555;
     }
 
     .row > * {
@@ -333,15 +343,12 @@
     }
 
     textarea {
-        background-color: var(--background-secondary);
         border: none;
         border-radius: 10px;
         width: 80%;
-        color: var(--text-secondary);
     }
 
     button {
-        background-color: var(--background-secondary);
         border: none;
         width: 100%;
         height: 100%;
@@ -360,7 +367,7 @@
     }
 
     svg {
-        fill: var(--text-secondary);
+        fill: var(--click);
         height: 25px;
         width: 25px;
         transition: fill 0.6s;
@@ -373,15 +380,6 @@
 
     form button {
         align-self: center !important;
-    }
-
-    input {
-        background-color: var(--background-secondary);
-        border: none;
-        border-radius: 10px;
-        color: var(--text-primary);
-        text-align: center;
-        max-width: 100%;
     }
 
     .mobile {
@@ -406,7 +404,6 @@
         align-items: center;
         gap: 4px;
         padding: 4px 8px;
-        background-color: var(--background-secondary);
         border-radius: 8px;
         cursor: pointer;
         white-space: nowrap;
@@ -423,10 +420,6 @@
 
     .categoryCheckbox span {
         font-size: 0.85em;
-    }
-
-    .categoryCheckbox:has(input:checked) {
-        background-color: var(--border);
     }
 
     @media screen and (width <= 1000px) {
@@ -447,7 +440,6 @@
         .mobile > div span textarea {
             width: min-content;
             max-width: 100%;
-            background-color: transparent;
             text-align: right;
             pointer-events: none;
             user-select: none;
@@ -457,7 +449,6 @@
         }
 
         .mobile > form textarea,
-        .mobile > form input,
         .mobile > form :global(.locationSelect) {
             width: 100%;
         }
@@ -478,7 +469,6 @@
             margin: 0;
             height: 1em;
             line-height: 1em;
-            background-color: transparent;
         }
 
         .horizontal {
@@ -502,7 +492,6 @@
         }
 
         .save {
-            background-color: var(--background-secondary) !important;
             border-radius: 15px;
             display: block;
             width: min-content;
@@ -516,7 +505,6 @@
             text-align: right;
             word-break: break-word;
             margin-left: 20%;
-            background-color: var(--background-secondary);
             padding: 5px;
             border-radius: 10px;
         }

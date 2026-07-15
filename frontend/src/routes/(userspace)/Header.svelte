@@ -56,6 +56,9 @@
                     <a href={resolve('/users')}>Zarządzanie</a>
                 </li>
             {/if}
+            <li aria-current={page.url.pathname.startsWith('/location') ? 'page' : undefined}>
+                <a href={resolve('/location')}>Lokalizacje</a>
+            </li>
         </ul>
         <svg aria-hidden="true" viewBox="0 0 2 3">
             <path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z"/>
@@ -80,6 +83,7 @@
             {#if user?.role === "ROLE_ADMIN"}
                 <a href={resolve('/users')} onclick={closeMenu}>Zarządzanie</a>
             {/if}
+            <a href={resolve('/location')} onclick={closeMenu}>Lokalizacje</a>
             <button class="mobile-logout" onclick={() => { logout(); closeMenu(); }}>
                 Wyloguj się
             </button>
@@ -88,6 +92,14 @@
 </header>
 
 <style>
+    :root{
+        --background: var(--background-secondary);
+    }
+
+    nav {
+        display: flex;
+        justify-content: center;
+    }
     header {
         z-index: 76897;
         display: flex;
@@ -109,8 +121,8 @@
     }
 
     #logout {
-        background-color: #b3b3b3;
-        color: var(--text-secondary);
+        background-color: var(--background);
+        color: var(--text-primary-dark);
         border: none;
         padding: 0 10px;
         text-align: center;
@@ -123,34 +135,14 @@
     }
 
     #logout:hover{
-        color: var(--text-primary)
+        color: var(--text-primary-dark);
     }
 
     .corner svg {
-        fill: #b3b3b3;
+        fill: var(--background-secondary);
         /*position: relative;*/
         /*top: 50%;*/
         /*left: 50%;*/
-    }
-
-    /*.corner a {*/
-    /*    display: flex;*/
-    /*    align-items: center;*/
-    /*    justify-content: center;*/
-    /*    width: 100%;*/
-    /*    height: 100%;*/
-    /*}*/
-
-    /*.corner img {*/
-    /*    width: 2em;*/
-    /*    height: 2em;*/
-    /*    object-fit: contain;*/
-    /*}*/
-
-    nav {
-        display: flex;
-        justify-content: center;
-        --background: #b3b3b3;
     }
 
     svg {
@@ -195,15 +187,17 @@
     }
 
     a{
-        color: var(--background-primary);
+        /*color: var(--background-primary);*/
+        color: var(--text-primary-dark)
     }
 
     a:hover{
-        color: var(--background-secondary)
+        /*color: var(--background-secondary)*/
+        color: var(--text-primary-dark)
     }
 
     li[aria-current='page'] a {
-        color: var(--text-primary) !important;
+        color: var(--active) !important;
     }
 
     nav a {
@@ -273,7 +267,7 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            background: #b3b3b3;
+            background: var(--background);
             position: absolute;
             top: 3em;
             left: 0;
@@ -329,7 +323,7 @@
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
-                background: #b3b3b3;
+                background: var(--background);
                 height: 3em;
                 box-sizing: border-box;
             }

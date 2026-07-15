@@ -98,32 +98,6 @@
     </div>
 
     <div class="locations">
-        <h2>Lokalizacje</h2>
-        {#if form?.error && form?.type == "location"}
-            <Error code={form?.error}></Error>
-        {/if}
-        <div class="addLocation">
-            <form action="?/addLocation" method="POST" use:enhance={(update) => {
-                return async ({update}) => {
-                    await update();
-                    await categories.load(true);
-        }}}>
-                <input class="left" name="name" placeholder="Szkoła Podstawowa nr 720" required type="text">
-                <input name="shortname" placeholder="SP720" required type="text">
-                <button class="right" type="submit">Dodaj</button>
-            </form>
-        </div>
-
-        <ul>
-            {#each $locations.data as location (location.id)}
-                <li>
-                    <a class="text-black bg-(--background-secondary) p-1 rounded-lg hover:text- duration-150" href={`/location/${location.id}`}>{location.name}</a>
-                </li>
-            {/each}
-        </ul>
-    </div>
-
-    <div class="locations">
         <h2>Kategorie</h2>
         {#if form?.error && form?.type == "category"}
             <Error code={form?.error}></Error>

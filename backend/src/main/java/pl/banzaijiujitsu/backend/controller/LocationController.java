@@ -23,6 +23,7 @@ import pl.banzaijiujitsu.backend.service.MemberService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/location")
@@ -65,6 +66,12 @@ public class LocationController {
         return ResponseEntity.ok(allowed_locations);
     }
 
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> getOne(@PathVariable Long id){
+        return ResponseEntity.ok(locationService.findById(id));
+    }
+
+
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
@@ -99,11 +106,34 @@ public class LocationController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH')")
+    @Transactional
+    public ResponseEntity<?> updateLocation(@PathVariable Long id, @RequestBody UpdateLocationRequest req) {
+        Optional<Location> optionalLocation = locationService.findById(id);
+        if(optionalLocation.isEmpty()) {
+            throw new InvalidLocationException("INVALID_LOCATION_ID");
+        }
+        Location location = optionalLocation.get();
+        if(!req.name.isEmpty()) {
+            location.setName(req.name);
+        }
+        if(!req.shortname.isEmpty()) {
+            location.setShortname(req.shortname);
+        }
+        return ResponseEntity.ok(locationService.save(location));
+    }
+
     public record LocationCreationRequest(
             @NotNull String name,
             @NotNull String shortname
     ) {
     }
+
+    public record UpdateLocationRequest(
+            String name,
+            String shortname
+    ){}
 
     public record DeleteLocationRequest(
             @NotNull Long locationId

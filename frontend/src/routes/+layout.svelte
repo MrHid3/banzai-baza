@@ -10,6 +10,7 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+    @import "tailwindcss";
 
     :global(:root) {
         --font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
@@ -31,6 +32,30 @@
         /*--border: var(--color-slate-700);*/
         /*--accent: var(--color-gray-600);*/
         /*--background-special: var(--color-zinc-800);*/
+        --background-secondary: var(--color-slate-200);
+        --text-primary: var(--color-slate-100);
+        --text-primary-dark: var(--color-slate-800);
+        --text-secondary: #4f4f4f;
+        --border: #bbbbbb;
+        --accent: #777777;
+        --background-special: #4c4c4c;
+        --click-dark: var(--color-slate-600);
+        --input-dark: var(--color-slate-800);
+        --link-dark: var(--color-slate-700);
+        --click: var(--color-slate-600);
+        --input: var(--color-slate-400);
+        --link: var(--color-slate-500);
+        --active-foreground: var(--color-gray-100);
+        --active: var(--color-gray-500);
+        --hover: var(--color-slate-300);
+        --hover-foreground: var(--color-slate-600);
+        --shd: var(--color-slate-50/60);
+        --shd-dark: var(--color-slate-950/20);
+        color: var(--text-primary);
+        background-color: var(--background-primary);
+    }
+
+    @theme{
         --background-primary: #ededed;
         --background-secondary: #dadada;
         --text-primary: #141414;
@@ -38,8 +63,6 @@
         --border: #bbbbbb;
         --accent: #777777;
         --background-special: #4c4c4c;
-        color: var(--text-primary);
-        background-color: var(--background-primary);
     }
 
     :global(*) {
@@ -48,8 +71,10 @@
     }
 
     main {
-        background-color: var(--background-color);
         color: var(--text-primary);
+        @apply
+        bg-radial from-slate-900 to-neutral-950
+        ;
     }
 
     :global(input::-webkit-outer-spin-button),

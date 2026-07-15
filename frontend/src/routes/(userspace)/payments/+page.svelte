@@ -80,7 +80,6 @@
         ])
     );
 
-    console.log(filteredMembers)
 
 </script>
 <svelte:head>
