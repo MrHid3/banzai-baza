@@ -17,7 +17,7 @@
 
 <header>
     <!-- Mobile bar: only visible on small screens -->
-    <div class="mobile-bar">
+    <div class="mobile-bar bg-(--link)!">
         <button
                 class="hamburger-btn"
                 onclick={toggleMenu}
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Desktop nav (unchanged) -->
-    <nav>
+    <nav class="*:*:shadow-md *:*:shadow-slate-50/40">
         <svg aria-hidden="true" viewBox="0 0 2 3">
             <path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z"/>
         </svg>
@@ -69,12 +69,12 @@
         <svg aria-hidden="true" viewBox="0 0 2 3">
             <path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z"/>
         </svg>
-        <span id="logout">Wyloguj się</span>
+        <span id="logout" class="shadow-md shadow-slate-50/40">Wyloguj się</span>
     </button>
 
     <!-- Mobile dropdown menu -->
     {#if menuOpen}
-        <nav class="mobile-menu" role="navigation">
+        <nav class="mobile-menu *:text-(--text-primary)! *:bg-(--link)! " role="navigation">
             <a href={resolve('/payments')} onclick={closeMenu}>Płatności</a>
             <a href={resolve('/db')} onclick={closeMenu}>Baza</a>
             <a href={resolve('/multipliers')} onclick={closeMenu}>Mnożniki</a>

@@ -47,7 +47,7 @@
 </script>
 
 {#if !edit}
-    <div class="row desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-50/60 hover:-translate-y-1/12 delay-75">
+    <div class="row desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-950/20 hover:-translate-y-1/12 delay-75">
         <span class="data rounded-l-2xl">{num}</span>
         <span class="data">{member?.name != "" ? member?.name : "- -"}</span>
         <span class="data">{member?.surname != "" ? member?.surname : "- -"}</span>
@@ -91,7 +91,7 @@
             </form>
         </div>
     </div>
-    <div class="mobile">
+    <div class="mobile max-w-full text-(--text-primary-dark) bg-(--background-secondary)! border-none! outline-none! shadow-md shadow-slate-950/40">
         {#if !mobileEdit}
             <!--        <div class="horizontal">-->
             <!--            <span>{member?.name}</span>-->
@@ -179,7 +179,7 @@
                         class="bold">Komentarz</span><span><textarea name="comment">{member.comment}</textarea></span></div>
                 <div class="horizontal">
                     <span></span>
-                    <button type="submit" class="save">Zapisz</button>
+                    <button type="submit" class="save bg-(--click) text-(--text-primary)">Zapisz</button>
                 </div>
             </form>
         {/if}
@@ -261,6 +261,7 @@
             max-w-full
             p-1
             rounded-lg
+        shadow-md shadow-slate-950/20
         ;
     }
 

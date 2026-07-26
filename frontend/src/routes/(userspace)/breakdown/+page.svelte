@@ -218,15 +218,16 @@
     <title>Baza - Podsumowanie</title>
 </svelte:head>
 
-<div class="page">
+<div class="page bg-(--background-primary) rounded-2xl shadow-md shadow-slate-950/20">
 
-    <div class="mobile">Obróć telefon aby uzyskać więcej szczegółów</div>
+    <div class="mobile shadow-md shadow-slate-950/20">Obróć telefon aby uzyskać więcej szczegółów</div>
 
     {#if !data.error && payments.length > 0}
-        <div id="filterHolder">
+        <div id="filterHolder" class="bg-(--background-secondary) shadow-md shadow-slate-950/20">
             <label for="yearSelect">Rok:</label>
             <select
                     id="yearSelect"
+                    class="text-(--text-primary)!"
                     bind:value={selectedYear}
                     onchange={() => { collapsed = new Set(); }}
             >
@@ -238,13 +239,13 @@
     {/if}
 
     {#if data.error}
-        <p class="no-results">Nie udało się załadować danych.</p>
+        <p class="no-results text-(--text-primary)!">Nie udało się załadować danych.</p>
 
     {:else if payments.length === 0}
-        <p class="no-results">Brak zarejestrowanych płatności.</p>
+        <p class="no-results text-(--text-primary)!">Brak zarejestrowanych płatności.</p>
 
     {:else}
-        <div class="summary-bar">
+        <div class="summary-bar shadow-md shadow-slate-950/20">
             <div class="summary-item">
                 <span class="summary-value">{fmt(grandTotal)}</span>
                 <span class="summary-label">Łącznie zebrano</span>
@@ -262,7 +263,7 @@
         {#each breakdown as block}
             {@const isCollapsed = collapsed.has(block.monthKey)}
 
-            <div class="block">
+            <div class="block shadow-md shadow-slate-950/20">
                 <button
                         class="block-header"
                         onclick={() => toggle(block.monthKey)}
@@ -302,10 +303,10 @@
                                 <tbody>
                                 {#each [...section.locations.values()] as row}
                                     <tr>
-                                        <td class="loc-cell">{row.location}</td>
+                                        <td class="loc-cell bg-(--background-secondary)">{row.location}</td>
                                         {#each methodList as m}
                                             {@const bucket = row.methods.get(m)}
-                                            <td class="desktop">
+                                            <td class="desktop bg-(--background-secondary)">
                                                 {#if bucket}
                                                     <div class="cell-amount">{fmt(bucket.total)}</div>
                                                     <div class="cell-count">{bucket.count} wpł.</div>
@@ -320,14 +321,14 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td class="loc-cell">Suma</td>
+                                    <td class="loc-cell bg-(--background-secondary)">Suma</td>
                                     {#each methodList as m}
                                         {@const colTotal = [...section.locations.values()]
                                             .reduce((s, r) => s + (r.methods.get(m)?.total ?? 0), 0)}
                                         {@const colCount = [...section.locations.values()]
                                             .reduce((s, r) => s + (r.methods.get(m)?.count ?? 0), 0)}
-                                        <td class="desktop">
-                                            <div class="cell-amount">{fmt(colTotal)}</div>
+                                        <td class="desktop bg-(--background-secondary)">
+                                            <div class="cell-amount ">{fmt(colTotal)}</div>
                                             <div class="cell-count">{colCount} wpł.</div>
                                         </td>
                                     {/each}
@@ -360,10 +361,10 @@
                                 <tbody>
                                 {#each [...section.locations.values()] as row}
                                     <tr>
-                                        <td class="loc-cell">{row.location}</td>
+                                        <td class="loc-cell bg-(--background-secondary)">{row.location}</td>
                                         {#each methodList as m}
                                             {@const bucket = row.methods.get(m)}
-                                            <td class="desktop">
+                                            <td class="desktop bg-(--background-secondary)">
                                                 {#if bucket}
                                                     <div class="cell-amount">{fmt(bucket.total)}</div>
                                                     <div class="cell-count">{bucket.count} wpł.</div>
@@ -378,14 +379,14 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td class="loc-cell">Suma</td>
+                                    <td class="loc-cel">Suma</td>
                                     {#each methodList as m}
                                         {@const colTotal = [...section.locations.values()]
                                             .reduce((s, r) => s + (r.methods.get(m)?.total ?? 0), 0)}
                                         {@const colCount = [...section.locations.values()]
                                             .reduce((s, r) => s + (r.methods.get(m)?.count ?? 0), 0)}
-                                        <td class="desktop">
-                                            <div class="cell-amount">{fmt(colTotal)}</div>
+                                        <td class="desktop bg-(--background-secondary)!">
+                                            <div class="cell-amount bg-(--background-secondary)">{fmt(colTotal)}</div>
                                             <div class="cell-count">{colCount} wpł.</div>
                                         </td>
                                     {/each}
@@ -403,10 +404,10 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+    @import "tailwindcss";
 
     * {
         font-family: 'Ubuntu', sans-serif;
-        font-weight: normal;
         box-sizing: border-box;
         margin: 0;
         padding: 0;
@@ -421,12 +422,10 @@
 
     h1 {
         font-size: 1.6em;
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     #filterHolder {
-        outline: 2px solid var(--border);
         border-radius: 15px;
         padding: 10px 16px;
         display: flex;
@@ -443,10 +442,10 @@
     }
 
     select {
-        background-color: var(--background-secondary);
+        background-color: var(--input);
         border: none;
         border-radius: 15px;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
         padding: 6px 14px;
         cursor: pointer;
         font-family: 'Ubuntu', sans-serif;
@@ -467,7 +466,6 @@
     .summary-bar {
         display: flex;
         flex-direction: row;
-        outline: 2px solid var(--border);
         border-radius: 15px;
         overflow: hidden;
     }
@@ -489,8 +487,7 @@
 
     .summary-value {
         font-size: 1.3em;
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     .summary-label {
@@ -502,7 +499,6 @@
 
     /* ── Month block ── */
     .block {
-        outline: 2px solid var(--border);
         border-radius: 15px;
         overflow: hidden;
     }
@@ -517,19 +513,18 @@
         background-color: var(--background-secondary);
         border: none;
         cursor: pointer;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
         text-align: left;
         gap: 10px;
     }
 
     .block-header:hover {
-        background-color: var(--background-primary);
+        background-color: var(--hover);
     }
 
     .block-label {
         font-size: 1.05em;
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     .block-right {
@@ -540,8 +535,7 @@
     }
 
     .block-total {
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     .chevron {
@@ -564,12 +558,11 @@
         justify-content: space-between;
         padding: 8px 16px;
         border-top: 2px solid var(--border);
-        background-color: var(--background-primary);
+        background-color: var(--background-secondary);
     }
 
     .section-label {
         font-size: 0.8em;
-        font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.07em;
         color: var(--text-secondary);
@@ -577,8 +570,7 @@
 
     .section-total {
         font-size: 0.9em;
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     /* ── Table ── */
@@ -598,7 +590,6 @@
     }
 
     thead td {
-        font-weight: bold;
         padding: 10px;
         text-align: center;
         border-bottom: 2px solid var(--border);
@@ -621,7 +612,7 @@
     td {
         text-align: center;
         padding: 8px 5px;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     td:first-child {
@@ -630,13 +621,11 @@
     }
 
     .loc-cell {
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     .cell-amount {
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
     }
 
     .cell-count {
@@ -651,8 +640,8 @@
     }
 
     .total-cell {
-        font-weight: 700;
-        color: var(--text-primary);
+        color: var(--text-primary-dark);
+        background-color: var(--background-secondary);
     }
 
     tfoot tr {
@@ -661,7 +650,6 @@
     }
 
     tfoot .loc-cell {
-        font-weight: 700;
         font-size: 0.85em;
         text-transform: uppercase;
         letter-spacing: 0.05em;

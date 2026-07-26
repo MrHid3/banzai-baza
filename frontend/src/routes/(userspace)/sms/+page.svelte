@@ -112,31 +112,29 @@
     <title>Baza - SMS</title>
 </svelte:head>
 
-<div class="h-full bg-(--color-background-primary) px-4 py-8 md:px-8 md:py-12 mx-auto!">
+<!--<div class="h-full bg-(&#45;&#45;background-primary) px-4 py-8 md:px-8 md:py-12 mx-auto! rounded-2xl">-->
     <div class="max-w-6xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Left panel: Member selection -->
             <div class="flex flex-col gap-6">
-                <div class="outline-2 outline outline-(--color-border) rounded-3xl p-8 bg-(--color-background-primary) p-4!">
-                    <h2 class="text-2xl font-bold text-(--color-text-primary) mb-8">
+                <div class="rounded-3xl p-8 bg-(--background-primary) p-4! shadow-md shadow-slate-50/60">
+                    <h2 class="text-2xl font-bold text-(--text-primary-dark) mb-8">
                         Wybór odbiorców
                     </h2>
 
                     <!-- Filters -->
                     <div class="space-y-6 mb-8">
                         <!-- Location filter -->
-                        <div class="flex flex-col gap-3">
-                            <label class="text-sm font-semibold text-(--color-text-primary)">
+                        <div class="flex flex-col gap-3 w-fit">
+                            <label class="text-sm font-semibold text-(--text-primary-dark)">
                                 Lokalizacja
                             </label>
-                            <div class="bg-(--color-background-secondary) rounded-2xl p-4 w-fit">
                                 <LocationSelect all={true} bind:location={selectedLocation} short={false} />
-                            </div>
                         </div>
 
                         <!-- Search filter -->
                         <div class="flex flex-col gap-3">
-                            <label for="member-search" class="text-sm font-semibold text-(--color-text-primary) p-1!">
+                            <label for="member-search" class="text-sm font-semibold text-(--text-primary-dark) p-1!">
                                 Szukaj
                             </label>
                             <input
@@ -144,25 +142,25 @@
                                     type="text"
                                     bind:value={memberSearchText}
                                     placeholder="Imię, nazwisko, email..."
-                                    class="bg-(--color-background-secondary) border-none rounded-2xl px-5! py-3! text-(--color-text-secondary) placeholder-gray-500 focus:outline-2 focus:outline-(--color-text-primary) transition"
+                                    class="bg-(--background-secondary) border-none rounded-2xl px-5! py-3! text-(--text-secondary) placeholder-gray-500 focus:outline-2 focus:outline-(--text-primary-dark) transition"
                             />
                         </div>
 
                         <!-- Categories -->
                         <div class="flex flex-col gap-3">
-                            <label class="text-sm font-semibold text-(--color-text-primary) px-1">
+                            <label class="text-sm font-semibold text-(--text-primary-dark) px-1">
                                 Kategorie
                             </label>
                             <div class="flex flex-wrap gap-3">
                                 {#each categories as category (category.id)}
-                                    <label class="flex items-center gap-3 bg-(--color-background-secondary) hover:bg-(--color-border) px-4! py-3! rounded-xl cursor-pointer transition">
+                                    <label class="flex items-center gap-3 bg-(--background-secondary) hover:bg-(--hover) px-4! py-3! rounded-xl cursor-pointer transition">
                                         <input
                                                 type="checkbox"
                                                 checked={selectedCategories.includes(category.id)}
                                                 onchange={() => toggleCategory(category.id)}
-                                                class="accent-(--color-text-primary) cursor-pointer"
+                                                class="accent-(--text-primary-dark) cursor-pointer"
                                         />
-                                        <span class="text-sm text-(--color-text-primary)">{category.shortname}</span>
+                                        <span class="text-sm text-(--text-primary-dark)">{category.shortname}</span>
                                     </label>
                                 {/each}
                             </div>
@@ -170,22 +168,22 @@
 
                         <!-- Filter logic toggle -->
                         <div class="flex flex-col gap-3">
-                            <label class="text-sm font-semibold text-(--color-text-primary) px-1!">
+                            <label class="text-sm font-semibold text-(--text-primary-dark) px-1!">
                                 Logika filtrowania
                             </label>
                             <div class="flex gap-3">
                                 <button
                                         class="flex-1 py-3! px-5! rounded-xl font-medium transition {filterMode === 'OR'
-                                        ? 'bg-(--color-border) text-(--color-text-primary)'
-                                        : 'bg-(--color-background-secondary) text-(--color-text-secondary) hover:bg-(--color-border)'}"
+                                        ? 'bg-(--active) text-(--active-foreground)'
+                                        : 'bg-(--background-secondary) text-(--text-secondary) hover:bg-(--hover)'}"
                                         onclick={() => (filterMode = 'OR')}
                                 >
                                     LUB
                                 </button>
                                 <button
                                         class="flex-1 py-3 px-5 rounded-xl font-medium transition {filterMode === 'AND'
-                                        ? 'bg-(--color-border) text-(--color-text-primary)'
-                                        : 'bg-(--color-background-secondary) text-(--color-text-secondary) hover:bg-(--color-border)'}"
+                                        ? 'bg-(--active) text-(--active-foreground)'
+                                        : 'bg-(--background-secondary) text-(--text-secondary) hover:bg-(--hover)'}"
                                         onclick={() => (filterMode = 'AND')}
                                 >
                                     I
@@ -195,14 +193,14 @@
 
                         <!-- Action buttons -->
                         <div class="flex gap-3 flex-wrap pt-6 gap-3! p-3! w-full">
-                            <button onclick={clearFilters} class="text-sm font-medium bg-(--color-background-secondary) hover:bg-(--color-border) text-(--color-text-secondary) px-4 py-2.5 rounded-lg transition">
+                            <button onclick={clearFilters} class="text-sm font-medium bg-(--background-secondary) hover:bg-(--hover) text-(--text-secondary) px-4 py-2.5 rounded-lg transition">
                                 Wyczyść
                             </button>
                             {#if filteredMembers.length > 0}
-                                <button onclick={selectAllFiltered} class="text-sm font-medium bg-(--color-background-secondary) hover:bg-(--color-border) text-(--color-text-secondary) px-4 py-2.5 rounded-lg transition">
+                                <button onclick={selectAllFiltered} class="text-sm font-medium bg-(--background-secondary) hover:bg-(--hover) text-(--text-secondary) px-4 py-2.5 rounded-lg transition">
                                     Zaznacz wszystkich
                                 </button>
-                                <button onclick={deselectAll} class="text-sm font-medium bg-(--color-background-secondary) hover:bg-(--color-border) text-(--color-text-secondary) px-4 py-2.5 rounded-lg transition">
+                                <button onclick={deselectAll} class="text-sm font-medium bg-(--background-secondary) hover:bg-(--hover) text-(--text-secondary) px-4 py-2.5 rounded-lg transition">
                                     Odznacz wszystkich
                                 </button>
                             {/if}
@@ -210,39 +208,38 @@
                     </div>
 
                     <!-- Selection counter -->
-                    <div class="flex gap-8 bg-(--color-background-secondary) rounded-2xl w-fit p-2! mx-auto! mb-3! w-full">
+                    <div class="flex gap-8 bg-(--background-secondary) rounded-2xl w-fit p-2! mx-auto! mb-3! w-full">
                         <div class="flex flex-col gap-2 w-1/2">
-                            <span class="text-xs font-semibold text-(--color-text-secondary) uppercase tracking-wider text-center! p-1">Zaznaczeni</span>
-                            <span class="text-3xl font-bold text-(--color-text-primary) text-center">{selectedMembers.length}</span>
+                            <span class="text-xs font-semibold text-(--text-secondary) uppercase tracking-wider text-center! p-1">Zaznaczeni</span>
+                            <span class="text-3xl font-bold text-(--text-primary-dark) text-center">{selectedMembers.length}</span>
                         </div>
-                        <div class="w-px bg-(--color-border)"></div>
                         <div class="flex flex-col gap-2 w-1/2">
-                            <span class="text-xs font-semibold text-(--color-text-secondary) uppercase tracking-wider text-center! p-1">Dostępnych</span>
-                            <span class="text-3xl font-bold text-(--color-text-primary) text-center">{filteredMembers.length}</span>
+                            <span class="text-xs font-semibold text-(--text-secondary) uppercase tracking-wider text-center! p-1">Dostępnych</span>
+                            <span class="text-3xl font-bold text-(--text-primary-dark) text-center">{filteredMembers.length}</span>
                         </div>
                     </div>
 
                     <!-- Members list -->
-                    <div class="h-96 overflow-y-auto rounded-2xl outline-2 outline outline-(--color-border) bg-(--color-background-secondary)">
+                    <div class="h-96 overflow-y-auto rounded-2xl bg-(--background-secondary)">
                         {#if filteredMembers.length === 0}
                             <div class="flex items-center justify-center h-full text-center p-8">
-                                <span class="text-lg text-(--color-text-secondary)">Brak wyników</span>
+                                <span class="text-lg text-(--text-secondary)">Brak wyników</span>
                             </div>
                         {:else}
-                            <div class="divide-y divide-(--color-border)">
+                            <div>
                                 {#each filteredMembers as member (member.uuid)}
-                                    <label class="flex items-center gap-4 px-3! py-2! hover:bg-(--color-background-primary) cursor-pointer transition">
+                                    <label class="flex items-center gap-4 px-3! py-2! hover:bg-(--background-primary) cursor-pointer transition">
                                         <input
                                                 type="checkbox"
                                                 checked={selectedMembers.includes(member.uuid)}
                                                 onchange={() => toggleMember(member.uuid)}
-                                                class="accent-(--color-text-primary) cursor-pointer flex-shrink-0"
+                                                class="accent-(--text-primary-dark) cursor-pointer flex-shrink-0"
                                         />
                                         <div class="min-w-0 flex-1">
-                                            <div class="font-medium text-(--color-text-primary) truncate">
+                                            <div class="font-medium text-(--text-primary-dark) truncate">
                                                 {member.name} {member.surname}
                                             </div>
-                                            <div class="flex gap-3 mt-2 text-xs text-(--color-text-secondary)">
+                                            <div class="flex gap-3 mt-2 text-xs text-(--text-secondary)">
                                                 <span class="px-3 py-1.5">
                                                     {member.location.shortname}
                                                 </span>
@@ -259,8 +256,8 @@
 
             <!-- Right panel: Message composition -->
             <div class="flex flex-col gap-6">
-                <div class="outline-2 outline outline-(--color-border) rounded-3xl p-4! bg-(--color-background-primary)">
-                    <h2 class="text-2xl font-bold text-(--color-text-primary) mb-8">
+                <div class="rounded-3xl p-4! bg-(--background-primary) shadow-md shadow-slate-50/60">
+                    <h2 class="text-2xl font-bold text-(--text-primary-dark) mb-8">
                         Wiadomość
                     </h2>
 
@@ -272,7 +269,7 @@
                     <form action="?/sendSms" method="POST" use:enhance class="space-y-8">
                         <!-- Message text -->
                         <div class="flex flex-col gap-3">
-                            <label for="message-text" class="text-sm font-semibold text-(--color-text-primary) px-1">
+                            <label for="message-text" class="text-sm font-semibold text-(--text-primary-dark) px-1">
                                 Treść wiadomości
                             </label>
                             <textarea
@@ -281,10 +278,10 @@
                                     bind:value={messageText}
                                     placeholder="Wpisz treść SMS-a..."
                                     required
-                                    class="bg-(--color-background-secondary) border-none rounded-2xl px-5! py-4! text-(--color-text-secondary) placeholder-gray-500 resize-none focus:outline-2 focus:outline-(--color-text-primary) transition h-36"
+                                    class="bg-(--background-secondary) border-none rounded-2xl px-5! py-4! text-(--text-secondary) placeholder-gray-500 resize-none focus:outline-2 focus:outline-(--text-primary-dark) transition h-36"
                             ></textarea>
                             <div class="flex justify-between items-center text-xs px-1">
-                                <span class="text-(--color-text-secondary)">
+                                <span class="text-(--text-secondary)">
                                     {messageCharCount} / {maxMessageLength} znaków
                                 </span>
                                 {#if messageCharCount > maxMessageLength}
@@ -295,29 +292,29 @@
 
                         <!-- Scheduling options -->
                         <div class="flex flex-col gap-4 w-fit">
-                            <label class="text-sm font-semibold text-(--color-text-primary) px-1">
+                            <label class="text-sm font-semibold text-(--text-primary-dark) px-1">
                                 Kiedy wysłać
                             </label>
                             <div class="space-y-3 flex flex-row gap-2 my-2!">
-                                <label class="flex items-center gap-4 p-4! bg-(--color-background-secondary) rounded-2xl cursor-pointer hover:bg-(--color-border) transition w-full">
+                                <label class="flex items-center gap-4 p-4! bg-(--background-secondary) rounded-2xl cursor-pointer hover:bg-(--hover) transition w-full">
                                     <input
                                             type="radio"
                                             name="scheduleType"
                                             value="now"
                                             bind:group={scheduleType}
-                                            class="accent-(--color-text-primary) cursor-pointer"
+                                            class="accent-(--text-primary-dark) cursor-pointer"
                                     />
-                                    <span class="text-sm font-medium text-(--color-text-primary)">Teraz</span>
+                                    <span class="text-sm font-medium text-(--text-primary-dark)">Teraz</span>
                                 </label>
-                                <label class="flex items-center gap-4 p-4! bg-(--color-background-secondary) rounded-2xl cursor-pointer hover:bg-(--color-border) transition w-full">
+                                <label class="flex items-center gap-4 p-4! bg-(--background-secondary) rounded-2xl cursor-pointer hover:bg-(--hover) transition w-full">
                                     <input
                                             type="radio"
                                             name="scheduleType"
                                             value="scheduled"
                                             bind:group={scheduleType}
-                                            class="accent-(--color-text-primary) cursor-pointer"
+                                            class="accent-(--text-primary-dark) cursor-pointer"
                                     />
-                                    <span class="text-sm font-medium text-(--color-text-primary)">Zaplanuj na później</span>
+                                    <span class="text-sm font-medium text-(--text-primary-dark)">Zaplanuj na później</span>
                                 </label>
                             </div>
                         </div>
@@ -325,7 +322,7 @@
                         {#if scheduleType === 'scheduled'}
                             <div class="grid grid-cols-2 gap-6 my-2! px-2">
                                 <div class="flex flex-col gap-3">
-                                    <label for="schedule-date" class="text-sm font-semibold text-(--color-text-primary) px-1">
+                                    <label for="schedule-date" class="text-sm font-semibold text-(--text-primary-dark) px-1">
                                         Data
                                     </label>
                                     <input
@@ -335,12 +332,12 @@
                                             bind:value={scheduleDate}
                                             min={minDate}
                                             required
-                                            class="bg-(--color-background-secondary) border-none rounded-2xl px-5 py-3 text-(--color-text-secondary) focus:outline-2 focus:outline-(--color-text-primary) transition"
+                                            class="bg-(--background-secondary) border-none rounded-2xl px-5 py-3 text-(--text-secondary) focus:outline-2 focus:outline-(--text-primary-dark) transition"
                                     />
                                 </div>
 
                                 <div class="flex flex-col gap-3">
-                                    <label for="schedule-time" class="text-sm font-semibold text-(--color-text-primary) px-1">
+                                    <label for="schedule-time" class="text-sm font-semibold text-(--text-primary-dark) px-1">
                                         Godzina
                                     </label>
                                     <input
@@ -350,7 +347,7 @@
                                             bind:value={scheduleTime}
                                             required
                                             step="60"
-                                            class="bg-(--color-background-secondary) border-none rounded-2xl px-5 py-3 text-(--color-text-secondary) focus:outline-2 focus:outline-(--color-text-primary) transition"
+                                            class="bg-(--background-secondary) border-none rounded-2xl px-5 py-3 text-(--text-secondary) focus:outline-2 focus:outline-(--text-primary-dark) transition"
                                     />
                                 </div>
                             </div>
@@ -364,8 +361,8 @@
                                 type="submit"
                                 disabled={selectedMembers.length === 0 || messageText.trim().length === 0}
                                 class="w-full mt-10 py-4 px-8 rounded-2xl font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed {selectedMembers.length === 0 || messageText.trim().length === 0
-                                ? 'bg-(--color-background-secondary) text-(--color-text-secondary)'
-                                : 'bg-(--color-border) text-(--color-text-primary) hover:opacity-90'}"
+                                ? 'bg-(--background-secondary) text-(--text-secondary)'
+                                : 'bg-(--active) text-(--text-primary) hover:opacity-90'}"
                         >
                             <span>
                                 {scheduleType === 'now' ? 'Wyślij SMS' : 'Zaplanuj SMS'}
@@ -385,7 +382,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <style>
     @import "tailwindcss";
@@ -405,6 +401,12 @@
         }
     }
 
+    button, textarea, label:has(input), *:not(label) > input{
+        @apply
+        shadow-md shadow-slate-950/20
+        ;
+    }
+
     /* Smooth scrollbar styling */
     ::-webkit-scrollbar {
         width: 6px;
@@ -420,6 +422,6 @@
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background: var(--text-primary);
+        background: var(--text-primary-dark-dark);
     }
 </style>

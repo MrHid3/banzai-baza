@@ -1,5 +1,6 @@
 import type { PageServerLoad, Actions } from './$types';
 import { fail } from '@sveltejs/kit';
+import { serverFetch } from '$lib/api.ts';
 
 export const load: PageServerLoad = async ({ fetch }) => {
     const res = await fetch('/api/payment/recent');
@@ -19,12 +20,11 @@ export const load: PageServerLoad = async ({ fetch }) => {
 };
 
 export const actions: Actions = {
-    deletePayment: async ({ request, fetch }) => {
+    deletePayment: async ({ request, cookies, locals }) => {
         const data = await request.formData();
         const uuid = data.get('uuid');
         if (!uuid || typeof uuid !== 'string') return fail(400, { message: 'Brak uuid' });
-
-        const res = await fetch(`/api/payments/${uuid}`, { method: 'DELETE' });
+        const res = await serverFetch(`/api/payment`, { method: 'DELETE', body: JSON.stringify({uuid: uuid}) }, cookies, locals);
         if (!res.ok) return fail(res.status, { message: 'Nie udało się usunąć płatności' });
 
         return { success: true };

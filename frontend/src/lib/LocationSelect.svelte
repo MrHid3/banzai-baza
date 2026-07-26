@@ -41,16 +41,20 @@
 </select>
 
 <style>
-    select, option {
-        background-color: var(--background-secondary);
+    @import "tailwindcss";
+
+    select{
         border: none;
-        color: var(--text-secondary);
         display: inline-block !important;
         align-self: center;
         text-align: center;
         border-radius: 10px;
         padding: 0;
         width: fit-content;
+        @apply
+        bg-(--input) text-(--text-primary) border-none! p-2! outline-(--active)
+            shadow-md shadow-slate-950/40
+       ;
     }
 
     select {

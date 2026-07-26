@@ -16,6 +16,7 @@
         --font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
         'Open Sans', 'Helvetica Neue', sans-serif;
         --font-mono: 'Fira Mono', monospace;
+        font-weight: bold;
         /*--color-background-primary: #121212;*/
         /*--color-background-secondary: #252525;*/
         /*--color-text-primary: #E0E0E0;*/
@@ -32,14 +33,15 @@
         /*--border: var(--color-slate-700);*/
         /*--accent: var(--color-gray-600);*/
         /*--background-special: var(--color-zinc-800);*/
+        --background-primary: var(--color-slate-50);
         --background-secondary: var(--color-slate-200);
         --text-primary: var(--color-slate-100);
         --text-primary-dark: var(--color-slate-800);
-        --text-secondary: #4f4f4f;
+        --text-secondary: var(--color-slate-700);
         --border: #bbbbbb;
         --accent: #777777;
         --background-special: #4c4c4c;
-        --click-dark: var(--color-slate-600);
+        --click-dark: var(--color-slate-900);
         --input-dark: var(--color-slate-800);
         --link-dark: var(--color-slate-700);
         --click: var(--color-slate-600);
@@ -53,6 +55,9 @@
         --shd-dark: var(--color-slate-950/20);
         color: var(--text-primary);
         background-color: var(--background-primary);
+        @apply
+        text-shadow-sm text-shadow-slate-500/20
+        ;
     }
 
     @theme{

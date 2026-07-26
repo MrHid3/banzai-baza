@@ -108,16 +108,15 @@
     <title>Baza - Szczegoły Płatności</title>
 </svelte:head>
 
-<div class="min-h-screen" style="background: var(--background-primary); color: var(--text-primary)">
-    <div class="max-w-7xl mx-auto">
+<div class="min-h-screen bg-(--background-primary) text-(--text-primary-dark) p-4 rounded-2xl shadow-md shadow-slate-50/60 ">
+    <div class="w-ful">
 
         <!-- Filters -->
         <div
-                class="grid gap-3 mb-5 p-4! rounded-xl border"
+                class="grid gap-3 mb-5 p-4! rounded-xl border shadow-md shadow-slate-950/40 border-none text-(--text-secondary)"
                 style="
         grid-template-columns: 2fr 1fr 1fr 1fr;
         background: var(--background-secondary);
-        border-color: var(--border);
       "
         >
             <div>
@@ -152,7 +151,7 @@
                 </select>
             </div>
             <div>
-                <div class="text-xs mb-1" style="color: var(--text-secondary)">Metoda</div>
+                <div class="text-xs mb-1" style="color: var(--text-secondary)">Typ</div>
                 <select
                         bind:value={filterType}
                         class="w-full px-3! py-2! text-sm rounded-lg border outline-none"
@@ -192,21 +191,21 @@
         </p>
 
         <!-- Table -->
-        <div class="rounded-xl overflow-hidden border" style="border-color: var(--border)">
+        <div class="rounded-xl bg-(--background-secondary) shadow-md shadow-slate-950/40 w-fit">
             <table class="w-full text-sm border-collapse" style="table-layout: fixed">
-                <colgroup>
-                    <col style="width: 14%">
-                    <col style="width: 10%">
-                    <col style="width: 16%">
-                    <col style="width: 13%">
-                    <col style="width: 11%">
-                    <col style="width: 10%">
-                    <col style="width: 9%">
-                    <col style="width: 12%">
-                    <col style="width: 5%">
-                </colgroup>
+<!--                <colgroup>-->
+<!--                    <col style="width: 14%">-->
+<!--                    <col style="width: 10%">-->
+<!--                    <col style="width: 16%">-->
+<!--                    <col style="width: 13%">-->
+<!--                    <col style="width: 11%">-->
+<!--                    <col style="width: 10%">-->
+<!--                    <col style="width: 9%">-->
+<!--                    <col style="width: 12%">-->
+<!--                    <col style="width: 5%">-->
+<!--                </colgroup>-->
                 <thead>
-                <tr style="background: var(--background-special); color: var(--background-primary)">
+                <tr class="" style="; color: var(--background-primary-dark)">
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Członek</th>
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Lokalizacja</th>
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Wprowadzający</th>
@@ -216,7 +215,7 @@
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Typ</th>
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Metoda</th>
                     <th class="px-3! py-2.5! font-medium text-left text-xs">Komentarz</th>
-                    <th class="px-3! py-2.5! font-medium text-left text-xs">Akcja</th>
+                    <th class="px-3! py-2.5! font-medium text-left text-xs"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -270,8 +269,8 @@
                 <span
                         class="inline-block px-2! py-0.5! rounded text-xs font-medium"
                         style="
-                    background: {payment.paymentType === 'MONTHLY_FEE' ? '#b0c4b0' : '#c4b0b0'};
-                    color: {payment.paymentType === 'MONTHLY_FEE' ? '#1a2e1a' : '#2e1a1a'};
+                    background: {payment.paymentType === 'MONTHLY_FEE' ? 'var(--color-teal-400);' : 'var(--color-indigo-800)'};
+                    color: {payment.paymentType === 'MONTHLY_FEE' ? '#var(--color-teal-800)' : 'var(--color-indigo-50)'};
                   "
                 >
                   {payment.paymentType === 'MONTHLY_FEE' ? 'Składka' : 'Wpisowe'}
@@ -288,12 +287,13 @@
                   {payment.paymentMethod === 'CASH' ? 'Gotówka' : 'Karta'}
                 </span>
                         </td>
-                        <td class="px-3! py-2! truncate" title={payment.comment ?? ''}>
+                        <td class="px-3! py-2!" title={payment.comment ?? ''}>
                             {payment.comment || '—'}
                         </td>
                         <td class="px-3! py-2!">
                             <form
                                     method="POST"
+                                    class="flex flex-col justify-center"
                                     action="?/deletePayment"
                                     use:enhance={({ formData }) => {
                     return async ({ result, update }) => {
@@ -308,22 +308,10 @@
                                 <input type="hidden" name="uuid" value={payment.uuid} />
                                 <button
                                         type="submit"
-                                        class="px-2 py-1 text-xs rounded border cursor-pointer transition-colors"
+                                        class="px-2 py-1 text-xs rounded rounded-md shadow-md shadow-slate-950/40 bg-(--click)! text-(--text-primary) cursor-pointer transition-colors hover:bg-(--hover)! active:bg-(--active)!"
                                         style="
                       background: transparent;
-                      border-color: var(--border);
-                      color: var(--text-secondary);
                     "
-                                        onmouseenter={(e) => {
-                      (e.currentTarget as HTMLButtonElement).style.background = 'var(--background-special)';
-                      (e.currentTarget as HTMLButtonElement).style.color = '#ededed';
-                      (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--background-special)';
-                    }}
-                                        onmouseleave={(e) => {
-                      (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
-                      (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-secondary)';
-                      (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--color-border)';
-                    }}
                                 >
                                     Usuń
                                 </button>
@@ -339,4 +327,11 @@
 
 <style>
     @import "tailwindcss";
+
+    input, select{
+        @apply
+            bg-(--input)!
+            shadow-md shadow-slate-950/40 border-none!
+        ;
+    }
 </style>
