@@ -39,17 +39,6 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateMobileAccessToken(String phoneNumber){
-        return Jwts.builder()
-                .setSubject(phoneNumber)
-                .claim("phoneNumbers", List.of(phoneNumber))
-                .claim("role", "ROLE_MOBILE")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSigningKey())
-                .compact();
-    }
-
     public UUID extractUuid(String token) {
         return UUID.fromString(
                 Jwts.parserBuilder()

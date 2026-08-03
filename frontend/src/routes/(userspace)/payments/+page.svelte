@@ -226,7 +226,7 @@
 			{#each filteredMembers as member (member.member.uuid)}
 				{#if selectedCategory == null || selectedCategory == -1 || member.member.categories.some(a => a.id == selectedCategory)}
 					<div
-						class="tr border-none rounded-2xl duration-150 bg-(--background-secondary)!
+						class="tr border-none rounded-2xl! duration-150 bg-(--background-secondary)!
 						text-(--text-primary-dark) shadow-md shadow-slate-950/20">
 						<div
 							class="td rounded-l-2xl!">{ filteredMembers.findIndex(m => member.member.uuid == m.member.uuid) + 1}</div>

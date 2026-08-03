@@ -49,8 +49,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/auth/login", "/api/auth/refresh", "/api/auth/registration/validate",
-                                "/api/auth/registration/confirm", "/api/auth/reset-password/*", "/api/mobile/auth/requestOTP",
-                                "/api/mobile/auth/verifyOTP", "/api/mobile/auth/refresh").permitAll()
+                                "/api/auth/registration/confirm", "/api/auth/reset-password/*").permitAll()
                         .requestMatchers("/notsecure").permitAll()
                         .requestMatchers("/api/auth/register").hasRole("ADMIN")
                         .anyRequest().authenticated())

@@ -1,11 +1,11 @@
 <script lang="ts">
-    let {children} = $props();
+    let {children, user} = $props();
 
 </script>
 
 <main>
 
-    {@render children()}
+    {@render children(user = user)}
 </main>
 
 <style>

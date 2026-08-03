@@ -22,31 +22,35 @@
 <svelte:head>
     <title>Login</title>
 </svelte:head>
+<main class="w-screen h-screen">
 
-<form action="?/login" method="POST" use:enhance>
-    <input name="email" placeholder="Email" type="email" bind:value={email} required>
+<form action="?/login" method="POST" use:enhance class="bg-(--background-primary) p-4 rounded-2xl shadow-slate-50/60 shadow-md">
+    <input name="email" placeholder="Email"  type="email" bind:value={email} required>
     <input name="password" placeholder="Hasło" type={showPassword? "text" : "password"} required>
     <label for="show">
         <input bind:checked={showPassword} name="show" type="checkbox">
         Pokaż hasło
     </label>
     <button id="send" type="submit">Zaloguj się</button>
-    <a href={"/request-password-reset?email=" + encodeURIComponent(email)}>Zapomniałem/-am hasła</a>
+    <a href={"/request-password-reset?email=" + encodeURIComponent(email)} class="underline">Zapomniałem/-am hasła</a>
 
     {#if form?.error}
         <Error code={form?.error}></Error>
     {/if}
 </form>
+</main>
 
 <style>
-    * {
-        background-color: var(--background-primary);
-        color: var(--text-primary);
+    @import "tailwindcss";
+    main{
+        color: var(--text-primary-dark);
+        @apply
+        bg-radial from-slate-900 to-neutral-950
+        ;
     }
-
     form {
         position: absolute;
-        top: 30%;
+        top: 0;
         left: 50%;
         transform: translate(-50%, 50%);
         display: flex;
@@ -54,11 +58,16 @@
         gap: 10px;
     }
 
+    input{
+        @apply
+            bg-(--input) rounded-md shadow-md shadow-slate-950/40
+        ;
+    }
+
     input:not([type=checkbox]), #send {
         width: 15vw;
         min-width: 200px;
         padding: 10px;
-        border: 1px solid var(--border)
     }
 
     input:invalid:not(:focus):not(:placeholder-shown) {
@@ -71,6 +80,10 @@
 
     button {
         cursor: pointer;
+        @apply
+            bg-(--click) text-(--text-primary) rounded-md shadow-md shadow-slate-950/40
+            hover:-translate-y-1! duration-100
+        ;
     }
 
 </style>

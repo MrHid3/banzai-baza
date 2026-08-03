@@ -24,32 +24,39 @@
 <svelte:head>
     <title>Ustaw hasło</title>
 </svelte:head>
-{#if !form?.ok}
-    {#if !checked}
-        Ładowanie...
-        <!--    TODO: animacja ładowania-->
-    {:else if !data.ok}
-        Link wygasł
+<main class="w-screen h-screen pt-30">
+
+    {#if !form?.ok}
+        {#if !checked}
+            Ładowanie...
+            <!--    TODO: animacja ładowania-->
+        {:else if !data.ok}
+            Link wygasł
+        {:else}
+            <form action="?/confirm" method="POST" use:enhance
+                  class="bg-(--background-primary) p-4 rounded-2xl shadow-slate-50/60 shadow-md text-(--text-primary-dark)!">
+                <input type="hidden" value={token} name="token">
+                Nowe hasło: <input type={showPassword? "text" : "password"} name="password" bind:value={password}
+                                   required/>
+                Powtórz hasło: <input type={showPassword? "text" : "password"} pattern={password} required/>
+                <label for="show">
+                    <input type="checkbox" bind:checked={showPassword}>
+                    Pokaż hasło
+                </label>
+                <button type="submit">Zapisz</button>
+                {#if form?.error}
+                    <span class="error">{form?.error}</span>
+                {/if}
+            </form>
+        {/if}
     {:else}
-        <form action="?/confirm" method="POST" use:enhance>
-            <input type="hidden" value={token} name="token">
-            Noew hasło: <input type={showPassword? "text" : "password"} name="password" bind:value={password} required/>
-            Powtórz hasło: <input type={showPassword? "text" : "password"} pattern={password} required/>
-            <label for="show">
-                <input type="checkbox" bind:checked={showPassword}>
-                Pokaż hasło
-            </label>
-            <button type="submit">Zapisz</button>
-            {#if form?.error}
-                <span class="error">{form?.error}</span>
-            {/if}
-        </form>
+        <p>Hasło zostało zresetowane</p>
+        <a href="/login">Powrót do loginu</a>
     {/if}
-{:else}
-    <p>Hasło zostało zresetowane</p>
-    <a href="/login">Powrót do loginu</a>
-{/if}
+</main>
 <style>
+    @import "tailwindcss";
+
     form {
         display: flex;
         flex-direction: column;
@@ -63,14 +70,31 @@
         display: block;
     }
 
-    p, a{
+    p, a {
         margin: 0 auto;
         text-align: center;
         display: block;
     }
 
-    a{
-        color: var(--text-secondary);
+    a {
         text-decoration: underline;
+    }
+
+    input {
+        @apply
+        bg-(--input)
+        p-2 text-(--text-primary)
+            rounded-md shadow-md shadow-slate-950/40
+        ;
+    }
+
+    button {
+
+        cursor: pointer;
+        @apply
+        bg-(--click) text-(--text-primary) rounded-md shadow-md shadow-slate-950/40
+        hover:-translate-y-1! duration-100
+            p-2
+        ;
     }
 </style>

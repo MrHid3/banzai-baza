@@ -1,6 +1,21 @@
 import {serverFetch} from "$lib/api";
 import {type Actions, fail} from "@sveltejs/kit";
 
+export const load = async ({event, locals, cookies}) => {
+    const appUsers = await serverFetch("/api/appUser", {}, cookies, locals);
+    const locations = await serverFetch("/api/location/all", {}, cookies, locals);
+    const categories = await serverFetch("/api/memberCategory", {}, cookies, locals);
+
+    console.log(locals.user)
+    if (appUsers.ok && locations.ok && categories.ok) {
+        return {
+            locations: await locations.json(),
+            users: await appUsers.json(),
+            categories: await categories.json(),
+            user: locals.user
+        };
+    }
+}
 
 export const actions : Actions = {
     invite: async ({request, cookies, locals}) => {

@@ -55,7 +55,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         Role adminRole = createRoleIfNotFound("ROLE_ADMIN", Arrays.asList(manageAllMembers, manageUsers));
         createRoleIfNotFound("ROLE_COACH", Collections.singletonList(manageOwnMembers));
-        createRoleIfNotFound("ROLE_MOBILE", List.of());
 
         try {
             createAppUserIfNotFound(adminEmail, adminPassword, adminRole);

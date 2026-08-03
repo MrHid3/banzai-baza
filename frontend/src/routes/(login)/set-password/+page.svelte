@@ -24,6 +24,7 @@
 <svelte:head>
     <title>Ustaw hasło</title>
 </svelte:head>
+<main class="w-screen h-screen p-30">
 
 {#if !checked}
     Ładowanie...
@@ -44,6 +45,7 @@
         {/if}
     </form>
 {/if}
+</main>
 <style>
     * {
         font-weight: normal;
@@ -55,7 +57,7 @@
         display: flex;
         flex-direction: column;
         width: 500px;
-        margin: 50px auto;
+        margin: 0 auto;
         gap: 10px;
         text-align: center;
     }

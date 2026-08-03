@@ -1,73 +1,71 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { onMount } from 'svelte';
-	import { locations } from '$lib/stores/locations.svelte';
-	import LocationSelect from '$lib/LocationSelect.svelte';
-	import Error from '$lib/Error.svelte';
+    import {enhance} from '$app/forms';
+    import {onMount} from 'svelte';
+    import {locations} from '$lib/stores/locations.svelte';
+    import LocationSelect from '$lib/LocationSelect.svelte';
+    import Error from '$lib/Error.svelte';
 
-	onMount(() => {
-		locations.load(true);
-	});
+    onMount(() => {
+        locations.load(true);
+    });
 
-	let { data, form } = $props();
+    let {data, form} = $props();
 
-	let users = $derived(data.users);
-	let categories = $derived(data.categories);
-	// let categories = [];
+    let users = $derived(data.users);
+    let categories = $derived(data.categories);
+    // let categories = [];
 
-	const roles = {
-		'ROLE_ADMIN': 'Administrator',
-		'ROLE_COACH': 'Trener'
-	};
+    const roles = {
+        'ROLE_ADMIN': 'Administrator',
+        'ROLE_COACH': 'Trener'
+    };
 
-	const statuses = {
-		'PENDING': 'Oczekujący',
-		'ACTIVE': 'Aktywny',
-		'DISABLED': 'Wyłączony'
-	};
+    const statuses = {
+        'PENDING': 'Oczekujący',
+        'ACTIVE': 'Aktywny',
+        'DISABLED': 'Wyłączony'
+    };
 
-	let inviting = $state(false);
+    let inviting = $state(false);
 
 </script>
 <svelte:head>
-	<title>Baza - Zarządzanie</title>
+    <title>Baza - Zarządzanie</title>
 </svelte:head>
 
 <div class="container gap-4">
-	<div class="locations card">
-		<h2 class="text-xl m-2">Użytkownicy</h2>
-		{#if form?.error && form?.type == "user"}
-			<Error code={form?.error}></Error>
-		{/if}
-		<div class="addLocation">
-			<form action="?/invite" class="flex flex-col gap-2" method="POST" use:enhance={() => {
+    <div class="locations card">
+        <h2 class="text-xl m-2">Użytkownicy</h2>
+        <Error code={form?.error}></Error>
+        <div class="addLocation">
+            <form action="?/invite" class="flex flex-col gap-2" method="POST" use:enhance={() => {
             inviting = true;
             return async ({update}) => {
                 await update();
                 inviting = false;
             }
         }}>
-				<input class="left" name="email" placeholder="trener@email.com" required type="email" autocomplete="off" />
-				<select name="role">
-					<option value="ROLE_ADMIN">Administrator</option>
-					<option value="ROLE_COACH">Trener</option>
-				</select>
-				<button class="right" disabled={inviting} type="submit">{inviting ? "Zaprasznie..." : "Zaproś"}</button>
-			</form>
-		</div>
+                <input autocomplete="off" class="left" name="email" placeholder="trener@email.com" required
+                       type="email"/>
+                <select name="role">
+                    <option value="ROLE_ADMIN">Administrator</option>
+                    <option value="ROLE_COACH">Trener</option>
+                </select>
+                <button class="right" disabled={inviting} type="submit">{inviting ? "Zapraszanie..." : "Zaproś"}</button>
+            </form>
+        </div>
 
-		<ul class="mt-2">
-			{#each users as user, index (index)}
-				<li>
+        <ul class="mt-2">
+            {#each users.sort((a, b) => a.uuid > b.uuid) as user, index (index)}
+                <li>
                     <span class="user m-1 bg-(--background-secondary) p-2 rounded-lg shadow-md shadow-slate-950/20">
-                        {roles[user.role.name]} {user.email}, {statuses[user.status]}
-											{#if user.role.name !== "ROLE_ADMIN"}
-                            <label for="hide{index}"
-                                   class="bg-(--click)! text-(--text-primary)! rounded-l-md! rounded-r-lg! p-2 shadow-md shadow-slate-950/20">Rozwiń</label>
+                        {roles[user.role.name]} {user.email}
+                        {data.user.email !== user.uuid ? ", " + statuses[user.status] : ""}
+                        {#if data.user.email != user.uuid}
+                        <label for="hide{index}"
+                               class="bg-(--click)! text-(--text-primary)! rounded-l-md! rounded-r-lg! p-2 shadow-md shadow-slate-950/20">Rozwiń</label>
                             <input type="checkbox" class="hide-checkbox" id="hide{index}">
-                        {/if}
 											<div class="hideable flex gap-2 flex-col">
-                        {#if user.role.name !== "ROLE_ADMIN"}
                             {#if user.status !== "PENDING"}
                                 <form action="?/changeStatus" method="POST" use:enhance>
                                     <input type="hidden" name="userUuid" value={user.uuid}>
@@ -76,54 +74,58 @@
                                     <button type="submit"
                                             class="deleteAccount">{user.status === "ACTIVE" ? "WYŁĄCZ KONTO" : "WŁĄCZ KONTO"}</button>
                                 </form>
-														{/if}
-													{#each user.locations as location (location.id)}
-                                <form action="?/deleteLocationFromUser" method="POST" use:enhance class="flex flex-row justify-center items-center gap-2 align-middle">
+                            {/if}
+                                                {#if user.role.name !== "ROLE_ADMIN"}
+                            {#each user.locations as location (location.id)}
+                                <form action="?/deleteLocationFromUser" method="POST" use:enhance
+                                      class="flex flex-row justify-center items-center gap-2 align-middle">
                                     <span class="h-fit block">{location.name}</span>
                                     <input type="hidden" name="locationId" value={location.id}>
                                     <input type="hidden" name="userUuid" value={user.uuid}>
                                     <button type="submit">Usuń</button>
                                 </form>
-													{/each}
-													<form action="?/addLocationToUser" method="POST" use:enhance class="flex flex-row justify-center items-center gap-2 h-fit">
+                            {/each}
+                                                    <form action="?/addLocationToUser" method="POST" use:enhance
+                                                          class="flex flex-row justify-center items-center gap-2 h-fit">
                                 <input type="hidden" value={user.uuid} name="userUuid">
                                 <LocationSelect all={false} class="h-full!"></LocationSelect>
                                 <button type="submit" class="h-full!">Dodaj</button>
                             </form>
                         {/if}
-                    </div>
+                        </div>
+                                                {/if}
                     </span>
-				</li>
-			{/each}
-		</ul>
-	</div>
+                </li>
+            {/each}
+        </ul>
+    </div>
 
-	<div class="locations card">
-		<h2 class="text-xl m-2">Kategorie</h2>
-		{#if form?.error && form?.type == "category"}
-			<Error code={form?.error}></Error>
-		{/if}
-		<div class="1addLocation">
-			<form action="?/addCategory" method="POST" use:enhance class="gap-2! flex flex-col">
-				<input class="left" name="name" placeholder="Grupa 1" required type="text">
-				<input name="shortname" placeholder="Gr1" required type="text">
-				<button class="right" type="submit">Dodaj</button>
-			</form>
-		</div>
+    <div class="locations card">
+        <h2 class="text-xl m-2">Kategorie</h2>
+        {#if form?.error && form?.type == "category"}
+            <Error code={form?.error}></Error>
+        {/if}
+        <div class="1addLocation">
+            <form action="?/addCategory" class="gap-2! flex flex-col" method="POST" use:enhance>
+                <input class="left" name="name" placeholder="Grupa 1" required type="text">
+                <input name="shortname" placeholder="Gr1" required type="text">
+                <button class="right w-full" type="submit">Dodaj</button>
+            </form>
+        </div>
 
-		<ul class="mt-2 flex flex-row! flex-wrap gap-2">
-			{#each categories as category, index (index)}
-				<li class="bg-(--background-secondary) p-2 rounded-lg w-fit shadow-md shadow-slate-950/20">
-					<form action="?/deleteCategory" method="POST" use:enhance
-					>
-						<span>{category.name} ({category.shortname})</span>
-						<input type="hidden" name="categoryId" value={category.id}>
-						<button type="submit">Usuń</button>
-					</form>
-				</li>
-			{/each}
-		</ul>
-	</div>
+        <ul class="mt-2 flex flex-row! flex-wrap gap-2">
+            {#each categories as category, index (index)}
+                <li class="bg-(--background-secondary) p-2 rounded-lg w-fit shadow-md shadow-slate-950/20">
+                    <form action="?/deleteCategory" method="POST" use:enhance
+                    >
+                        <span>{category.name} ({category.shortname})</span>
+                        <input type="hidden" name="categoryId" value={category.id}>
+                        <button type="submit">Usuń</button>
+                    </form>
+                </li>
+            {/each}
+        </ul>
+    </div>
 </div>
 
 <style>
