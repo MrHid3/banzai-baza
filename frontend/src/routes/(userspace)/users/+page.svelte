@@ -61,7 +61,7 @@
                     <span class="user m-1 bg-(--background-secondary) p-2 rounded-lg shadow-md shadow-slate-950/20">
                         {roles[user.role.name]} {user.email}
                         {data.user.email !== user.uuid ? ", " + statuses[user.status] : ""}
-                        {#if data.user.email != user.uuid}
+                        {#if data.user.email != user.uuid && !(user.status == "PENDING" && user.role.name == "ROLE_ADMIN")}
                         <label for="hide{index}"
                                class="bg-(--click)! text-(--text-primary)! rounded-l-md! rounded-r-lg! p-2 shadow-md shadow-slate-950/20">Rozwiń</label>
                             <input type="checkbox" class="hide-checkbox" id="hide{index}">
