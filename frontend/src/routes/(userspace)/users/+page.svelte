@@ -48,8 +48,8 @@
                 <input autocomplete="off" class="left" name="email" placeholder="trener@email.com" required
                        type="email"/>
                 <select name="role">
-                    <option value="ROLE_ADMIN">Administrator</option>
                     <option value="ROLE_COACH">Trener</option>
+                    <option value="ROLE_ADMIN">Administrator</option>
                 </select>
                 <button class="right" disabled={inviting} type="submit">{inviting ? "Zapraszanie..." : "Zaproś"}</button>
             </form>
