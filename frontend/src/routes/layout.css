@@ -1,6 +1,26 @@
 @import '@fontsource/fira-mono';
 
-:root {
+:global(:root) {
+	--background-primary: var(--color-slate-50);
+	--background-secondary: var(--color-slate-200);
+	--text-primary: var(--color-slate-100);
+	--text-primary-dark: var(--color-slate-800);
+	--text-secondary: var(--color-slate-700);
+	--border: #bbbbbb;
+	--accent: #777777;
+	--background-special: #4c4c4c;
+	--click-dark: var(--color-slate-900);
+	--input-dark: var(--color-slate-800);
+	--link-dark: var(--color-slate-700);
+	--click: var(--color-slate-600);
+	--input: var(--color-slate-400);
+	--link: var(--color-slate-500);
+	--active-foreground: var(--color-gray-100);
+	--active: var(--color-gray-500);
+	--hover: var(--color-slate-300);
+	--hover-foreground: var(--color-slate-600);
+	--shd: var(--color-slate-50/60);
+	--shd-dark: var(--color-slate-950/20);
 }
 
 body {

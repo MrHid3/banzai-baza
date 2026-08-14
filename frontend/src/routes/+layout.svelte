@@ -33,41 +33,47 @@
         /*--border: var(--color-slate-700);*/
         /*--accent: var(--color-gray-600);*/
         /*--background-special: var(--color-zinc-800);*/
-        --background-primary: var(--color-slate-50);
-        --background-secondary: var(--color-slate-200);
-        --text-primary: var(--color-slate-100);
-        --text-primary-dark: var(--color-slate-800);
-        --text-secondary: var(--color-slate-700);
+        --background-primary: oklch(98.4% 0.003 247.858);
+        --background-secondary: oklch(92.9% 0.013 255.508);
+        --text-primary: oklch(96.8% 0.007 247.896);
+        --text-primary-dark: oklch(27.9% 0.041 260.031);
+        --text-secondary: oklch(37.2% 0.044 257.287);
         --border: #bbbbbb;
         --accent: #777777;
         --background-special: #4c4c4c;
-        --click-dark: var(--color-slate-900);
-        --input-dark: var(--color-slate-800);
-        --link-dark: var(--color-slate-700);
-        --click: var(--color-slate-600);
-        --input: var(--color-slate-400);
-        --link: var(--color-slate-500);
-        --active-foreground: var(--color-gray-100);
-        --active: var(--color-gray-500);
-        --hover: var(--color-slate-300);
-        --hover-foreground: var(--color-slate-600);
-        --shd: var(--color-slate-50/60);
-        --shd-dark: var(--color-slate-950/20);
-        color: var(--text-primary);
-        background-color: var(--background-primary);
-        @apply
-        text-shadow-sm text-shadow-slate-500/20
-        ;
+        --click-dark: oklch(20.8% 0.042 265.755);
+        --input-dark: oklch(27.9% 0.041 260.031);
+        --link-dark: oklch(37.2% 0.044 257.287);
+        --click: oklch(44.6% 0.043 257.281);
+        --input: oklch(70.4% 0.04 256.788);
+        --link: oklch(55.4% 0.046 257.417);
+        --active-foreground: oklch(96.7% 0.003 264.542);
+        --active: oklch(55.1% 0.027 264.364);
+        --hover: oklch(86.9% 0.022 252.894);
+        --hover-foreground: oklch(44.6% 0.043 257.281);
     }
 
     @theme{
-        --background-primary: #ededed;
-        --background-secondary: #dadada;
-        --text-primary: #141414;
-        --text-secondary: #4f4f4f;
+        --background-primary: oklch(98.4% 0.003 247.858);
+        --background-secondary: oklch(92.9% 0.013 255.508);
+        --text-primary: oklch(96.8% 0.007 247.896);
+        --text-primary-dark: oklch(27.9% 0.041 260.031);
+        --text-secondary: oklch(37.2% 0.044 257.287);
         --border: #bbbbbb;
         --accent: #777777;
         --background-special: #4c4c4c;
+        --click-dark: oklch(20.8% 0.042 265.755);
+        --input-dark: oklch(27.9% 0.041 260.031);
+        --link-dark: oklch(37.2% 0.044 257.287);
+        --click: oklch(44.6% 0.043 257.281);
+        --input: oklch(70.4% 0.04 256.788);
+        --link: oklch(55.4% 0.046 257.417);
+        --active-foreground: oklch(96.7% 0.003 264.542);
+        --active: oklch(55.1% 0.027 264.364);
+        --hover: oklch(86.9% 0.022 252.894);
+        --hover-foreground: oklch(44.6% 0.043 257.281);
+        --shd: var(--color-slate-50/60);
+        --shd-dark: var(--color-slate-950/20);
     }
 
     :global(*) {
