@@ -33,7 +33,7 @@
     <title>Baza - Zarządzanie</title>
 </svelte:head>
 
-<div class="container gap-4">
+<div class="biggest gap-4">
     <div class="locations card">
         <h2 class="text-xl m-2">Użytkownicy</h2>
         <Error code={form?.error}></Error>
@@ -100,7 +100,7 @@
         </ul>
     </div>
 
-    <div class="locations card">
+    <div class="locations card justify-center!">
         <h2 class="text-xl m-2">Kategorie</h2>
         {#if form?.error && form?.type == "category"}
             <Error code={form?.error}></Error>
@@ -234,13 +234,13 @@
         height: 100% !important;
     }
 
-    .container {
+    .biggest {
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
     }
 
-    .container > div {
+    .biggest > div {
         width: 50%;
     }
 
@@ -300,7 +300,7 @@
     }
 
     @media screen and (width <= 1000px) {
-        .container {
+        .biggest {
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -308,7 +308,7 @@
             box-sizing: border-box;
         }
 
-        .container > * {
+        .biggest > * {
             width: 100% !important;
             box-sizing: border-box;
         }
@@ -379,7 +379,7 @@
             flex: 1;
         }
 
-        .container * {
+        .biggest * {
             margin: 3px;
         }
     }
