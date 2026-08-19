@@ -59,6 +59,9 @@
             <li aria-current={page.url.pathname.startsWith('/location') ? 'page' : undefined}>
                 <a href={resolve('/location')}>Lokalizacje</a>
             </li>
+            <li aria-current={page.url.pathname.startsWith('/transfers') ? 'page' : undefined}>
+                <a href={resolve('/transfers')}>Przelewy</a>
+            </li>
         </ul>
         <svg aria-hidden="true" viewBox="0 0 2 3">
             <path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z"/>
@@ -84,6 +87,7 @@
                 <a href={resolve('/users')} onclick={closeMenu}>Zarządzanie</a>
             {/if}
             <a href={resolve('/location')} onclick={closeMenu}>Lokalizacje</a>
+            <a href={resolve('/transfers')} onclick={closeMenu}>Przelewy</a>
             <button class="mobile-logout" onclick={() => { logout(); closeMenu(); }}>
                 Wyloguj się
             </button>

@@ -24,7 +24,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
     env_file:
-      - .env.docker
+      - .env
     depends_on:
       db:
         condition: service_healthy

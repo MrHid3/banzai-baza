@@ -9,10 +9,8 @@ import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.model.AppUser;
 
 import javax.crypto.SecretKey;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Service
