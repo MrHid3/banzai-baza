@@ -51,9 +51,10 @@
 	let selectedCategory = $state(-1);
 	let showEntryFee = $state(false);
 
-	const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+	const monthNames = ['Grudzień', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień', 'Styczeń', 'Luty'];
 
 	const currentMonth = new Date().getMonth() + 1;
+	// const currentMonth = 1
 	const currentYear = new Date().getFullYear();
 
 	const monthString = (month: number) => {
@@ -189,7 +190,7 @@
 				{/if}
 				<div class="td flex-col flex">
 					<div>
-						{monthNames[currentMonth - 3]}
+						{monthNames[currentMonth - 1]}
 					</div>
 					<div class="flex flex-row gap-2 justify-center">
 						(<span
@@ -200,7 +201,7 @@
 				</div>
 				<div class="td">
 					<div>
-						{monthNames[currentMonth - 2]}
+						{monthNames[currentMonth]}
 					</div>
 					<div class="flex flex-row gap-2 justify-center">
 						(<span
@@ -211,7 +212,7 @@
 				</div>
 				<div class="td rounded-r-2xl!">
 					<div>
-						{monthNames[currentMonth - 1]}
+						{monthNames[currentMonth + 1]}
 					</div>
 					<div class="flex flex-row gap-2 justify-center">
 						(<span
@@ -244,7 +245,7 @@
 								member.member.uuid
 							)}
 						{/if}
-						{#each [2, 1, 0] as i}
+						{#each [1, 0, -1] as i}
 							{@render payment(
 								member.payments.find((a) => a.month == `${currentYear}-${monthString(currentMonth - i)}-01`),
 								"MONTHLY_FEE",
