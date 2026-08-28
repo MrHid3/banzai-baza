@@ -9,6 +9,11 @@
 	});
 
 	let { data, form } = $props();
+
+	$effect(() => {
+		if(form?.ok)
+			locations.load(true)
+	})
 </script>
 
 

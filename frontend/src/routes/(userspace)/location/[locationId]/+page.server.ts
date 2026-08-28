@@ -26,5 +26,9 @@ export const actions : Actions = {
 			});
 		}
 
+		return {
+			ok: true
+		}
+
 	}
 }
