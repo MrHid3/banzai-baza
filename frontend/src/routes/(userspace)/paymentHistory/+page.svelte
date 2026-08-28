@@ -74,7 +74,7 @@
     let filterType = $state('');
     let filterPeriod = $state('');
 
-    let payments = $state(data.payments);
+    let payments = $state(data.payments.reverse());
 
     const availableLocations = $derived(
         [...new Set(payments.map(p => p.location.name))].sort()
