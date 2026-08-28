@@ -63,7 +63,7 @@ public class MemberController {
                             memberRequest.locationId())
                     .orElseThrow(InvalidLocationException::new);
 
-            if (allowed_locations.contains(memberLocation)) {
+            if (!allowed_locations.contains(memberLocation)) {
                 throw new InvalidLocationException();
             }
 

@@ -6,7 +6,6 @@ export const load = async ({event, locals, cookies}) => {
     const locations = await serverFetch("/api/location/all", {}, cookies, locals);
     const categories = await serverFetch("/api/memberCategory", {}, cookies, locals);
 
-    console.log(locals.user)
     if (appUsers.ok && locations.ok && categories.ok) {
         return {
             locations: await locations.json(),
