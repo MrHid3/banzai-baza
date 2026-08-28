@@ -25,6 +25,7 @@
 <main class="w-screen h-screen">
 
 <form action="?/login" method="POST" use:enhance class="bg-(--background-primary) p-4 rounded-2xl shadow-slate-50/60 shadow-md">
+    <h1 class="text-(--text-secondary) text-3xl text-center mb-4    ">Baza Banzai</h1>
     <input name="email" placeholder="Email"  type="email" bind:value={email} required>
     <input name="password" placeholder="Hasło" type={showPassword? "text" : "password"} required>
     <label for="show">
