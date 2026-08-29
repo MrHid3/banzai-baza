@@ -194,9 +194,9 @@
 					</div>
 					<div class="flex flex-row gap-2 justify-center">
 						(<span
-						class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(2) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
+						class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(1) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
 						<span
-							class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(2) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
+							class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(1) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
 					</div>
 				</div>
 				<div class="td">
@@ -205,9 +205,9 @@
 					</div>
 					<div class="flex flex-row gap-2 justify-center">
 						(<span
-						class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(1) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
+						class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(0) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
 						<span
-							class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(1) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
+							class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(0) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
 					</div>
 				</div>
 				<div class="td rounded-r-2xl!">
@@ -216,9 +216,9 @@
 					</div>
 					<div class="flex flex-row gap-2 justify-center">
 						(<span
-						class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(0) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
+						class="text-yellow-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(-1) && m.paymentMethod == "DEBIT").reduce((sum, p) => sum + p.amount, 0)}</span>
 						<span
-							class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(0) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
+							class="text-green-600">{filteredMembers.flatMap(m => m.member.payments).filter(m => m.month == resolveMonthKey(-1) && m.paymentMethod == "CASH").reduce((sum, p) => sum + p.amount, 0)}</span>)
 					</div>
 				</div>
 			</div>
@@ -281,9 +281,9 @@
 				null,
 				member.member.uuid
 			)}</span></div>
-			{#each [2, 1, 0] as i}
+			{#each [1, 0, -1] as i}
 				<div class="horizontal flex"><span
-					class="bold flex-1 flex items-center">{monthNames[currentMonth - i - 1]}</span><span class="flex-3">
+					class="bold flex-1 flex items-center">{monthNames[currentMonth - i]}</span><span class="flex-3">
                 {@render payment(
 									member.payments.find((a) => a.month == `${currentYear}-${monthString(currentMonth - i)}-01`),
 									"MONTHLY_FEE",
