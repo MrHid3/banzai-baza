@@ -54,16 +54,20 @@ public class MemberController {
         try {
 
             assert auth != null;
-            Collection<Location> allowed_locations = appUserService
-                    .findByEmail(auth.getName())
-                    .orElseThrow(InvalidUuidException::new)
-                    .getLocations();
-
             Location memberLocation = locationService.findByIdAndIsActive(
                             memberRequest.locationId())
                     .orElseThrow(InvalidLocationException::new);
+            Collection<Location> allowed_locations;
+            if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                allowed_locations = locationService.findAll();
+            } else {
+                allowed_locations = appUserService
+                        .findByEmail(auth.getName())
+                        .orElseThrow(InvalidUuidException::new)
+                        .getLocations();
+            }
 
-            if (!allowed_locations.contains(memberLocation)) {
+            if (!(allowed_locations.contains(memberLocation))) {
                 throw new InvalidLocationException();
             }
 
@@ -80,6 +84,7 @@ public class MemberController {
 
             memberService.save(member);
         } catch (InvalidLocationException | InvalidEmailException e) {
+            System.out.println(e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
