@@ -1,16 +1,11 @@
 <script lang="ts">
     let {children} = $props();
-    import {navigating} from "$app/state";
 
 </script>
 
 <main>
 
-    {#if navigating.to}
-        loading
-        {:else}
-        {@render children()}
-    {/if}
+    {@render children()}
 </main>
 
 <style>
