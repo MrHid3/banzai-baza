@@ -47,7 +47,7 @@
 </script>
 
 {#if !edit}
-    <div class="row desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-950/20 hover:-translate-y-1/12 delay-75">
+    <div class="row desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-950/20 delay-75">
         <span class="data rounded-l-2xl">{num}</span>
         <span class="data">{member?.name != "" ? member?.name : "- -"}</span>
         <span class="data">{member?.surname != "" ? member?.surname : "- -"}</span>
@@ -185,10 +185,10 @@
         {/if}
     </div>
 {:else}
-    <form action="?/update" method="POST" class="row desktop desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-50/60 hover:-translate-y-1/12 delay-75" use:enhance={() => {
+    <form action="?/update" method="POST" class="row desktop desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-50/60 delay-75" use:enhance={() => {
+                   edit = false;
            return({ result }) => {
                if (result.type === "success") {
-                   edit = false;
                    member.categories = [];
                    categories.forEach((category) => {
                        if (result.data.categories.some(c => c == category.id)){
@@ -196,6 +196,9 @@
                        }
                    })
            }
+               else{
+                   edit = true
+               }
 
     }}}>
         <input type="hidden" name="memberUuid" bind:value={member.uuid}>

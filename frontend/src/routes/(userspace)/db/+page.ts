@@ -1,5 +1,4 @@
 import type {PageLoad} from "../../../../.svelte-kit/types/src/routes/$types";
-import {PUBLIC_BACKEND_2} from "$env/static/public";
 
 export const load: PageLoad = async (event) => {
 
