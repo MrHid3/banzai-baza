@@ -268,7 +268,7 @@
             {#each filteredMembers as member (member.uuid)}
                 <Member bind:member={members[members.findIndex(m => m.uuid === member.uuid)]} mobileEdit={mobileEdit}
                         deleteMode={deleteMode} categories={categories}
-                        num={members.findIndex(m => m.uuid == member.uuid) + 1}></Member>
+                        num={filteredMembers.findIndex(m => m.uuid == member.uuid) + 1}></Member>
                 <!--        <Member bind:member={member}></Member>-->
             {/each}
         {/if}
