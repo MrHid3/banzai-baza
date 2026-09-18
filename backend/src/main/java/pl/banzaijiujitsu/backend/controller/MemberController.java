@@ -20,10 +20,7 @@ import pl.banzaijiujitsu.backend.model.MemberCategory;
 import pl.banzaijiujitsu.backend.service.*;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/member")
@@ -71,7 +68,7 @@ public class MemberController {
                 throw new InvalidLocationException();
             }
 
-            List<MemberCategory> memberCategories = memberCategoryService.findAllByIds(memberRequest.categories() == null ? Collections.emptyList() : memberRequest.categories());
+            HashSet<MemberCategory> memberCategories = memberCategoryService.findAllByIds(memberRequest.categories() == null ? Collections.emptyList() : memberRequest.categories());
             Member member = new Member(memberRequest.email());
             member.setName(memberRequest.name());
             member.setSurname(memberRequest.surname());
@@ -197,7 +194,7 @@ public class MemberController {
         if(!allowed_locations.contains(requestLocation)) {
             throw new LocationException("NO_ACCESS_TO_LOCATION");
         }
-        List<MemberCategory> memberCategories = memberCategoryService.findAllByIds(req.categories() == null ? Collections.emptyList() : req.categories());
+        HashSet<MemberCategory> memberCategories = memberCategoryService.findAllByIds(req.categories() == null ? Collections.emptyList() : req.categories());
 
         memberService.update(member, req.name, req.surname, req.email, requestLocation, req.monthlyFee, req.phoneNumber, memberCategories, req.comment);
 

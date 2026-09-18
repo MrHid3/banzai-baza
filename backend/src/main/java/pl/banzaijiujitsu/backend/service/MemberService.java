@@ -81,7 +81,7 @@ public class MemberService {
     }
 
     @Transactional
-    public Member update(Member member, String name, String surname, String email, Location location, Integer MonthlyFee, String phoneNumber, List<MemberCategory> categories, String comment) {
+    public Member update(Member member, String name, String surname, String email, Location location, Integer MonthlyFee, String phoneNumber, HashSet<MemberCategory> categories, String comment) {
         member.setName(name);
         member.setSurname(surname);
         member.setEmail(email);

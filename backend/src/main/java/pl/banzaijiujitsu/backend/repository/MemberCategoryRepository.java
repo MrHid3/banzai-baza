@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.banzaijiujitsu.backend.model.MemberCategory;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,5 @@ public interface MemberCategoryRepository extends JpaRepository<MemberCategory, 
 
     Optional<MemberCategory> findByShortname(String shortname);
 
-    List<MemberCategory> findAllByIdIsIn(List<Long> id);
+    HashSet<MemberCategory> findAllByIdIsIn(List<Long> id);
 }

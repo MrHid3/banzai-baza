@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.banzaijiujitsu.backend.model.MemberCategory;
 import pl.banzaijiujitsu.backend.repository.MemberCategoryRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ public class MemberCategoryService {
         this.memberCategoryRepository.delete(memberCategory);
     }
 
-    public List<MemberCategory> findAllByIds(List<Long> ids){
+    public HashSet<MemberCategory> findAllByIds(List<Long> ids){
         return memberCategoryRepository.findAllByIdIsIn(ids);
     }
 }

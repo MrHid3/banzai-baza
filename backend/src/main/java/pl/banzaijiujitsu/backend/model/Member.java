@@ -8,9 +8,7 @@ import lombok.ToString;
 import pl.banzaijiujitsu.backend.exception.InvalidEmailException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,7 +68,7 @@ public class Member {
     private Boolean isActive = true;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<MemberCategory> categories = new ArrayList<MemberCategory>();
+    private Set<MemberCategory> categories = new HashSet<MemberCategory>();
 
     @OneToMany(mappedBy = "payer")
     @JsonManagedReference
