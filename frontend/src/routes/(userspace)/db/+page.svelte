@@ -35,7 +35,7 @@
                     m.email?.toLowerCase().includes(search.toLowerCase()) ||
                     m.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
                     m.comment?.toLowerCase().includes(search.toLowerCase())
-                );
+                ) && (selectedCategory == null || selectedCategory == -1 || m.some(a => a.id == selectedCategory));
             });
         }
 
@@ -47,6 +47,7 @@
 
     let memberTextFilter = $state('');
     let selectedLocation = $state(null);
+    let selectedCategory = $state(-1);
 
     let showAddFragment = $state(false);
 
@@ -102,11 +103,24 @@
 
 <div class="bg-(--background-primary) p-4! rounded-2xl shadow-md shadow-slate-50/60">
 
-    <div class="filterHolder bg-(--background-secondary) text-(--text-primary-dark) flex! flex-col! md:flex-row! gap-2 shadow-md shadow-slate-950/20">
+    <div class="filterHolder bg-(--background-secondary) text-(--text-primary-dark) flex! flex-col! items-center md:flex-row! gap-2 shadow-md shadow-slate-950/20">
         <span class="flex flex-col justify-center">Znajdź:</span>
         <input bind:value={memberTextFilter} class="input shadow-md shadow-slate-950/40!" type="text"/>
         <span class="flex flex-col justify-center">Filtruj po lokalizacji</span>
         <LocationSelect all={true} bind:location={selectedLocation} short={false}></LocationSelect>
+        <span >Filtruj po kategorii:</span>
+        <select bind:value={selectedCategory} class=" text-(--text-primary) p-2! bg-(--input)!
+            text-center
+            max-w-full
+            p-1!
+            rounded-lg!
+            shadow-md shadow-slate-950/40
+            outline-(--active)">
+            <option value={-1}>Wszystkie</option>
+            {#each data.categories as category (category.id)}
+                <option value={category.id}>{category.shortname}</option>
+            {/each}
+        </select>
         {#if form?.error}
             <span class="error">{form.error}</span>
         {/if}

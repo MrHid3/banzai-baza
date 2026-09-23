@@ -64,7 +64,7 @@
     });
 
     let messageCharCount = $derived(messageText.length);
-    let maxMessageLength = 160;
+    let maxMessageLength = 10000;
 
     function toggleMember(uuid: string) {
         const idx = selectedMembers.indexOf(uuid);

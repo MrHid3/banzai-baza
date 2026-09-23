@@ -37,7 +37,7 @@
 					m.member.email?.toLowerCase().includes(search.toLowerCase()) ||
 					m.member.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
 					m.member.comment?.toLowerCase().includes(search.toLowerCase())
-				);
+				) && (selectedCategory == -1 || selectedCategory == null || m.member.categories.some(a => a.id == selectedCategory));
 			});
 		}
 
@@ -225,7 +225,6 @@
 		</div>
 		<div class="tbody">
 			{#each filteredMembers as member (member.member.uuid)}
-				{#if selectedCategory == null || selectedCategory == -1 || member.member.categories.some(a => a.id == selectedCategory)}
 					<div
 						class="tr border-none rounded-2xl! duration-150 bg-(--background-secondary)!
 						text-(--text-primary-dark) shadow-md shadow-slate-950/20">
@@ -255,7 +254,6 @@
 							)}
 						{/each}
 					</div>
-				{/if}
 			{/each}
 		</div>
 	</div>
