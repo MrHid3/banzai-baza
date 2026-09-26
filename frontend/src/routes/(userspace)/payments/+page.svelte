@@ -29,7 +29,7 @@
 
 
 		const search = memberTextFilter;
-		if (search.length >= 3) {
+		if (search.length > 1 || selectedCategory != -1) {
 			result = result.filter((m) => {
 				return (
 					m.member.name?.toLowerCase().includes(search.toLowerCase()) ||

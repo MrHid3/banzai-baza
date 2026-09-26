@@ -27,7 +27,7 @@
         }
 
         const search = memberTextFilter;
-        if (search.length >= 3) {
+        if (search.length >= 1 || selectedCategory != -1) {
             result = result.filter((m) => {
                 return (
                     m.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -35,7 +35,7 @@
                     m.email?.toLowerCase().includes(search.toLowerCase()) ||
                     m.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
                     m.comment?.toLowerCase().includes(search.toLowerCase())
-                ) && (selectedCategory == null || selectedCategory == -1 || m.some(a => a.id == selectedCategory));
+                ) && (selectedCategory === null || selectedCategory == -1 || m.categories.some(a => a.id == selectedCategory));
             });
         }
 
