@@ -6,6 +6,7 @@
         location = $bindable(),
         short = true,
         all = false,
+        mobile = false,
         class: componentClass = ""
     }
         = $props();
@@ -33,7 +34,7 @@
 
 <select bind:value={selectedLocationId} class={componentClass} id="locationSelect" name="locationId">
     {#if all}
-        <option value={-1}>Wszystkie</option>
+        <option value={-1}>Wszystkie{mobile? " lokalizacje" : ""}</option>
     {/if}
     {#each $locations.data as location, index(index)}
         <option value={location.id}>{short ? location.shortname : location.name}</option>

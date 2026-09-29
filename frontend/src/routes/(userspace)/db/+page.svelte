@@ -1,53 +1,30 @@
 <script lang="ts">
+    import {MediaQuery} from 'svelte/reactivity'; // CHANGED: added (Svelte >= 5.7)
     import Member from './Member.svelte';
     import {enhance} from '$app/forms';
     import LocationSelect from '$lib/LocationSelect.svelte';
     import {untrack} from 'svelte';
 
     let {data, form} = $props();
-    let loading = $state(true);
 
-    let members = $state(data.members ?? []);
+    let members = $state([...(data.members ?? [])].sort((a, b) => a.uuid.localeCompare(b.uuid)) ?? []); // CHANGED: copy, no prop mutation
+    let filteredMembers = $derived.by(() => {
+        const search = memberTextFilter.toLowerCase(); // CHANGED: lowercase once
+        return members.filter((m) => {
+            if (selectedLocation != null && m.location.id != selectedLocation) return false;
+            if (selectedCategory != -1 && !m.categories.some((a) => a.id == selectedCategory)) return false;
+            if (search.length === 0) return true;
+            return (
+                m.name?.toLowerCase().includes(search) ||
+                m.surname?.toLowerCase().includes(search) ||
+                m.email?.toLowerCase().includes(search) ||
+                m.phoneNumber?.toLowerCase().includes(search) ||
+                m.comment?.toLowerCase().includes(search)
+            );
+        })
+    })
+    const indexByUuid = $derived(new Map(members.map((m, i) => [m.uuid, i])));
     let categories = $derived(data.categories);
-
-    $effect(() => {
-        members = data.members?.sort((a, b) => a.uuid.localeCompare(b.uuid)) ?? [];
-    });
-
-    let filteredMembers = $state([]);
-
-    $effect(() => {
-        let result = members;
-		loading = true;
-
-        if (selectedLocation != null) {
-            result = result.filter((m) => {
-                return m.location.id == selectedLocation.id;
-            });
-        }
-
-        const search = memberTextFilter;
-        if (search.length >= 1 || selectedCategory != -1) {
-            result = result.filter((m) => {
-                return (
-                    m.name?.toLowerCase().includes(search.toLowerCase()) ||
-                    m.surname?.toLowerCase().includes(search.toLowerCase()) ||
-                    m.email?.toLowerCase().includes(search.toLowerCase()) ||
-                    m.phoneNumber?.toLowerCase().includes(search.toLowerCase()) ||
-                    m.comment?.toLowerCase().includes(search.toLowerCase())
-                ) && (selectedCategory === null || selectedCategory == -1 || m.categories.some(a => a.id == selectedCategory));
-            });
-        }
-
-        untrack(() => {
-            filteredMembers = result;
-			loading = false;
-        });
-    });
-
-    let memberTextFilter = $state('');
-    let selectedLocation = $state(null);
-    let selectedCategory = $state(-1);
 
     let showAddFragment = $state(false);
 
@@ -55,15 +32,28 @@
 
     let deleteQueue: string[] = $state([]);
 
+    // ... other imports unchanged; `untrack` still needed for the delete effect
+
+    const isMobile = new MediaQuery('max-width: 1000px'); // CHANGED: added
+
+    $effect(() => {
+        members = [...(data.members ?? [])].sort((a, b) => a.uuid.localeCompare(b.uuid)); // CHANGED: copy, no prop mutation
+    });
+
+    let memberTextFilter = $state('');
+    let selectedLocation = $state(null);
+    let selectedCategory = $state(-1);
+
+
     $effect(() => {
         if (form?.ok)
             if (form?.type == 'delete') {
-                const uuid: String = form?.uuid as String;
+                const uuid: string = form?.uuid as string;
                 untrack(() => {
                     deleteQueue = [...deleteQueue, uuid];
                 });
             } else if (form?.type == 'undelete') {
-                const uuid = form?.uuid as String;
+                const uuid = form?.uuid as string;
                 untrack(() => {
                     const index = deleteQueue.indexOf(uuid);
                     deleteQueue.splice(index, 1);
@@ -94,7 +84,6 @@
             }
         }
     }
-
 </script>
 
 <svelte:head>
@@ -104,11 +93,13 @@
 <div class="bg-(--background-primary) p-4! rounded-2xl shadow-md shadow-slate-50/60">
 
     <div class="filterHolder bg-(--background-secondary) text-(--text-primary-dark) flex! flex-col! items-center md:flex-row! gap-2 shadow-md shadow-slate-950/20">
-        <span class="flex flex-col justify-center">Znajdź:</span>
-        <input bind:value={memberTextFilter} class="input shadow-md shadow-slate-950/40!" type="text"/>
-        <span class="flex flex-col justify-center">Filtruj po lokalizacji</span>
-        <LocationSelect all={true} bind:location={selectedLocation} short={false}></LocationSelect>
-        <span >Filtruj po kategorii:</span>
+        <span class="flex flex-col justify-center desktop">Znajdź:</span>
+        <input bind:value={memberTextFilter} class="input shadow-md shadow-slate-950/40!"
+               placeholder={isMobile.current ? "Znajdź..." : ""} type="text"/>
+        <span class="flex flex-col justify-center desktop">Filtruj po lokalizacji</span>
+        <LocationSelect all={true} bind:location={selectedLocation} mobile={isMobile.current}
+                        short={false}></LocationSelect>
+        <span class="desktop">Filtruj po kategorii:</span>
         <select bind:value={selectedCategory} class=" text-(--text-primary) p-2! bg-(--input)!
             text-center
             max-w-full
@@ -116,7 +107,7 @@
             rounded-lg!
             shadow-md shadow-slate-950/40
             outline-(--active)">
-            <option value={-1}>Wszystkie</option>
+            <option value={-1}>Wszystkie{isMobile.current ? " kategorie" : ""}</option>
             {#each data.categories as category (category.id)}
                 <option value={category.id}>{category.shortname}</option>
             {/each}
@@ -124,49 +115,6 @@
         {#if form?.error}
             <span class="error">{form.error}</span>
         {/if}
-    </div>
-    <div class="mobile flex hover bg-(--background-secondary)! shadow-md shadow-slate-950/40">
-        <form action="?/undelete" method="POST" use:enhance>
-            <input name="memberUuid" type="hidden" value={deleteQueue[deleteQueue.length - 1]}>
-            <button aria-label="Od-usuń członka" class="left"
-                    style="{deleteQueue.length > 0 ? '' : 'pointer-events: none'}"
-                    type="submit">
-                <svg
-                        style="fill: {deleteQueue.length > 0 ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
-                        viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                    <path
-                            d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z"/>
-                </svg>
-            </button>
-            <button aria-label="Tryb usuwania" onclick={() => triggerDelete()}
-                    style="{mobileEdit ? 'pointer-events: none;' : ''}{deleteMode ? 'background-color: var(--color-border)' : ''}"
-                    type="button">
-                <svg class="bi bi-trash3-fill" height="30"
-                     style="fill: {!mobileEdit ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
-                     viewBox="0 0 16 16"
-                     width="30"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path
-                            d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
-                </svg>
-            </button>
-            <button aria-label="Tryb edycji" onclick={() => triggerEdit()}
-                    style="{deleteMode ? 'pointer-events: none;' : ''}{mobileEdit ? 'background-color: var(--color-border)' : ''}"
-                    type="button">
-                <svg class="bi bi-pencil-square" fill="currentColor" height="30"
-                     style="fill: {!deleteMode ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
-                     viewBox="0 0 16 16"
-                     width="30"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path
-                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path
-                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                            fill-rule="evenodd"/>
-                </svg>
-            </button>
-        </form>
     </div>
     <div class="mobile flex bg-(--background-secondary) shadow-md shadow-slate-950/40 text-(--text-primary-dark)">
         <form action="?/add" class="addForm" method="POST" use:enhance>
@@ -209,9 +157,53 @@
             </div>
         </form>
     </div>
+    <div class="mobile flex hover bg-(--background-secondary)/20 shadow-md shadow-slate-950/40 backdrop-blur-lg outline-1 outline-white/60">
+        <form action="?/undelete" method="POST" use:enhance>
+            <input name="memberUuid" type="hidden" value={deleteQueue[deleteQueue.length - 1]}>
+            <button aria-label="Od-usuń członka" class="left"
+                    style="{deleteQueue.length > 0 ? '' : 'pointer-events: none'}"
+                    type="submit">
+                <svg
+                        style="fill: {deleteQueue.length > 0 ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
+                        viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                    <path
+                            d="M24 192l144 0c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-46.7-46.7c75.3-58.6 184.3-53.3 253.5 15.9 75 75 75 196.5 0 271.5s-196.5 75-271.5 0c-10.2-10.2-19-21.3-26.4-33-9.5-14.9-29.3-19.3-44.2-9.8s-19.3 29.3-9.8 44.2C49.7 408.7 61.4 423.5 75 437 175 537 337 537 437 437S537 175 437 75C342.8-19.3 193.3-24.7 92.7 58.8L41 7C34.1 .2 23.8-1.9 14.8 1.8S0 14.3 0 24L0 168c0 13.3 10.7 24 24 24z"/>
+                </svg>
+            </button>
+            <button aria-label="Tryb usuwania" onclick={() => triggerDelete()}
+                    style="{mobileEdit ? 'pointer-events: none;' : ''}{deleteMode ? 'background-color: var(--color-border)' : ''}"
+                    type="button">
+                <svg class="bi bi-trash3-fill" height="30"
+                     style="fill: {!mobileEdit ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
+                     viewBox="0 0 16 16"
+                     width="30"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                            d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                </svg>
+            </button>
+            <button aria-label="Tryb edycji" onclick={() => triggerEdit()}
+                    style="{deleteMode ? 'pointer-events: none;' : ''}{mobileEdit ? 'background-color: var(--color-border)' : ''}"
+                    type="button">
+                <svg class="bi bi-pencil-square" fill="currentColor" height="30"
+                     style="fill: {!deleteMode ? 'var(--color-text-secondary)' : 'var(--color-background-secondary)'}"
+                     viewBox="0 0 16 16"
+                     width="30"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                            fill-rule="evenodd"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+
     <div class="membersTable desktop">
         <div
-                class="header desktop desktop text-(--text-primary-dark) bg-(--background-secondary) rounded-2xl! hover:bg-(--hover) hover:text-(--hover-foreground) duration-150 shadow-md shadow-slate-950/20 delay-75">
+                class="header table-row text-(--text-primary-dark) bg-(--background-secondary)/20 backdrop-blur-lg hover rounded-2xl! shadow-md shadow-slate-950/20 outline-1 outline-white/60">
             <span class="data rounded-l-2xl!">#</span>
             <span class="data">Imię</span>
             <span class="data">Nazwisko</span>
@@ -278,37 +270,27 @@
             </span>
             </form>
         {/if}
-        {#if !loading}
-            {#each filteredMembers as member (member.uuid)}
-                <Member bind:member={members[members.findIndex(m => m.uuid === member.uuid)]} mobileEdit={mobileEdit}
-                        deleteMode={deleteMode} categories={categories}
-                        num={filteredMembers.findIndex(m => m.uuid == member.uuid) + 1}></Member>
-                <!--        <Member bind:member={member}></Member>-->
+        {#if !isMobile.current}
+            {#each filteredMembers as member, i (member.uuid)}
+                <Member bind:member={members[indexByUuid.get(member.uuid)]} {mobileEdit} {deleteMode} {categories}
+                        num={i + 1} isMobile={false}></Member>
             {/each}
         {/if}
+
+        {#if filteredMembers.length == 0}
+            <div class="noResults text-(--text-primary-dark)!">Brak wyników</div>
+        {/if}
     </div>
-    <div class="mobile">
-        {#each filteredMembers as member (member.uuid)}
-            <Member bind:member={members[members.findIndex(m => m.uuid === member.uuid)]} mobileEdit={mobileEdit}
-                    deleteMode={deleteMode} categories={categories}></Member>
-            <!--        <Member bind:member={member}></Member>-->
+    {#if isMobile.current}
+        {#each filteredMembers as member, i (member.uuid)}
+            <Member bind:member={members[indexByUuid.get(member.uuid)]} {mobileEdit} {deleteMode} {categories}
+                    num={i + 1} isMobile={true}></Member>
         {/each}
-    </div>
-    {#if filteredMembers.length == 0 && !loading}
-        <div class="noResults text-(--text-primary-dark)!">
-            Brak wyników
-        </div>
-		{:else if loading}
-		<div class="gap-2 flex flex-col">
-			{#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]}
-				<div class="w-full bg-(--background-secondary)/60 h-11 rounded-2xl shadow-md shadow--(--bg-secondary)/40"></div>
-			{/each}
-		</div>
     {/if}
 </div>
 
 <style>
-    @import "tailwindcss";
+    @reference "tailwindcss";
 
     span.data:has(input) {
         @apply
@@ -386,12 +368,6 @@
         text-align: center;
     }
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
     .filterHolder {
         display: flex;
         flex-direction: row;
@@ -432,10 +408,11 @@
         position: sticky;
         top: 10px;
         left: 0;
-        z-index: 2137;
+        border-radius: 15px;
+        width: 100%;
+        padding: 10px;
     }
 
-    .header,
     .filterHolder,
     .addFragment {
         border-radius: 15px;
@@ -542,7 +519,7 @@
         display: none;
     }
 
-    @media screen and (width <= 1000px) {
+    @media screen and (max-width: 1000px) {
 
         .mobile {
             display: block !important;
@@ -554,6 +531,8 @@
         }
 
         .hover {
+            isolation: isolate;
+            z-index: 10;
             position: sticky;
             top: 10px;
         }
