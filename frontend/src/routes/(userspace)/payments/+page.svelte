@@ -95,7 +95,6 @@
         return totals;
     });
 
-
     let commentDrafts = $state({});
     let openComment = $state("");
 
@@ -108,8 +107,15 @@
 </svelte:head>
 
 
-{#snippet payment(payment, type, month, year, payerUuid)}
-    {#if payment}
+{#snippet payment(payment, type, month, year, payerUuid, payerStart)}
+    {#if new Date(payerStart).getMonth() - new Date(`${year}-${monthString(month)}`).getMonth() > 0}
+        <abbr class="td payment ok border-none! w-full! xl:max-w-1/4! xl:w-1/4"
+              title="Nie chodził"
+              style="font-style: unset; text-decoration: unset">
+                <span>0</span>
+        </abbr>
+
+    {:else if payment}
         <abbr class="td payment ok border-none! w-full! xl:max-w-1/4! xl:w-1/4"
               title={payment.comment}
               style="font-style: unset; text-decoration: unset">
@@ -181,7 +187,7 @@
 <div class="bg-(--background-primary) shadow-md shadow-slate-950/20 rounded-2xl p-4">
     <a class="absolute top-16 left-4 p-3 rounded-xl bg-neutral-200 border-2 border-neutral-400 text-neutral-400 hover:text-neutral-600 hover:text-shadow-2 hover:text-shadow-black/20 duration-200 desktop"
        href={resolve('/paymentHistory')}>Szczegóły</a>
-    <div class="bg-(--background-secondary) text-(--text-primary-dark) shadow-md shadow-slate-950/20 flex flex-col gap-2" id="filterHolder">
+    <div class="bg-(--background-secondary) text-(--text-primary-dark) shadow-md shadow-slate-950/20 flex flex-col xl:flex-row gap-2" id="filterHolder">
         <span class="desktop">Znajdź:</span>
         <input bind:value={memberTextFilter} class="input bg-(--input) text-(--text-primary)!" type="text" placeholder={isMobile.current? "Znajdź..." : ""}/>
         <span class="desktop">Filtruj po lokalizacji:</span>
@@ -267,7 +273,8 @@
                                 "STARTING_FEE",
                                 null,
                                 null,
-                                member.member.uuid
+                                member.member.uuid,
+                                member.member.createdAt
                             )}
                         {/if}
                         {#each [1, 0, -1] as i}
@@ -276,7 +283,8 @@
                                 "MONTHLY_FEE",
                                 currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
                                 currentMonth - i > 0 ? currentYear : currentYear - 1,
-                                member.member.uuid
+                                member.member.uuid,
+                                member.member.createdAt
                             )}
                         {/each}
                     </div>
@@ -305,7 +313,8 @@
                     "STARTING_FEE",
                     null,
                     null,
-                    member.member.uuid
+                    member.member.uuid,
+                    member.member.createdAt
                 )}</span></div>
                 {#each [1, 0, -1] as i}
                     <div class="horizontal flex"><span
@@ -316,7 +325,8 @@
                     "MONTHLY_FEE",
                     currentMonth - i > 0 ? currentMonth - i : currentMonth - i + 12,
                     currentMonth - i > 0 ? currentYear : currentYear - 1,
-                    member.member.uuid
+                    member.member.uuid,
+                    member.member.createdAt
                 )}
                 </span></div>
                 {/each}

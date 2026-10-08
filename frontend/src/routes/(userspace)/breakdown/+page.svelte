@@ -202,6 +202,10 @@
     const grandTotal = $derived(breakdown.reduce((s, b) => s + b.blockTotal, 0));
     const grandCount = $derived(filteredPayments.length);
 
+    const entryPayments = $derived(filteredPayments.filter(p => p.paymentType === ENTRY_FEE_TYPE));
+    const entryTotal = $derived(entryPayments.reduce((s, p) => s + p.amount, 0));
+    const entryCount = $derived(entryPayments.length);
+
     // ── Collapse state ────────────────────────────────────────────────────────
 
     let collapsed = $state<Set<string>>(new Set());
@@ -249,6 +253,10 @@
             <div class="summary-item">
                 <span class="summary-value">{fmt(grandTotal)}</span>
                 <span class="summary-label">Łącznie zebrano</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">{fmt(entryTotal)}</span>
+                <span class="summary-label">Wpisowe ({entryCount})</span>
             </div>
             <div class="summary-item">
                 <span class="summary-value">{grandCount}</span>

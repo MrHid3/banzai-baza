@@ -9,9 +9,9 @@
 
     let members = $state([...(data.members ?? [])].sort((a, b) => a.uuid.localeCompare(b.uuid)) ?? []); // CHANGED: copy, no prop mutation
     let filteredMembers = $derived.by(() => {
-        const search = memberTextFilter.toLowerCase(); // CHANGED: lowercase once
+        const search = memberTextFilter.toLowerCase();
         return members.filter((m) => {
-            if (selectedLocation != null && m.location.id != selectedLocation) return false;
+            if (selectedLocation != null && m.location.id != selectedLocation.id) return false;
             if (selectedCategory != -1 && !m.categories.some((a) => a.id == selectedCategory)) return false;
             if (search.length === 0) return true;
             return (
@@ -32,8 +32,6 @@
 
     let deleteQueue: string[] = $state([]);
 
-    // ... other imports unchanged; `untrack` still needed for the delete effect
-
     const isMobile = new MediaQuery('max-width: 1000px'); // CHANGED: added
 
     $effect(() => {
@@ -43,7 +41,6 @@
     let memberTextFilter = $state('');
     let selectedLocation = $state(null);
     let selectedCategory = $state(-1);
-
 
     $effect(() => {
         if (form?.ok)
