@@ -95,6 +95,18 @@
         return totals;
     });
 
+    let startingTotals = $derived.by(() => {
+        let totals = {DEBIT: 0, CASH: 0};
+        for (const m of filteredMembers) {
+            for (const p of m.member.payments) {
+                if(p.paymentType == "STARTING_FEE"){
+                    totals[p.paymentMethod] += p.amount
+                }
+            }
+        }
+        return totals;
+    })
+
     let commentDrafts = $state({});
     let openComment = $state("");
 
@@ -108,13 +120,12 @@
 
 
 {#snippet payment(payment, type, month, year, payerUuid, payerStart)}
-    {#if new Date(payerStart).getMonth() - new Date(`${year}-${monthString(month)}`).getMonth() > 0}
+    {#if type != "STARTING_FEE" && new Date(payerStart).getMonth() - new Date(`${year}-${monthString(month)}`).getMonth() > 0}
         <abbr class="td payment ok border-none! w-full! xl:max-w-1/4! xl:w-1/4"
               title="Nie chodził"
               style="font-style: unset; text-decoration: unset">
                 <span>0</span>
         </abbr>
-
     {:else if payment}
         <abbr class="td payment ok border-none! w-full! xl:max-w-1/4! xl:w-1/4"
               title={payment.comment}
@@ -218,7 +229,15 @@
                     <div class="td">Lokalizacja</div>
                     <div class="td">Cena/mieś.</div>
                     {#if showEntryFee}
-                        <div class="td">Wpisowe</div>
+                        <div class="td flex-col flex">
+                            <div>Wpisowe</div>
+                            <div class="flex flex-row gap-2 justify-center">
+                                (<span
+                                    class="text-yellow-600">{startingTotals.DEBIT}</span>
+                                <span
+                                        class="text-green-600">{startingTotals.CASH}</span>)
+                            </div>
+                        </div>
                     {/if}
                     <div class="td flex-col flex">
                         <div>
